@@ -40,8 +40,9 @@ sudo apt update && sudo apt install -y git build-essential xorriso squashfs-tool
    - **Release Name**: `WireBusOS Initial Release (v1.0.0)`
    - **Filename**: `WireBusOS-v1.0.0-amd64.iso`
 
-3. Inside the `chroot` terminal, run the WireBusOS installer with the `--chroot` flag:
+3. Inside the `chroot` terminal, grant execute permissions and run the installer with the `--chroot` flag:
    ```bash
+   chmod +x build-scripts/install-wirebus.sh
    ./build-scripts/install-wirebus.sh --chroot
    ```
 
