@@ -1,7 +1,7 @@
-// WireBusOS Top 20 Commercial Vendors & Custom Driver Extension SDK
+// WireBusOS Commercial Vendors & Custom Driver Extension SDK
 
 document.addEventListener('DOMContentLoaded', () => {
-    initTop20Vendors();
+    initVendors();
     initModalForm();
     initSldSimulator();
     initModbusTable();
@@ -10,8 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initCopyButtons();
 });
 
-// Top 20 Commercial Renewable Energy Vendors Dataset
-const TOP_20_VENDORS = [
+// Commercial Renewable Energy Vendors Dataset
+const COMMERCIAL_VENDORS = [
     { name: "Victron Energy", category: "solar", ecosystem: "VE.Direct / VE.Bus / VRM Cloud API", devices: "MultiPlus-II, Quattro, SmartSolar MPPT, Cerbo GX", driver: "vendor-drivers/victron_vrm_bridge.py" },
     { name: "Pylontech", category: "storage", ecosystem: "CANbus 250kbps / RS485 Console", devices: "US2000C, US3000C, US5000, Force L1/L2 Stacks", driver: "vendor-drivers/pylontech_bms_reader.py" },
     { name: "Siemens Energy", category: "hydro", ecosystem: "S7comm TCP 102 / Spectrum Power SCADA", devices: "S7-1200, S7-1500 PLC, WinCC, Penstock Actuators", driver: "vendor-drivers/siemens_s7_scada.py" },
@@ -49,16 +49,15 @@ const ALL_REGISTERS = [
     { vendor: "CATL", address: "40201", name: "CATL_Rack_SOC", type: "UINT16", unit: "%", desc: "EnerOne Storage Rack SOC" }
 ];
 
-// Initialize Top 20 Vendors Cards
-function initTop20Vendors() {
+// Initialize Vendors Cards
+function initVendors() {
     const grid = document.getElementById('top20-vendors-grid');
     const tabs = document.querySelectorAll('#vendor-category-tabs .filter-btn');
 
     let activeCategory = 'all';
 
-    // Load custom vendors saved in localStorage if any
     const savedCustomVendors = JSON.parse(localStorage.getItem('wirebus_custom_vendors') || '[]');
-    const combinedVendors = [...TOP_20_VENDORS, ...savedCustomVendors];
+    const combinedVendors = [...COMMERCIAL_VENDORS, ...savedCustomVendors];
 
     function renderVendors() {
         grid.replaceChildren();
@@ -155,12 +154,10 @@ function initModalForm() {
             driver: `vendor-drivers/${safeFilename}`
         };
 
-        // Save custom vendor to local storage
         const saved = JSON.parse(localStorage.getItem('wirebus_custom_vendors') || '[]');
         saved.push(newVendorObj);
         localStorage.setItem('wirebus_custom_vendors', JSON.stringify(saved));
 
-        // Add to Modbus Register Explorer
         if (regInput) {
             const parts = regInput.split(',');
             if (parts.length >= 4) {
@@ -179,8 +176,7 @@ function initModalForm() {
         form.reset();
         closeModal();
 
-        // Refresh UI
-        initTop20Vendors();
+        initVendors();
         initModbusTable();
     });
 }
@@ -296,9 +292,15 @@ function initModbusTable() {
     renderTable();
 }
 
-// Tools Catalog Renderer
+// Tools Catalog Dummy Renderer
 function initToolsCatalog() {
-    // Keep clean
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        });
+    });
 }
 
 // Replay Terminal Simulator
@@ -307,7 +309,7 @@ function initTerminalReplay() {
     const replayBtn = document.getElementById('btn-replay-term');
 
     const lines = [
-        { text: "[WireBusOS SDK] Loaded WireBusOS Top 20 Vendor Registry...", type: "" },
+        { text: "[WireBusOS SDK] Loaded WireBusOS Vendor Registry...", type: "" },
         { text: "[WireBusOS SDK] Victron Energy | Solar | VE.Bus / VE.Direct / VRM", type: "info" },
         { text: "[WireBusOS SDK] Siemens Energy | Hydro | S7comm TCP 102 / Spectrum SCADA", type: "success" },
         { text: "[WireBusOS SDK] Vestas Wind | Wind | VMP SCADA Gateway", type: "highlight" },

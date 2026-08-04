@@ -1,431 +1,188 @@
 {
-  "system": "WireBusOS Top 20 Commercial Equipment SCADA & Protocol Registry",
+  "system": "WireBusOS Commercial Equipment SCADA & Protocol Registry",
   "vendors": [
     {
       "vendor": "Victron Energy",
       "category": "solar",
       "ecosystem": "VE.Bus / VE.Direct / Venus OS dbus",
-      "devices": [
-        "MultiPlus-II",
-        "Quattro",
-        "SmartSolar MPPT",
-        "Cerbo GX"
-      ],
+      "devices": ["MultiPlus-II", "Quattro", "SmartSolar MPPT", "Cerbo GX"],
       "registers": [
-        {
-          "id": "0xED8D",
-          "name": "VE_Bus_State",
-          "type": "UINT16",
-          "unit": "enum",
-          "desc": "0=Off, 3=Inverting, 4=Bulk, 5=Absorption"
-        },
-        {
-          "id": "0x0304",
-          "name": "VE_Direct_PV_Power",
-          "type": "UINT16",
-          "unit": "W",
-          "desc": "MPPT Real-time Panel Yield"
-        }
+        { "id": "0xED8D", "name": "VE_Bus_State", "type": "UINT16", "unit": "enum", "desc": "0=Off, 3=Inverting, 4=Bulk, 5=Absorption" },
+        { "id": "0x0304", "name": "VE_Direct_PV_Power", "type": "UINT16", "unit": "W", "desc": "MPPT Real-time Panel Yield" }
       ]
     },
     {
       "vendor": "Pylontech",
       "category": "storage",
       "ecosystem": "CANbus / RS485 Console",
-      "devices": [
-        "US2000C",
-        "US3000C",
-        "US5000",
-        "Force L1/L2"
-      ],
+      "devices": ["US2000C", "US3000C", "US5000", "Force L1/L2"],
       "registers": [
-        {
-          "id": "CAN_0x355",
-          "name": "BMS_SOC_SOH",
-          "type": "UINT16",
-          "unit": "%",
-          "desc": "Battery Stack SOC & SOH Percentage"
-        },
-        {
-          "id": "CAN_0x356",
-          "name": "BMS_Voltage_Current",
-          "type": "INT16",
-          "unit": "V / A",
-          "desc": "Stack Voltage & Current"
-        }
+        { "id": "CAN_0x355", "name": "BMS_SOC_SOH", "type": "UINT16", "unit": "%", "desc": "Battery Stack SOC & SOH Percentage" },
+        { "id": "CAN_0x356", "name": "BMS_Voltage_Current", "type": "INT16", "unit": "V / A", "desc": "Stack Voltage & Current" }
       ]
     },
     {
       "vendor": "Siemens Energy",
       "category": "hydro",
       "ecosystem": "S7comm Protocol / Spectrum Power SCADA",
-      "devices": [
-        "S7-1200",
-        "S7-1500",
-        "WinCC SCADA",
-        "Spectrum Power"
-      ],
+      "devices": ["S7-1200", "S7-1500", "WinCC SCADA", "Spectrum Power"],
       "registers": [
-        {
-          "id": "DB10.DBD0",
-          "name": "Hydro_Flow_Rate",
-          "type": "REAL",
-          "unit": "m3/s",
-          "desc": "Penstock Hydro Turbine Volumetric Flow"
-        },
-        {
-          "id": "DB10.DBD4",
-          "name": "Penstock_Pressure",
-          "type": "REAL",
-          "unit": "bar",
-          "desc": "Hydraulic Penstock Operating Pressure"
-        }
+        { "id": "DB10.DBD0", "name": "Hydro_Flow_Rate", "type": "REAL", "unit": "m3/s", "desc": "Penstock Hydro Turbine Volumetric Flow" },
+        { "id": "DB10.DBD4", "name": "Penstock_Pressure", "type": "REAL", "unit": "bar", "desc": "Hydraulic Penstock Operating Pressure" }
       ]
     },
     {
       "vendor": "LuxpowerTek",
       "category": "solar",
       "ecosystem": "Lux Cloud / Modbus RTU (RS485)",
-      "devices": [
-        "LXP Hybrid 12k",
-        "SNA 5000",
-        "LXP-LB 5k"
-      ],
+      "devices": ["LXP Hybrid 12k", "SNA 5000", "LXP-LB 5k"],
       "registers": [
-        {
-          "id": "REG_040",
-          "name": "Lux_PV1_Power",
-          "type": "UINT16",
-          "unit": "W",
-          "desc": "Solar String 1 DC Power"
-        },
-        {
-          "id": "REG_080",
-          "name": "Lux_Battery_SOC",
-          "type": "UINT16",
-          "unit": "%",
-          "desc": "Lithium Battery SOC Percentage"
-        }
+        { "id": "REG_040", "name": "Lux_PV1_Power", "type": "UINT16", "unit": "W", "desc": "Solar String 1 DC Power" },
+        { "id": "REG_080", "name": "Lux_Battery_SOC", "type": "UINT16", "unit": "%", "desc": "Lithium Battery SOC Percentage" }
       ]
     },
     {
       "vendor": "SMA Solar Technology",
       "category": "solar",
       "ecosystem": "Speedwire UDP Multicast / SunSpec Modbus",
-      "devices": [
-        "Sunny Boy",
-        "Sunny Tripower CORE1",
-        "Sunny Island"
-      ],
+      "devices": ["Sunny Boy", "Sunny Tripower CORE1", "Sunny Island"],
       "registers": [
-        {
-          "id": "30775",
-          "name": "SMA_Grid_Power",
-          "type": "INT32",
-          "unit": "W",
-          "desc": "Total AC Output Power"
-        }
+        { "id": "30775", "name": "SMA_Grid_Power", "type": "INT32", "unit": "W", "desc": "Total AC Output Power" }
       ]
     },
     {
       "vendor": "Fronius International",
       "category": "solar",
       "ecosystem": "Fronius Solar.API REST / SunSpec Modbus",
-      "devices": [
-        "Fronius Symo",
-        "Fronius Primo",
-        "Fronius Eco"
-      ],
+      "devices": ["Fronius Symo", "Fronius Primo", "Fronius Eco"],
       "registers": [
-        {
-          "id": "API_Pac",
-          "name": "Fronius_AC_Power",
-          "type": "FLOAT",
-          "unit": "W",
-          "desc": "Real-time Inverter AC Generation"
-        }
+        { "id": "API_Pac", "name": "Fronius_AC_Power", "type": "FLOAT", "unit": "W", "desc": "Real-time Inverter AC Generation" }
       ]
     },
     {
       "vendor": "SolarEdge Technologies",
       "category": "solar",
       "ecosystem": "SunSpec Modbus TCP / Monitoring API",
-      "devices": [
-        "SolarEdge SE10000H",
-        "SE33.3K",
-        "Energy Bank"
-      ],
+      "devices": ["SolarEdge SE10000H", "SE33.3K", "Energy Bank"],
       "registers": [
-        {
-          "id": "40083",
-          "name": "SolarEdge_I_AC_Power",
-          "type": "INT16",
-          "unit": "W",
-          "desc": "AC Real Power Production"
-        }
+        { "id": "40083", "name": "SolarEdge_I_AC_Power", "type": "INT16", "unit": "W", "desc": "AC Real Power Production" }
       ]
     },
     {
       "vendor": "Tesla Energy",
       "category": "storage",
       "ecosystem": "Tesla Local Gateway 2 API / Fleet API",
-      "devices": [
-        "Powerwall 2",
-        "Powerwall 3",
-        "Megapack 2XL"
-      ],
+      "devices": ["Powerwall 2", "Powerwall 3", "Megapack 2XL"],
       "registers": [
-        {
-          "id": "API_SOC",
-          "name": "Tesla_Battery_SOC",
-          "type": "FLOAT",
-          "unit": "%",
-          "desc": "Site Energy Reserve Level"
-        }
+        { "id": "API_SOC", "name": "Tesla_Battery_SOC", "type": "FLOAT", "unit": "%", "desc": "Site Energy Reserve Level" }
       ]
     },
     {
       "vendor": "Enphase Energy",
       "category": "solar",
       "ecosystem": "Envoy IQ Gateway Local API",
-      "devices": [
-        "IQ7+",
-        "IQ8M",
-        "IQ Battery 5P"
-      ],
+      "devices": ["IQ7+", "IQ8M", "IQ Battery 5P"],
       "registers": [
-        {
-          "id": "API_WNow",
-          "name": "Enphase_Watts_Now",
-          "type": "INT32",
-          "unit": "W",
-          "desc": "Microinverter Array Active Generation"
-        }
+        { "id": "API_WNow", "name": "Enphase_Watts_Now", "type": "INT32", "unit": "W", "desc": "Microinverter Array Active Generation" }
       ]
     },
     {
       "vendor": "Growatt New Energy",
       "category": "solar",
       "ecosystem": "ShineServer API / Modbus RTU",
-      "devices": [
-        "MIN 5000TL-XH",
-        "SPH 10000",
-        "MAX 125KTL3"
-      ],
+      "devices": ["MIN 5000TL-XH", "SPH 10000", "MAX 125KTL3"],
       "registers": [
-        {
-          "id": "REG_001",
-          "name": "Growatt_Output_Power",
-          "type": "UINT32",
-          "unit": "W",
-          "desc": "Inverter Total Output Power"
-        }
+        { "id": "REG_001", "name": "Growatt_Output_Power", "type": "UINT32", "unit": "W", "desc": "Inverter Total Output Power" }
       ]
     },
     {
       "vendor": "Deye / Sol-Ark",
       "category": "solar",
       "ecosystem": "Hybrid Inverter CANbus & Modbus RTU",
-      "devices": [
-        "Deye SUN-12K-SG04",
-        "Sol-Ark 15K"
-      ],
+      "devices": ["Deye SUN-12K-SG04", "Sol-Ark 15K"],
       "registers": [
-        {
-          "id": "REG_590",
-          "name": "Deye_Battery_SOC",
-          "type": "UINT16",
-          "unit": "%",
-          "desc": "BMS Battery SOC"
-        }
+        { "id": "REG_590", "name": "Deye_Battery_SOC", "type": "UINT16", "unit": "%", "desc": "BMS Battery SOC" }
       ]
     },
     {
       "vendor": "Solis (Ginlong Technologies)",
       "category": "solar",
       "ecosystem": "SolisCloud API / Modbus RS485",
-      "devices": [
-        "S5-GC60K",
-        "RHI-5K-Plus"
-      ],
+      "devices": ["S5-GC60K", "RHI-5K-Plus"],
       "registers": [
-        {
-          "id": "3005",
-          "name": "Solis_Active_Power",
-          "type": "UINT32",
-          "unit": "W",
-          "desc": "Solis Inverter Output"
-        }
+        { "id": "3005", "name": "Solis_Active_Power", "type": "UINT32", "unit": "W", "desc": "Solis Inverter Output" }
       ]
     },
     {
       "vendor": "Schneider Electric",
       "category": "grid",
       "ecosystem": "EcoStruxure Microgrid Advisor / Conext",
-      "devices": [
-        "Conext XW Pro",
-        "EcoStruxure PLC"
-      ],
+      "devices": ["Conext XW Pro", "EcoStruxure PLC"],
       "registers": [
-        {
-          "id": "40120",
-          "name": "Schneider_Grid_Export",
-          "type": "INT32",
-          "unit": "kW",
-          "desc": "Microgrid Point of Interconnect Flow"
-        }
+        { "id": "40120", "name": "Schneider_Grid_Export", "type": "INT32", "unit": "kW", "desc": "Microgrid Point of Interconnect Flow" }
       ]
     },
     {
       "vendor": "ABB / Fimer",
       "category": "solar",
       "ecosystem": "PVS Inverter SunSpec Modbus TCP",
-      "devices": [
-        "PVS-100/120",
-        "REACT 2"
-      ],
+      "devices": ["PVS-100/120", "REACT 2"],
       "registers": [
-        {
-          "id": "40071",
-          "name": "ABB_Active_Power",
-          "type": "INT16",
-          "unit": "W",
-          "desc": "ABB PVS Inverter Real Power"
-        }
+        { "id": "40071", "name": "ABB_Active_Power", "type": "INT16", "unit": "W", "desc": "ABB PVS Inverter Real Power" }
       ]
     },
     {
       "vendor": "Vestas Wind Systems",
       "category": "wind",
       "ecosystem": "Vestas VMP / Online SCADA Gateway",
-      "devices": [
-        "V150-4.2 MW",
-        "V162-6.2 MW EnVentus"
-      ],
+      "devices": ["V150-4.2 MW", "V162-6.2 MW EnVentus"],
       "registers": [
-        {
-          "id": "VMP_P_Act",
-          "name": "Vestas_Active_Power",
-          "type": "FLOAT",
-          "unit": "kW",
-          "desc": "Wind Turbine Active Power Output"
-        }
+        { "id": "VMP_P_Act", "name": "Vestas_Active_Power", "type": "FLOAT", "unit": "kW", "desc": "Wind Turbine Active Power Output" }
       ]
     },
     {
       "vendor": "GE Vernova",
       "category": "wind",
       "ecosystem": "Mark VIe Control SCADA / Hydro & Wind",
-      "devices": [
-        "GE Haliade-X 12MW",
-        "GE 3.4MW",
-        "GE Hydro Governor"
-      ],
+      "devices": ["GE Haliade-X 12MW", "GE 3.4MW", "GE Hydro Governor"],
       "registers": [
-        {
-          "id": "MK6_Mw",
-          "name": "GE_Turbine_MW",
-          "type": "FLOAT",
-          "unit": "MW",
-          "desc": "Turbine Gross Active Power"
-        }
+        { "id": "MK6_Mw", "name": "GE_Turbine_MW", "type": "FLOAT", "unit": "MW", "desc": "Turbine Gross Active Power" }
       ]
     },
     {
       "vendor": "BYD Energy",
       "category": "storage",
       "ecosystem": "Battery-Box Premium CANbus",
-      "devices": [
-        "Battery-Box Premium HVS/HVM",
-        "LVS"
-      ],
+      "devices": ["Battery-Box Premium HVS/HVM", "LVS"],
       "registers": [
-        {
-          "id": "CAN_0x355",
-          "name": "BYD_Battery_SOC",
-          "type": "UINT16",
-          "unit": "%",
-          "desc": "BYD High Voltage Stack SOC"
-        }
+        { "id": "CAN_0x355", "name": "BYD_Battery_SOC", "type": "UINT16", "unit": "%", "desc": "BYD High Voltage Stack SOC" }
       ]
     },
     {
       "vendor": "CATL",
       "category": "storage",
       "ecosystem": "EnerOne / EnerC Grid Storage Modbus TCP",
-      "devices": [
-        "EnerOne LFP BESS",
-        "EnerC Container"
-      ],
+      "devices": ["EnerOne LFP BESS", "EnerC Container"],
       "registers": [
-        {
-          "id": "40201",
-          "name": "CATL_Rack_SOC",
-          "type": "UINT16",
-          "unit": "%",
-          "desc": "Containerized Storage SOC"
-        }
+        { "id": "40201", "name": "CATL_Rack_SOC", "type": "UINT16", "unit": "%", "desc": "Containerized Storage SOC" }
       ]
     },
     {
       "vendor": "Andritz Hydro",
       "category": "hydro",
       "ecosystem": "Metris DiOMera Hydro SCADA",
-      "devices": [
-        "Francis Hydro Turbine",
-        "Kaplan Turbine",
-        "Pelton Wheel"
-      ],
+      "devices": ["Francis Hydro Turbine", "Kaplan Turbine", "Pelton Wheel"],
       "registers": [
-        {
-          "id": "40301",
-          "name": "Andritz_Runner_RPM",
-          "type": "REAL",
-          "unit": "RPM",
-          "desc": "Hydro Turbine Runner Speed"
-        }
+        { "id": "40301", "name": "Andritz_Runner_RPM", "type": "REAL", "unit": "RPM", "desc": "Hydro Turbine Runner Speed" }
       ]
     },
     {
       "vendor": "LF Energy EVerest / OpenEVSE",
       "category": "ev",
       "ecosystem": "OCPP 1.6J / 2.0.1 EV Charger Gateway",
-      "devices": [
-        "EVerest Core Station",
-        "OpenEVSE WiFi v5"
-      ],
+      "devices": ["EVerest Core Station", "OpenEVSE WiFi v5"],
       "registers": [
-        {
-          "id": "OCPP_P_Ev",
-          "name": "EV_Charge_Rate",
-          "type": "FLOAT",
-          "unit": "kW",
-          "desc": "EV Vehicle Charge Delivery Rate"
-        }
-      ]
-    },
-    {
-      "vendor": "HydroTech",
-      "category": "hydro",
-      "ecosystem": "ModbusTCP Integration",
-      "devices": [
-        "HydroTurbine-V1"
-      ],
-      "registers": [
-        {
-          "id": "40001",
-          "name": "HydroTech_Active_Power",
-          "type": "UINT16",
-          "unit": "kW",
-          "desc": "Total Output Power"
-        },
-        {
-          "id": "40002",
-          "name": "HydroTech_Status",
-          "type": "UINT16",
-          "unit": "enum",
-          "desc": "0=Offline, 1=Operational"
-        }
+        { "id": "OCPP_P_Ev", "name": "EV_Charge_Rate", "type": "FLOAT", "unit": "kW", "desc": "EV Vehicle Charge Delivery Rate" }
       ]
     }
   ]

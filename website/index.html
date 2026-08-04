@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WireBusOS — Top Renewable Energy Vendors & Custom SDK</title>
-    <meta name="description" content="WireBusOS is a specialized renewable energy Linux distribution supporting the Top 20 Commercial Vendors (Victron, Pylontech, Siemens, Tesla, Vestas, GE, CATL) with an extensible custom driver SDK.">
+    <title>WireBusOS — Renewable Energy Vendors & Custom SDK</title>
+    <meta name="description" content="WireBusOS is a specialized renewable energy Linux distribution supporting Commercial Vendors (Victron, Pylontech, Siemens, Tesla, Vestas, GE, CATL) with an extensible custom driver SDK.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
@@ -44,10 +44,10 @@
         <div class="nav-container">
             <a href="#" class="brand">
                 <span class="brand-icon">⚡</span>
-                <span class="brand-name">WireBus<span class="highlight">OS</span> <span class="sub-tag">TOP 20 VENDOR SDK</span></span>
+                <span class="brand-name">WireBus<span class="highlight">OS</span> <span class="sub-tag">VENDOR DRIVER SDK</span></span>
             </a>
             <nav class="nav-links">
-                <a href="#vendor-suite">Top 20 Vendors</a>
+                <a href="#vendor-suite">Vendor Ecosystem</a>
                 <a href="#custom-vendor-sec">Add Vendor SDK</a>
                 <a href="#sld">Single-Line Diagram</a>
                 <a href="#scada-map">Modbus Registry</a>
@@ -65,9 +65,9 @@
             <div class="container hero-grid">
                 <div class="hero-content">
                     <div class="badge">
-                        <span class="pulse-dot"></span> Top 20 Vendors + Extensible Custom Driver SDK
+                        <span class="pulse-dot"></span> Commercial Vendors + Extensible Custom Driver SDK
                     </div>
-                    <h1 class="hero-title">Compatible with <span class="gradient-text">Top 20 Renewable Vendors</span> & Custom Equipment</h1>
+                    <h1 class="hero-title">Compatible with <span class="gradient-text">Top Renewable Vendors</span> & Custom Equipment</h1>
                     <p class="hero-subtitle">
                         Native integrations for **Victron**, **Pylontech**, **Siemens**, **Tesla Energy**, **Vestas**, **GE Vernova**, **CATL**, **BYD**, **Enphase**, and **SolarEdge**, plus a custom vendor driver generator.
                     </p>
@@ -76,13 +76,13 @@
                             <span>➕ Add Custom Vendor App</span>
                         </button>
                         <a href="#vendor-suite" class="btn btn-outline btn-lg">
-                            <span>📜 View Top 20 Directory</span>
+                            <span>📜 View Vendor Directory</span>
                         </a>
                     </div>
                     <div class="hero-stats">
                         <div class="stat-item">
-                            <span class="stat-num">20+</span>
-                            <span class="stat-label">Commercial Vendors</span>
+                            <span class="stat-num">Commercial</span>
+                            <span class="stat-label">Vendor Ecosystems</span>
                         </div>
                         <div class="stat-item">
                             <span class="stat-num">5 Domains</span>
@@ -106,7 +106,7 @@
                         <div class="terminal-title">python3 vendor-drivers/vendor_registry.py list</div>
                     </div>
                     <div class="terminal-body" id="terminal-output">
-                        <div class="term-line"><span class="prompt">[WireBusOS SDK]</span> Loaded WireBusOS Top 20 Vendor Registry...</div>
+                        <div class="term-line"><span class="prompt">[WireBusOS SDK]</span> Loaded WireBusOS Vendor Registry...</div>
                         <div class="term-line info"><span class="prompt">[WireBusOS SDK]</span> Victron Energy | Solar | VE.Bus / VE.Direct / VRM</div>
                         <div class="term-line success"><span class="prompt">[WireBusOS SDK]</span> Siemens Energy | Hydro | S7comm TCP 102 / Spectrum SCADA</div>
                         <div class="term-line highlight"><span class="prompt">[WireBusOS SDK]</span> Vestas Wind | Wind | VMP SCADA Gateway</div>
@@ -120,28 +120,28 @@
             </div>
         </section>
 
-        <!-- Top 20 Vendor Ecosystem Directory Section -->
+        <!-- Vendor Ecosystem Directory Section -->
         <section id="vendor-suite" class="section vendor-section">
             <div class="container">
                 <div class="section-header text-center">
-                    <span class="section-badge">Top 20 Commercial Ecosystem</span>
-                    <h2 class="section-title">Top 20 Commercial Equipment Ecosystems</h2>
+                    <span class="section-badge">Commercial Ecosystem</span>
+                    <h2 class="section-title">Commercial Equipment Ecosystems</h2>
                     <p class="section-subtitle">Filter through native drivers for solar inverters, battery BMS stacks, hydro SCADA controllers, wind turbine gateways, and EV chargers.</p>
                 </div>
 
                 <!-- Category Filter Tabs -->
                 <div class="filter-tabs" id="vendor-category-tabs">
-                    <button class="filter-btn active" data-vcat="all">All Vendors (20)</button>
-                    <button class="filter-btn" data-vcat="solar">☀️ Solar PV (10)</button>
-                    <button class="filter-btn" data-vcat="storage">🔋 Battery & BMS (4)</button>
-                    <button class="filter-btn" data-vcat="hydro">⚙️ Hydro SCADA (2)</button>
-                    <button class="filter-btn" data-vcat="wind">💨 Wind Energy (2)</button>
-                    <button class="filter-btn" data-vcat="ev">🔌 EV Charging (1)</button>
+                    <button class="filter-btn active" data-vcat="all">All Vendors</button>
+                    <button class="filter-btn" data-vcat="solar">☀️ Solar PV</button>
+                    <button class="filter-btn" data-vcat="storage">🔋 Battery & BMS</button>
+                    <button class="filter-btn" data-vcat="hydro">⚙️ Hydro SCADA</button>
+                    <button class="filter-btn" data-vcat="wind">💨 Wind Energy</button>
+                    <button class="filter-btn" data-vcat="ev">🔌 EV Charging</button>
                 </div>
 
                 <!-- Vendor Cards Grid -->
                 <div class="grid grid-3" id="top20-vendors-grid">
-                    <!-- Dynamic Top 20 Cards Rendered via JS -->
+                    <!-- Dynamic Vendor Cards Rendered via JS -->
                 </div>
             </div>
         </section>
@@ -244,7 +244,7 @@
                 <div class="section-header text-center">
                     <span class="section-badge">Equipment Register Registry</span>
                     <h2 class="section-title">Vendor SCADA Register Lookup</h2>
-                    <p class="section-subtitle">Search register maps across all 20 vendor applications.</p>
+                    <p class="section-subtitle">Search register maps across commercial vendor applications.</p>
                 </div>
 
                 <div class="scada-panel glass-panel">
@@ -297,7 +297,7 @@
             <div class="container text-center">
                 <div class="download-card glass-panel">
                     <h2 class="download-title">Deploy WireBusOS Workstation</h2>
-                    <p class="download-desc">Clone the repository and launch the Top 20 vendor driver suite.</p>
+                    <p class="download-desc">Clone the repository and launch the commercial vendor driver suite.</p>
 
                     <div class="quickstart-box">
                         <button class="copy-btn" data-copy="git clone https://github.com/wirebustech/WireBusOS.git && cd WireBusOS && ./build-scripts/install-wirebus.sh --core">Copy Command</button>
@@ -372,7 +372,7 @@
     <footer class="footer">
         <div class="container footer-content">
             <div class="footer-brand">
-                <span class="brand-icon">⚡</span> WireBusOS — Top 20 Renewable Energy Vendors Platform
+                <span class="brand-icon">⚡</span> WireBusOS — Renewable Energy Vendors Platform
             </div>
             <div class="footer-links">
                 <a href="https://www.victronenergy.com/" target="_blank">Victron</a>

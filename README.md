@@ -1,6 +1,6 @@
 # WireBusOS ⚡🌱
 
-**WireBusOS** is a specialized, open-source Linux distribution engineered for energy systems engineering, renewable energy dispatch modeling, microgrid optimal power flow (OPF), battery electrochemistry, industrial SCADA telemetry (Modbus/DNP3/MQTT), and commercial equipment integrations.
+**WireBusOS** is a specialized, open-source Linux distribution remastered using **Cubic (Custom Ubuntu ISO Creator)** engineered for power systems engineering, renewable energy dispatch modeling, microgrid optimal power flow (OPF), battery electrochemistry, industrial SCADA telemetry (Modbus/DNP3/MQTT), and commercial equipment integrations.
 
 ```
                   +-------------------------------------------------------------+
@@ -19,7 +19,7 @@
          +---------------------------------------+---------------------------------------+
          |                                                                               |
 +------------------------------------+                         +-----------------------------------+
-| INDUSTRIAL SCADA & MODBUS CORE     |                         | TOP 20 COMMERCIAL VENDOR SUITE    |
+| INDUSTRIAL SCADA & MODBUS CORE     |                         | COMMERCIAL VENDOR SUITE           |
 | Grafana / InfluxDB / Home Assistant|                         | Victron, Pylontech, Siemens, SMA, |
 | MQTT / DNP3 Gateways               |                         | Tesla, Vestas, GE, BYD, CATL, etc.|
 +------------------------------------+                         +-----------------------------------+
@@ -27,9 +27,9 @@
 
 ---
 
-## 🏭 Top 20 Renewable Energy Vendor Integrations
+## 🏭 Commercial Renewable Energy Vendor Integrations
 
-WireBusOS provides pre-mapped registers, protocol drivers, and SDK tools for the **Top 20 Commercial Vendors** in solar, wind, hydro, battery storage, and EV infrastructure:
+WireBusOS provides pre-mapped registers, protocol drivers, and SDK tools for the **Top Commercial Vendors** in solar, wind, hydro, battery storage, and EV infrastructure:
 
 | Category | Commercial Vendor & Ecosystem | Supported Hardware & Protocols | Driver Module |
 |---|---|---|---|
@@ -37,7 +37,7 @@ WireBusOS provides pre-mapped registers, protocol drivers, and SDK tools for the
 | ☀️ **Solar** | **LuxpowerTek** | LXP Hybrid 12k, SNA 5000, LXP-LB 5k (Lux Cloud / Modbus RTU) | `vendor-drivers/luxpower_cloud_client.py` |
 | ☀️ **Solar** | **SMA Solar Technology** | Sunny Boy, Sunny Tripower CORE1, Sunny Island (Speedwire UDP) | `vendor-drivers/sma_fronius_drivers.py` |
 | ☀️ **Solar** | **Fronius International** | Fronius Symo, Primo, Eco (Fronius Solar.API REST) | `vendor-drivers/sma_fronius_drivers.py` |
-| ☀️ **Solar** | **SolarEdge** | SE10000H, SE33.3K, Energy Bank (SunSpec Modbus TCP) | Integrated via SunSpec Core |
+| ☀️ **Solar** | **SolarEdge** | SE10000H, SE33.3K, Energy Bank (SunSpec Modbus TCP) | Integrated via SunSpec Engine |
 | ☀️ **Solar** | **Enphase Energy** | IQ7+, IQ8M, IQ Battery 5P (Envoy Local API) | Integrated via Envoy Bridge |
 | ☀️ **Solar** | **Growatt** | MIN 5000TL-XH, SPH 10000, MAX 125KTL3 (ShineServer API) | Integrated via Modbus RTU |
 | ☀️ **Solar** | **Deye / Sol-Ark** | Deye SUN-12K, Sol-Ark 15K Hybrid Inverters (CANbus / Modbus) | Integrated via Hybrid Gateway |
@@ -88,7 +88,7 @@ WireBusOS/
 │   ├── requirements-energy.txt     # Python scientific library manifest
 │   ├── docker-compose.yml          # Telemetry stack (Grafana, InfluxDB, Home Assistant)
 │   ├── modbus_scada_map.json       # Modbus TCP SCADA register mapping
-│   └── vendor_registers.json       # Top 20 Commercial Vendor registry
+│   └── vendor_registers.json       # Commercial Vendor registry
 ├── vendor-drivers/                 # Vendor Driver Suite & Extension SDK
 │   ├── vendor_registry.py          # CLI Manager & Extension SDK
 │   ├── victron_vrm_bridge.py       # Victron VE.Direct / VE.Bus / VRM API driver
