@@ -8,7 +8,7 @@ jupyterlab>=4.0.0
 
 # Solar PV Modeling (Module 01)
 pvlib>=0.10.0
-pysam>=4.0.0
+NREL-PySAM>=3.0.0
 
 # Wind Energy Modeling (Module 02)
 windpowerlib>=0.2.2
