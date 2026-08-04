@@ -7,6 +7,10 @@ Wants=network-online.target
 Type=oneshot
 ExecStart=/opt/wirebus/wirebus-first-boot.sh
 RemainAfterExit=yes
+TimeoutStartSec=120
+StandardOutput=journal+console
+StandardError=journal+console
 
 [Install]
 WantedBy=multi-user.target
+

@@ -68,6 +68,123 @@ warn() {
     echo -e "\033[1;33m[WARNING]\033[0m $1"
 }
 
+setup_os_branding() {
+    log "Applying WireBusOS distribution branding and system identity..."
+    
+    # 1. /etc/os-release
+    cat << 'EOF' > /etc/os-release
+NAME="WireBusOS"
+VERSION="1.0.0 (Noble Numbat Base)"
+ID=wirebusos
+ID_LIKE=ubuntu
+PRETTY_NAME="WireBusOS 1.0.0 LTS (Energy & Microgrid Engineering OS)"
+VERSION_ID="1.0.0"
+VERSION_CODENAME=noble
+UBUNTU_CODENAME=noble
+HOME_URL="https://github.com/wirebustech/WireBusOS"
+SUPPORT_URL="https://github.com/wirebustech/WireBusOS/issues"
+BUG_REPORT_URL="https://github.com/wirebustech/WireBusOS/issues"
+PRIVACY_POLICY_URL="https://github.com/wirebustech/WireBusOS"
+LOGO=wirebusos-logo
+EOF
+
+    # 2. /etc/lsb-release
+    cat << 'EOF' > /etc/lsb-release
+DISTRIB_ID=WireBusOS
+DISTRIB_RELEASE=1.0.0
+DISTRIB_CODENAME=noble
+DISTRIB_DESCRIPTION="WireBusOS 1.0.0 LTS (Energy Engineering Platform)"
+EOF
+
+    # 3. /etc/issue and /etc/issue.net
+    echo -e "WireBusOS 1.0.0 LTS \\n \\l" > /etc/issue
+    echo "WireBusOS 1.0.0 LTS" > /etc/issue.net
+
+    # 4. Hostname
+    echo "wirebus-os" > /etc/hostname
+    if [[ -f "/etc/hosts" ]]; then
+        if ! grep -q "wirebus-os" /etc/hosts; then
+            echo "127.0.1.1 wirebus-os" >> /etc/hosts
+        fi
+    fi
+
+    # 5. Casper installer defaults
+    cat << 'EOF' > /etc/casper.conf
+USERNAME="wirebus"
+USERFULLNAME="WireBus OS User"
+HOST="wirebus-os"
+BUILD_SYSTEM="WireBusOS"
+EOF
+
+    # 6. MOTD Banner
+    mkdir -p /etc/update-motd.d
+    cat << 'EOF' > /etc/update-motd.d/00-wirebus-header
+#!/bin/sh
+echo "============================================================"
+echo "  ⚡ WireBusOS v1.0.0 LTS - Microgrid & Energy Engineering OS"
+echo "  🌱 Open-Source Energy Simulation & SCADA Control Platform"
+echo "============================================================"
+EOF
+    chmod +x /etc/update-motd.d/00-wirebus-header 2>/dev/null || true
+    cat << 'EOF' > /etc/motd
+============================================================
+  ⚡ WireBusOS v1.0.0 LTS - Microgrid & Energy Engineering OS
+  🌱 Open-Source Energy Simulation & SCADA Control Platform
+============================================================
+EOF
+
+    # 7. Pre-create installer log directory
+    mkdir -p /var/log/installer
+    chmod 755 /var/log/installer 2>/dev/null || true
+
+    # 8. Ubiquity installer target module compatibility
+    mkdir -p /usr/lib/ubiquity/ubiquity/targets /usr/share/ubiquity-slideshow 2>/dev/null || true
+    ln -sf ubuntu.py /usr/lib/ubiquity/ubiquity/targets/wirebusos.py 2>/dev/null || true
+    ln -sf ubuntu /usr/share/ubiquity-slideshow/wirebusos 2>/dev/null || true
+
+    # 9. Desktop launchers & skeleton configuration
+    mkdir -p /usr/share/applications /etc/skel/Desktop
+    cat << 'EOF' > /usr/share/applications/wirebus-telemetry.desktop
+[Desktop Entry]
+Name=WireBusOS Telemetry Dashboard
+Comment=Grafana & SCADA Monitoring Stack
+Exec=xdg-open http://localhost:3000
+Icon=utilities-system-monitor
+Terminal=false
+Type=Application
+Categories=Development;Engineering;Science;
+EOF
+    cp /usr/share/applications/wirebus-telemetry.desktop /etc/skel/Desktop/ 2>/dev/null || true
+
+    # Installer Desktop Launcher
+    cat << 'EOF' > /usr/share/applications/ubiquity.desktop
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Install WireBusOS 1.0.0 LTS
+Comment=Install this system permanently to your hard disk
+Exec=sudo -E ubiquity gtk_ui
+Icon=ubiquity
+Terminal=false
+Categories=GTK;System;Core;
+OnlyShowIn=GNOME;XFCE;Unity;
+EOF
+    cp /usr/share/applications/ubiquity.desktop /etc/skel/Desktop/ 2>/dev/null || true
+    chmod +x /etc/skel/Desktop/ubiquity.desktop 2>/dev/null || true
+
+    # Default bash environment aliases
+    if [[ -f "/etc/skel/.bashrc" ]]; then
+        if ! grep -q "WIREBUS_HOME" /etc/skel/.bashrc; then
+            cat << 'EOF' >> /etc/skel/.bashrc
+
+# WireBusOS Environment Settings
+export WIREBUS_HOME="/opt/wirebus"
+alias python3-wirebus="/opt/wirebus/venv/bin/python3"
+EOF
+        fi
+    fi
+}
+
 setup_cad_repositories() {
     log "Cleaning offline CD-ROM entries in chroot..."
     rm -f /etc/apt/sources.list.d/*cdrom* /etc/apt/sources.list.d/cdrom.sources 2>/dev/null || true
@@ -75,7 +192,7 @@ setup_cad_repositories() {
         sed -i '/cdrom/s/^/#/' /etc/apt/sources.list 2>/dev/null || true
     fi
 
-    log "Enabling Ubuntu universe and multiverse components..."
+    log "Enabling WireBusOS universe and multiverse package repositories..."
     if [[ -f "/etc/apt/sources.list.d/ubuntu.sources" ]]; then
         sed -i 's/Components: main restricted/Components: main restricted universe multiverse/g' /etc/apt/sources.list.d/ubuntu.sources 2>/dev/null || true
     fi
@@ -89,7 +206,6 @@ setup_cad_repositories() {
 
     curl -fsSL http://build.openmodelica.org/apt/openmodelica.asc 2>/dev/null | gpg --dearmor -o /etc/apt/trusted.gpg.d/openmodelica-keyring.gpg 2>/dev/null || true
     echo "deb [signed-by=/etc/apt/trusted.gpg.d/openmodelica-keyring.gpg] http://build.openmodelica.org/apt noble stable" > /etc/apt/sources.list.d/openmodelica.list 2>/dev/null || true
-
 }
 
 fix_chroot_kernel_hooks() {
@@ -158,8 +274,10 @@ setup_telemetry_stack() {
 
 setup_first_boot_service() {
     log "Configuring WireBusOS first-boot systemd engine..."
-    cp "${REPO_DIR}/build-scripts/wirebus-first-boot.sh" /usr/local/bin/wirebus-first-boot.sh
-    chmod +x /usr/local/bin/wirebus-first-boot.sh
+    mkdir -p /opt/wirebus
+    cp "${REPO_DIR}/build-scripts/wirebus-first-boot.sh" /opt/wirebus/wirebus-first-boot.sh
+    chmod +x /opt/wirebus/wirebus-first-boot.sh
+    ln -sf /opt/wirebus/wirebus-first-boot.sh /usr/local/bin/wirebus-first-boot.sh
 
     cp "${REPO_DIR}/build-scripts/first-boot-wirebus.service" /etc/systemd/system/first-boot-wirebus.service
     chmod 644 /etc/systemd/system/first-boot-wirebus.service
@@ -194,6 +312,12 @@ main() {
     parse_args "$@"
 
     log "Starting WireBusOS Setup (Core=${INSTALL_CORE}, Full=${INSTALL_FULL}, Chroot=${IS_CHROOT})..."
+
+    if [[ -x "${SCRIPT_DIR}/customize-distro.sh" ]]; then
+        "${SCRIPT_DIR}/customize-distro.sh"
+    else
+        setup_os_branding
+    fi
 
     install_apt_packages
     setup_python_env
