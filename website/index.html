@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WireBusOS — Renewable Energy Vendors & Custom SDK</title>
-    <meta name="description" content="WireBusOS is a specialized renewable energy Linux distribution supporting Commercial Vendors (Victron, Pylontech, Siemens, Tesla, Vestas, GE, CATL) with an extensible custom driver SDK.">
+    <title>WireBusOS — Functional Modules & Renewable Energy Linux Platform</title>
+    <meta name="description" content="WireBusOS is a specialized renewable energy Linux distribution featuring 12 functional module directories (Solar PV, Wind, Microgrids, Battery, Building Energy, SCADA, CAD, GIS, LF Energy, EV).">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
@@ -44,14 +44,14 @@
         <div class="nav-container">
             <a href="#" class="brand">
                 <span class="brand-icon">⚡</span>
-                <span class="brand-name">WireBus<span class="highlight">OS</span> <span class="sub-tag">VENDOR DRIVER SDK</span></span>
+                <span class="brand-name">WireBus<span class="highlight">OS</span> <span class="sub-tag">12 FUNCTIONAL MODULES</span></span>
             </a>
             <nav class="nav-links">
+                <a href="#functional-modules">12 Functional Modules</a>
                 <a href="#vendor-suite">Vendor Ecosystem</a>
-                <a href="#custom-vendor-sec">Add Vendor SDK</a>
+                <a href="#custom-vendor-sec">Vendor SDK</a>
                 <a href="#sld">Single-Line Diagram</a>
                 <a href="#scada-map">Modbus Registry</a>
-                <a href="#suite">Tool Suite</a>
                 <a href="#download" class="btn btn-sm btn-primary">Get ISO Build Kit</a>
             </nav>
             <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle Menu">☰</button>
@@ -65,37 +65,37 @@
             <div class="container hero-grid">
                 <div class="hero-content">
                     <div class="badge">
-                        <span class="pulse-dot"></span> Commercial Vendors + Extensible Custom Driver SDK
+                        <span class="pulse-dot"></span> 12 Functionally Modularized Renewable Energy Directories
                     </div>
-                    <h1 class="hero-title">Compatible with <span class="gradient-text">Top Renewable Vendors</span> & Custom Equipment</h1>
+                    <h1 class="hero-title">Functionally Modularized <span class="gradient-text">Renewable Energy Suite</span></h1>
                     <p class="hero-subtitle">
-                        Native integrations for **Victron**, **Pylontech**, **Siemens**, **Tesla Energy**, **Vestas**, **GE Vernova**, **CATL**, **BYD**, **Enphase**, and **SolarEdge**, plus a custom vendor driver generator.
+                        Organized into 12 functional directories covering **Solar PV**, **Wind Energy**, **Microgrids**, **Battery Storage**, **Building Energy**, **SCADA/IoT**, **CAD Design**, **OpenModelica**, **GIS**, **LF Energy**, **EV Charging**, and **Data Science Base**.
                     </p>
                     <div class="hero-actions">
-                        <button class="btn btn-primary btn-lg" id="btn-open-add-vendor">
+                        <a href="#functional-modules" class="btn btn-primary btn-lg">
+                            <span>📂 Explore 12 Functional Modules</span>
+                        </a>
+                        <button class="btn btn-outline btn-lg" id="btn-open-add-vendor">
                             <span>➕ Add Custom Vendor App</span>
                         </button>
-                        <a href="#vendor-suite" class="btn btn-outline btn-lg">
-                            <span>📜 View Vendor Directory</span>
-                        </a>
                     </div>
                     <div class="hero-stats">
                         <div class="stat-item">
-                            <span class="stat-num">Commercial</span>
-                            <span class="stat-label">Vendor Ecosystems</span>
+                            <span class="stat-num">12</span>
+                            <span class="stat-label">Functional Directories</span>
                         </div>
                         <div class="stat-item">
-                            <span class="stat-num">5 Domains</span>
-                            <span class="stat-label">Solar, Wind, Hydro, BMS, EV</span>
+                            <span class="stat-num">30+</span>
+                            <span class="stat-label">Open Source Tools</span>
                         </div>
                         <div class="stat-item">
-                            <span class="stat-num">CLI SDK</span>
-                            <span class="stat-label">vendor_registry.py</span>
+                            <span class="stat-num">100%</span>
+                            <span class="stat-label">Open Source & Modular</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Technical Live Terminal / Vendor Script Execution -->
+                <!-- Technical Live Terminal -->
                 <div class="hero-terminal">
                     <div class="terminal-header">
                         <div class="terminal-buttons">
@@ -103,24 +103,121 @@
                             <span class="btn-dot yellow"></span>
                             <span class="btn-dot green"></span>
                         </div>
-                        <div class="terminal-title">python3 vendor-drivers/vendor_registry.py list</div>
+                        <div class="terminal-title">for f in modules/*/*.py; do python3 "$f"; done</div>
                     </div>
                     <div class="terminal-body" id="terminal-output">
-                        <div class="term-line"><span class="prompt">[WireBusOS SDK]</span> Loaded WireBusOS Vendor Registry...</div>
-                        <div class="term-line info"><span class="prompt">[WireBusOS SDK]</span> Victron Energy | Solar | VE.Bus / VE.Direct / VRM</div>
-                        <div class="term-line success"><span class="prompt">[WireBusOS SDK]</span> Siemens Energy | Hydro | S7comm TCP 102 / Spectrum SCADA</div>
-                        <div class="term-line highlight"><span class="prompt">[WireBusOS SDK]</span> Vestas Wind | Wind | VMP SCADA Gateway</div>
-                        <div class="term-line"><span class="prompt">[WireBusOS SDK]</span> CATL BESS | Storage | EnerOne Modbus TCP</div>
+                        <div class="term-line"><span class="prompt">[WireBusOS Modules]</span> Executing 12 Functional Module Suites...</div>
+                        <div class="term-line info"><span class="prompt">[WireBusOS Modules]</span> 01-solar-pv: pvlib, SAM, PySAM, PVGIS, r.sun</div>
+                        <div class="term-line success"><span class="prompt">[WireBusOS Modules]</span> 02-wind-energy: OpenFAST, FAST.Farm, QBlade, windpowerlib</div>
+                        <div class="term-line highlight"><span class="prompt">[WireBusOS Modules]</span> 03-microgrid: PyPSA, oemof, Calliope, pandapower, ANDES</div>
+                        <div class="term-line"><span class="prompt">[WireBusOS Modules]</span> 10-lf-energy: PowerGridModel, OpenSTEF, openEEmeter</div>
                     </div>
                     <div class="terminal-controls">
-                        <button class="btn btn-sm btn-secondary" id="btn-replay-term">▶ Poll Vendor Registry</button>
-                        <span class="terminal-status">Vendor Extension SDK Manager</span>
+                        <button class="btn btn-sm btn-secondary" id="btn-replay-term">▶ Run All 12 Modules</button>
+                        <span class="terminal-status">Modular Directory Suite</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Vendor Ecosystem Directory Section -->
+        <!-- 12 Functional Modules Explorer Section -->
+        <section id="functional-modules" class="section modules-section">
+            <div class="container">
+                <div class="section-header text-center">
+                    <span class="section-badge">Modular Directory Architecture</span>
+                    <h2 class="section-title">12 Functional Module Directories</h2>
+                    <p class="section-subtitle">Browse through the repository folders organized by engineering function.</p>
+                </div>
+
+                <div class="grid grid-3">
+                    <div class="glass-card tool-card">
+                        <span class="tool-tag">MODULE 01</span>
+                        <h3 class="tool-name">☀️ Solar PV Design</h3>
+                        <p class="tool-desc">pvlib-python, NREL SAM, PySAM, PVGIS API, GRASS r.sun raster modeling.</p>
+                        <div class="tool-repo">📂 modules/01-solar-pv/</div>
+                    </div>
+
+                    <div class="glass-card tool-card">
+                        <span class="tool-tag">MODULE 02</span>
+                        <h3 class="tool-name">💨 Wind Energy</h3>
+                        <p class="tool-desc">OpenFAST, FAST.Farm, QBlade aero-elastic BEMT solver, windpowerlib.</p>
+                        <div class="tool-repo">📂 modules/02-wind-energy/</div>
+                    </div>
+
+                    <div class="glass-card tool-card">
+                        <span class="tool-tag">MODULE 03</span>
+                        <h3 class="tool-name">⚡ Microgrid Systems</h3>
+                        <p class="tool-desc">PyPSA, oemof-solph, Calliope, OSeMOSYS, SWITCH, Temoa, GridLAB-D, OpenDSS, pandapower, ANDES.</p>
+                        <div class="tool-repo">📂 modules/03-microgrid-energy-systems/</div>
+                    </div>
+
+                    <div class="glass-card tool-card">
+                        <span class="tool-tag">MODULE 04</span>
+                        <h3 class="tool-name">🔋 Battery & Storage</h3>
+                        <p class="tool-desc">PyBaMM electrochemistry SPM modeling, OpenEMS energy management controller.</p>
+                        <div class="tool-repo">📂 modules/04-battery-storage/</div>
+                    </div>
+
+                    <div class="glass-card tool-card">
+                        <span class="tool-tag">MODULE 05</span>
+                        <h3 class="tool-name">🏬 Building Energy</h3>
+                        <p class="tool-desc">EnergyPlus whole-building simulation runtime, OpenStudio SDK & GUI.</p>
+                        <div class="tool-repo">📂 modules/05-building-energy/</div>
+                    </div>
+
+                    <div class="glass-card tool-card">
+                        <span class="tool-tag">MODULE 06</span>
+                        <h3 class="tool-name">📊 SCADA & Telemetry</h3>
+                        <p class="tool-desc">Home Assistant, emoncms, Node-RED, Grafana, InfluxDB, ThingsBoard, SCADA-LTS.</p>
+                        <div class="tool-repo">📂 modules/06-monitoring-scada-iot/</div>
+                    </div>
+
+                    <div class="glass-card tool-card">
+                        <span class="tool-tag">MODULE 07</span>
+                        <h3 class="tool-name">📐 CAD & Electronics</h3>
+                        <p class="tool-desc">KiCad PCB design, FreeCAD 3D mechanical, QElectroTech single-line, ngspice.</p>
+                        <div class="tool-repo">📂 modules/07-cad-electronics-design/</div>
+                    </div>
+
+                    <div class="glass-card tool-card">
+                        <span class="tool-tag">MODULE 08</span>
+                        <h3 class="tool-name">🔬 Physical Simulation</h3>
+                        <p class="tool-desc">OpenModelica object-oriented physical system modeling with renewable libraries.</p>
+                        <div class="tool-repo">📂 modules/08-simulation-framework/</div>
+                    </div>
+
+                    <div class="glass-card tool-card">
+                        <span class="tool-tag">MODULE 09</span>
+                        <h3 class="tool-name">🌍 GIS & Spatial Resource</h3>
+                        <p class="tool-desc">QGIS PyQGIS Py-API, GRASS GIS terrain & solar irradiance slope exclusion analysis.</p>
+                        <div class="tool-repo">📂 modules/09-gis-spatial/</div>
+                    </div>
+
+                    <div class="glass-card tool-card">
+                        <span class="tool-tag">MODULE 10</span>
+                        <h3 class="tool-name">🌐 LF Energy Suite</h3>
+                        <p class="tool-desc">GridAPPS-D, OpenSTEF ML forecast, PowerGridModel C++ engine, OperatorFabric, openEEmeter.</p>
+                        <div class="tool-repo">📂 modules/10-lf-energy-projects/</div>
+                    </div>
+
+                    <div class="glass-card tool-card">
+                        <span class="tool-tag">MODULE 11</span>
+                        <h3 class="tool-name">🔌 EV Charging</h3>
+                        <p class="tool-desc">EVerest Core station software stack, OpenEVSE firmware interface (OCPP 1.6J/2.0.1).</p>
+                        <div class="tool-repo">📂 modules/11-ev-charging/</div>
+                    </div>
+
+                    <div class="glass-card tool-card">
+                        <span class="tool-tag">MODULE 12</span>
+                        <h3 class="tool-name">🧪 Data Science Base</h3>
+                        <p class="tool-desc">NumPy, pandas, SciPy, matplotlib, seaborn, JupyterLab environment.</p>
+                        <div class="tool-repo">📂 modules/12-data-science-base/</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Commercial Vendor Directory Section -->
         <section id="vendor-suite" class="section vendor-section">
             <div class="container">
                 <div class="section-header text-center">
@@ -129,7 +226,6 @@
                     <p class="section-subtitle">Filter through native drivers for solar inverters, battery BMS stacks, hydro SCADA controllers, wind turbine gateways, and EV chargers.</p>
                 </div>
 
-                <!-- Category Filter Tabs -->
                 <div class="filter-tabs" id="vendor-category-tabs">
                     <button class="filter-btn active" data-vcat="all">All Vendors</button>
                     <button class="filter-btn" data-vcat="solar">☀️ Solar PV</button>
@@ -139,7 +235,6 @@
                     <button class="filter-btn" data-vcat="ev">🔌 EV Charging</button>
                 </div>
 
-                <!-- Vendor Cards Grid -->
                 <div class="grid grid-3" id="top20-vendors-grid">
                     <!-- Dynamic Vendor Cards Rendered via JS -->
                 </div>
@@ -269,25 +364,6 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Scientific Tools Directory -->
-        <section id="suite" class="section suite-section">
-            <div class="container">
-                <div class="section-header text-center">
-                    <span class="section-badge">Open Source Scientific Tools</span>
-                    <h2 class="section-title">Integrated Scientific Packages</h2>
-                    <p class="section-subtitle">30+ pre-installed energy engineering modeling libraries.</p>
-                </div>
-
-                <div class="search-box-wrap">
-                    <input type="text" id="suite-search" class="search-input" placeholder="Search tool by name or repository (e.g. pvlib, PyPSA, FreeCAD, OpenFAST)...">
-                </div>
-
-                <div class="grid grid-3" id="tools-grid">
-                    <!-- Dynamic cards -->
                 </div>
             </div>
         </section>
