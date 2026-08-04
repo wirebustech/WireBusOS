@@ -1,16 +1,15 @@
 #!/usr/bin/env bash
-# WireBusOS Automated Installer & ISO Remastering Script
-# Author: WireBusOS Core Team
-# Usage: ./install-wirebus.sh [--core | --full | --chroot | --desktop]
+# WireBusOS v1.0.0 (Initial Release) Build & Installer Script
+# Supported modes: --core (default), --full, --chroot, --desktop
 
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
+REPO_DIR="$(dirname "${SCRIPT_DIR}")"
 
-IS_CHROOT=0
 INSTALL_CORE=1
 INSTALL_FULL=0
+IS_CHROOT=0
 INSTALL_DESKTOP=0
 
 show_help() {
@@ -71,17 +70,32 @@ warn() {
 
 install_apt_packages() {
     log "Removing offline CD-ROM repository files in chroot..."
-    rm -f /etc/apt/sources.list.d/*cdrom* 2>/dev/null || true
+    rm -f /etc/apt/sources.list.d/*cdrom* /etc/apt/sources.list.d/cdrom.sources 2>/dev/null || true
     if [[ -f "/etc/apt/sources.list" ]]; then
         sed -i '/cdrom/s/^/#/' /etc/apt/sources.list 2>/dev/null || true
     fi
 
-    log "Updating package index..."
+    log "Enabling Ubuntu universe and multiverse repositories..."
     apt-get update -y
+    apt-get install -y --no-install-recommends software-properties-common ca-certificates curl gnupg || true
+    add-apt-repository universe -y || true
+    add-apt-repository multiverse -y || true
 
-    log "Installing prerequisite APT packages..."
+    log "Adding OpenModelica repository..."
+    curl -fsSL http://build.openmodelica.org/apt/openmodelica.asc | gpg --dearmor -o /etc/apt/trusted.gpg.d/openmodelica-keyring.gpg 2>/dev/null || true
+    echo "deb [signed-by=/etc/apt/trusted.gpg.d/openmodelica-keyring.gpg] http://build.openmodelica.org/apt noble nightly" > /etc/apt/sources.list.d/openmodelica.list 2>/dev/null || true
+
+    log "Updating package index with universe & OpenModelica repos..."
+    apt-get update -y || true
+
+    log "Installing prerequisite APT packages individually..."
     if [[ -f "${REPO_DIR}/config/packages-core.txt" ]]; then
-        grep -v '^#' "${REPO_DIR}/config/packages-core.txt" | xargs apt-get install -y --no-install-recommends
+        while IFS= read -r pkg || [[ -n "$pkg" ]]; do
+            # Skip empty lines and comments
+            [[ -z "$pkg" || "$pkg" =~ ^# ]] && continue
+            log "Installing APT package: ${pkg}..."
+            apt-get install -y --no-install-recommends "${pkg}" || warn "Package '${pkg}' not found in repositories, skipping."
+        done < "${REPO_DIR}/config/packages-core.txt"
     else
         apt-get install -y python3 python3-pip python3-venv git curl build-essential
     fi
@@ -96,31 +110,38 @@ setup_python_env() {
     log "Upgrading pip and wheel inside virtualenv..."
     "${venv_dir}/bin/pip" install --upgrade pip setuptools wheel
 
+    log "Installing WireBusOS scientific energy libraries..."
     if [[ -f "${REPO_DIR}/config/requirements-energy.txt" ]]; then
-        log "Installing Python renewable energy suite (pvlib, PyPSA, PyBaMM, OpenFAST-io, etc.)..."
-        "${venv_dir}/bin/pip" install -r "${REPO_DIR}/config/requirements-energy.txt"
+        "${venv_dir}/bin/pip" install -r "${REPO_DIR}/config/requirements-energy.txt" || warn "Some PIP dependencies failed to install."
     fi
 
-    # Create symlink for energy python environment
-    ln -sf "${venv_dir}/bin/python3" /usr/local/bin/wirebus-python
-    ln -sf "${venv_dir}/bin/jupyter-lab" /usr/local/bin/wirebus-jupyter
+    # Create system-wide symlink for python3-wirebus
+    ln -sf "${venv_dir}/bin/python3" /usr/local/bin/python3-wirebus
 }
 
-deploy_wirebus_configs() {
-    log "Deploying WireBusOS configuration files and service manifests..."
-    mkdir -p /etc/wirebus /opt/wirebus/telemetry
-
+setup_telemetry_stack() {
+    log "Deploying pre-configured telemetry container manifests..."
+    mkdir -p /opt/wirebus/telemetry
     if [[ -f "${REPO_DIR}/config/docker-compose.yml" ]]; then
         cp "${REPO_DIR}/config/docker-compose.yml" /opt/wirebus/telemetry/docker-compose.yml
     fi
 
-    cp "${SCRIPT_DIR}/wirebus-first-boot.sh" /opt/wirebus/wirebus-first-boot.sh
-    chmod +x /opt/wirebus/wirebus-first-boot.sh
+    log "Deploying SunSpec Modbus register map..."
+    mkdir -p /opt/wirebus/scada
+    if [[ -f "${REPO_DIR}/config/modbus_scada_map.json" ]]; then
+        cp "${REPO_DIR}/config/modbus_scada_map.json" /opt/wirebus/scada/modbus_scada_map.json
+    fi
+    if [[ -f "${REPO_DIR}/config/vendor_registers.json" ]]; then
+        cp "${REPO_DIR}/config/vendor_registers.json" /opt/wirebus/scada/vendor_registers.json
+    fi
 }
 
 setup_first_boot_service() {
-    log "Registering wirebus-first-boot systemd service..."
-    cp "${SCRIPT_DIR}/first-boot-wirebus.service" /etc/systemd/system/first-boot-wirebus.service
+    log "Configuring WireBusOS first-boot systemd engine..."
+    cp "${REPO_DIR}/build-scripts/wirebus-first-boot.sh" /usr/local/bin/wirebus-first-boot.sh
+    chmod +x /usr/local/bin/wirebus-first-boot.sh
+
+    cp "${REPO_DIR}/build-scripts/first-boot-wirebus.service" /etc/systemd/system/first-boot-wirebus.service
     chmod 644 /etc/systemd/system/first-boot-wirebus.service
 
     # Enable service for systemd (in chroot this bakes into symlinks)
@@ -144,26 +165,23 @@ start_live_services() {
                 (cd /opt/wirebus/telemetry && docker compose up -d) || warn "Docker stack launch deferred to startup."
             fi
         else
-            warn "Docker service not currently active. First-boot script will handle startup."
+            warn "Docker daemon not running. Telemetry containers deferred to first boot."
         fi
     fi
 }
 
 main() {
     parse_args "$@"
-    
-    log "Starting WireBusOS setup (Chroot mode: ${IS_CHROOT})..."
+
+    log "Starting WireBusOS Setup (Core=${INSTALL_CORE}, Full=${INSTALL_FULL}, Chroot=${IS_CHROOT})..."
+
     install_apt_packages
     setup_python_env
-    deploy_wirebus_configs
+    setup_telemetry_stack
     setup_first_boot_service
     start_live_services
 
-    log "----------------------------------------------------"
-    log "WireBusOS installation & configuration completed!"
-    log "Python Suite: /opt/wirebus/venv (alias: wirebus-python)"
-    log "Telemetry Stack: /opt/wirebus/telemetry/docker-compose.yml"
-    log "----------------------------------------------------"
+    log "WireBusOS Installation & Remastering Setup Complete! ⚡🌱"
 }
 
 main "$@"
