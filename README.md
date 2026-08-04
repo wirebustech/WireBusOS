@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <b>A specialized open-source Linux distribution engineered for power systems analysis, renewable microgrids, battery electrochemistry, and SCADA automation.</b>
+  <b>A specialized open-source Linux distribution engineered for power systems analysis, renewable microgrids, battery electrochemistry, energy finance, and SCADA automation.</b>
 </p>
 
 ---
@@ -76,21 +76,18 @@ python3 vendor-drivers/vendor_registry.py add --name "HydroTech" --category "hyd
 ```
 This automatically registers the equipment in `config/vendor_registers.json` and creates a runnable driver boilerplate in `vendor-drivers/hydrotech_driver.py`.
 
-### Web Portal Interactive Builder:
-Click the **"➕ Add Custom Vendor"** button on the WireBusOS Web Portal to define new equipment, specify register parameters, and generate Python driver code dynamically!
-
 ---
 
-## 📂 12 Functional Module Directories
+## 📂 13 Functional Module Directories
 
-WireBusOS is organized into 12 functional tool directories:
+WireBusOS is organized into 13 functional tool directories:
 
 ```
 WireBusOS/
 ├── assets/                         # Official Logo & Graphic Assets
 │   ├── wirebusos_icon.svg          # 512x512 Icon Badge
 │   └── wirebusos_horizontal_logo.svg # 900x220 Horizontal Logo
-├── modules/                        # 12 Functional Tool Directories
+├── modules/                        # 13 Functional Tool Directories
 │   ├── 01-solar-pv/                # pvlib-python, NREL SAM, PySAM, PVGIS, r.sun
 │   ├── 02-wind-energy/             # OpenFAST, FAST.Farm, QBlade, windpowerlib
 │   ├── 03-microgrid-energy-systems/# PyPSA, oemof, Calliope, OSeMOSYS, SWITCH, Temoa, etc.
@@ -102,7 +99,8 @@ WireBusOS/
 │   ├── 09-gis-spatial/             # QGIS, GRASS GIS
 │   ├── 10-lf-energy-projects/      # GridAPPS-D, OpenSTEF, PowerGridModel, OperatorFabric, openEEmeter
 │   ├── 11-ev-charging/             # EVerest Core, OpenEVSE
-│   └── 12-data-science-base/       # NumPy, pandas, SciPy, matplotlib, JupyterLab
+│   ├── 12-data-science-base/       # NumPy, pandas, SciPy, matplotlib, JupyterLab
+│   └── 13-energy-finance-economics/# pyPPA, NREL PySAM Financials, levelisedcost, PyThermoNomics, OpenPyTEA
 ├── vendor-drivers/                 # Vendor Driver Suite & Extension SDK
 │   ├── vendor_registry.py          # CLI Manager & Extension SDK
 │   ├── victron_vrm_bridge.py       # Victron VE.Direct / VE.Bus / VRM API driver

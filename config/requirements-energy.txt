@@ -32,6 +32,9 @@ eemeter>=3.0.0
 # EV Charging Protocols (Module 11)
 ocpp>=0.20.0
 
+# Energy Finance & Techno-Economics (Module 13)
+numpy-financial>=1.0.0
+
 # Vendor Telemetry & SCADA Protocols
 pymodbus>=3.5.0
 python-snap7>=1.3
