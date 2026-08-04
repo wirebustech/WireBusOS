@@ -68,7 +68,7 @@ warn() {
     echo -e "\033[1;33m[WARNING]\033[0m $1"
 }
 
-install_apt_packages() {
+setup_cad_repositories() {
     log "Removing offline CD-ROM repository files in chroot..."
     rm -f /etc/apt/sources.list.d/*cdrom* /etc/apt/sources.list.d/cdrom.sources 2>/dev/null || true
     if [[ -f "/etc/apt/sources.list" ]]; then
@@ -79,7 +79,26 @@ install_apt_packages() {
     if [[ -f "/etc/apt/sources.list.d/ubuntu.sources" ]]; then
         sed -i 's/Components: main restricted/Components: main restricted universe multiverse/g' /etc/apt/sources.list.d/ubuntu.sources 2>/dev/null || true
     fi
+
     apt-get update -y || true
+    apt-get install -y --no-install-recommends software-properties-common ca-certificates curl gnupg || true
+
+    log "Adding official FreeCAD PPA (ppa:freecad-maintainers/freecad-stable)..."
+    add-apt-repository ppa:freecad-maintainers/freecad-stable -y || true
+
+    log "Adding official KiCad PPA (ppa:kicad/kicad-8.0-releases)..."
+    add-apt-repository ppa:kicad/kicad-8.0-releases -y || true
+
+    log "Adding official OpenModelica APT repository..."
+    curl -fsSL http://build.openmodelica.org/apt/openmodelica.asc | gpg --dearmor -o /etc/apt/trusted.gpg.d/openmodelica-keyring.gpg 2>/dev/null || true
+    echo "deb [signed-by=/etc/apt/trusted.gpg.d/openmodelica-keyring.gpg] http://build.openmodelica.org/apt noble stable" > /etc/apt/sources.list.d/openmodelica.list 2>/dev/null || true
+
+    log "Refreshing APT package index with all upstream repositories..."
+    apt-get update -y || true
+}
+
+install_apt_packages() {
+    setup_cad_repositories
 
     log "Installing prerequisite core APT packages..."
     if [[ -f "${REPO_DIR}/config/packages-core.txt" ]]; then
@@ -88,9 +107,10 @@ install_apt_packages() {
         apt-get install -y python3 python3-pip python3-venv git curl build-essential || true
     fi
 
-    log "Attempting optional CAD & GIS tool installations (QGIS, KiCad, FreeCAD, NGSpice)..."
+    log "Installing CAD, GIS, and Simulation Tools (QGIS, KiCad, FreeCAD, OpenModelica, NGSpice)..."
     for pkg in qgis grass kicad freecad qelectrotech ngspice openmodelica docker.io; do
-        apt-get install -y --no-install-recommends --ignore-missing "${pkg}" 2>/dev/null || warn "Optional package '${pkg}' not available in mirror, skipping."
+        log "Installing ${pkg}..."
+        apt-get install -y --no-install-recommends "${pkg}" 2>/dev/null || warn "APT package '${pkg}' deferring to AppImage / GitHub release binary."
     done
 }
 
@@ -103,7 +123,7 @@ setup_python_env() {
     log "Upgrading pip and wheel inside virtualenv..."
     "${venv_dir}/bin/pip" install --upgrade pip setuptools wheel
 
-    log "Installing WireBusOS scientific energy libraries..."
+    log "Installing WireBusOS scientific energy libraries across all 14 modules..."
     if [[ -f "${REPO_DIR}/config/requirements-energy.txt" ]]; then
         "${venv_dir}/bin/pip" install -r "${REPO_DIR}/config/requirements-energy.txt" || warn "Some PIP dependencies failed to install."
     fi
