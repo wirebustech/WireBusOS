@@ -69,48 +69,48 @@ warn() {
 }
 
 setup_cad_repositories() {
-    log "Removing offline CD-ROM repository files in chroot..."
+    log "Cleaning offline CD-ROM entries in chroot..."
     rm -f /etc/apt/sources.list.d/*cdrom* /etc/apt/sources.list.d/cdrom.sources 2>/dev/null || true
     if [[ -f "/etc/apt/sources.list" ]]; then
         sed -i '/cdrom/s/^/#/' /etc/apt/sources.list 2>/dev/null || true
     fi
 
-    log "Enabling Ubuntu universe and multiverse repositories..."
+    log "Enabling Ubuntu universe and multiverse components..."
     if [[ -f "/etc/apt/sources.list.d/ubuntu.sources" ]]; then
         sed -i 's/Components: main restricted/Components: main restricted universe multiverse/g' /etc/apt/sources.list.d/ubuntu.sources 2>/dev/null || true
     fi
 
-    apt-get update -y || true
-    apt-get install -y --no-install-recommends software-properties-common ca-certificates curl gnupg || true
+    apt-get update -y 2>/dev/null || true
+    apt-get install -y --no-install-recommends software-properties-common ca-certificates curl gnupg 2>/dev/null || true
 
-    log "Adding official FreeCAD PPA (ppa:freecad-maintainers/freecad-stable)..."
-    add-apt-repository ppa:freecad-maintainers/freecad-stable -y || true
+    log "Attempting to add FreeCAD and OpenModelica repositories..."
+    add-apt-repository ppa:freecad-maintainers/freecad-stable -y 2>/dev/null || true
+    add-apt-repository ppa:kicad/kicad-8.0-releases -y 2>/dev/null || true
 
-    log "Adding official KiCad PPA (ppa:kicad/kicad-8.0-releases)..."
-    add-apt-repository ppa:kicad/kicad-8.0-releases -y || true
-
-    log "Adding official OpenModelica APT repository..."
-    curl -fsSL http://build.openmodelica.org/apt/openmodelica.asc | gpg --dearmor -o /etc/apt/trusted.gpg.d/openmodelica-keyring.gpg 2>/dev/null || true
+    curl -fsSL http://build.openmodelica.org/apt/openmodelica.asc 2>/dev/null | gpg --dearmor -o /etc/apt/trusted.gpg.d/openmodelica-keyring.gpg 2>/dev/null || true
     echo "deb [signed-by=/etc/apt/trusted.gpg.d/openmodelica-keyring.gpg] http://build.openmodelica.org/apt noble stable" > /etc/apt/sources.list.d/openmodelica.list 2>/dev/null || true
 
-    log "Refreshing APT package index with all upstream repositories..."
-    apt-get update -y || true
+    apt-get update -y 2>/dev/null || true
 }
 
 install_apt_packages() {
     setup_cad_repositories
 
-    log "Installing prerequisite core APT packages..."
+    log "Installing core development dependencies..."
     if [[ -f "${REPO_DIR}/config/packages-core.txt" ]]; then
-        grep -v '^#' "${REPO_DIR}/config/packages-core.txt" | xargs apt-get install -y --no-install-recommends || true
-    else
-        apt-get install -y python3 python3-pip python3-venv git curl build-essential || true
+        while IFS= read -r pkg || [[ -n "$pkg" ]]; do
+            [[ -z "$pkg" || "$pkg" =~ ^# ]] && continue
+            apt-get install -y --no-install-recommends "${pkg}" 2>/dev/null || warn "Core dependency '${pkg}' skipped."
+        done < "${REPO_DIR}/config/packages-core.txt"
     fi
 
-    log "Installing CAD, GIS, and Simulation Tools (QGIS, KiCad, FreeCAD, OpenModelica, NGSpice)..."
+    log "Installing CAD, GIS, and Simulation tools (ignoring missing packages)..."
     for pkg in qgis grass kicad freecad qelectrotech ngspice openmodelica docker.io; do
-        log "Installing ${pkg}..."
-        apt-get install -y --no-install-recommends "${pkg}" 2>/dev/null || warn "APT package '${pkg}' deferring to AppImage / GitHub release binary."
+        if apt-get install -y --no-install-recommends --ignore-missing "${pkg}" 2>/dev/null; then
+            log "Successfully installed ${pkg}."
+        else
+            warn "Package '${pkg}' not available in mirror, ignoring."
+        fi
     done
 }
 
