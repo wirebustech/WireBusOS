@@ -70,6 +70,14 @@ warn() {
 }
 
 install_apt_packages() {
+    log "Disabling offline CD-ROM repository entries in chroot..."
+    sed -i 's/^deb file:\/cdrom/# deb file:\/cdrom/g' /etc/apt/sources.list 2>/dev/null || true
+    sed -i 's/^deb cdrom:/# deb cdrom:/g' /etc/apt/sources.list 2>/dev/null || true
+    if [[ -d "/etc/apt/sources.list.d" ]]; then
+        sed -i '/file:\/cdrom/s/^/#/' /etc/apt/sources.list.d/* 2>/dev/null || true
+        sed -i '/cdrom:/s/^/#/' /etc/apt/sources.list.d/* 2>/dev/null || true
+    fi
+
     log "Updating package index..."
     apt-get update -y
 
