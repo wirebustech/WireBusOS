@@ -15,7 +15,7 @@ INSTALL_DESKTOP=0
 
 show_help() {
     cat << EOF
-WireBusOS Build & Installer Script
+WireBusOS v1.0.0 (Initial Release) Build & Installer Script
 
 Options:
   --core       Install core energy Python libraries & essential APT dependencies (default)
