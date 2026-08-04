@@ -1,4 +1,4 @@
-# Core system utilities
+# Core system utilities & development libraries
 curl
 wget
 git
@@ -9,28 +9,10 @@ python3-venv
 gfortran
 liblapack-dev
 libopenblas-dev
-
-# GIS & Spatial Assessment
-qgis
-grass
-grass-core
-
-# CAD & Electrical Design
-kicad
-freecad
-qelectrotech
-ngspice
-
-# Energy Simulation Runtimes
-openmodelica
-
-# Telemetry & Container Prerequisites
-docker.io
-docker-compose-v2
 ca-certificates
 gnupg
 
-# Desktop & GUI Enhancements
+# Telemetry & Networking Prerequisites
 htop
 net-tools
 jq

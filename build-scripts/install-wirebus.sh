@@ -76,29 +76,22 @@ install_apt_packages() {
     fi
 
     log "Enabling Ubuntu universe and multiverse repositories..."
-    apt-get update -y
-    apt-get install -y --no-install-recommends software-properties-common ca-certificates curl gnupg || true
-    add-apt-repository universe -y || true
-    add-apt-repository multiverse -y || true
-
-    log "Adding OpenModelica repository..."
-    curl -fsSL http://build.openmodelica.org/apt/openmodelica.asc | gpg --dearmor -o /etc/apt/trusted.gpg.d/openmodelica-keyring.gpg 2>/dev/null || true
-    echo "deb [signed-by=/etc/apt/trusted.gpg.d/openmodelica-keyring.gpg] http://build.openmodelica.org/apt noble nightly" > /etc/apt/sources.list.d/openmodelica.list 2>/dev/null || true
-
-    log "Updating package index with universe & OpenModelica repos..."
+    if [[ -f "/etc/apt/sources.list.d/ubuntu.sources" ]]; then
+        sed -i 's/Components: main restricted/Components: main restricted universe multiverse/g' /etc/apt/sources.list.d/ubuntu.sources 2>/dev/null || true
+    fi
     apt-get update -y || true
 
-    log "Installing prerequisite APT packages individually..."
+    log "Installing prerequisite core APT packages..."
     if [[ -f "${REPO_DIR}/config/packages-core.txt" ]]; then
-        while IFS= read -r pkg || [[ -n "$pkg" ]]; do
-            # Skip empty lines and comments
-            [[ -z "$pkg" || "$pkg" =~ ^# ]] && continue
-            log "Installing APT package: ${pkg}..."
-            apt-get install -y --no-install-recommends "${pkg}" || warn "Package '${pkg}' not found in repositories, skipping."
-        done < "${REPO_DIR}/config/packages-core.txt"
+        grep -v '^#' "${REPO_DIR}/config/packages-core.txt" | xargs apt-get install -y --no-install-recommends || true
     else
-        apt-get install -y python3 python3-pip python3-venv git curl build-essential
+        apt-get install -y python3 python3-pip python3-venv git curl build-essential || true
     fi
+
+    log "Attempting optional CAD & GIS tool installations (QGIS, KiCad, FreeCAD, NGSpice)..."
+    for pkg in qgis grass kicad freecad qelectrotech ngspice openmodelica docker.io; do
+        apt-get install -y --no-install-recommends --ignore-missing "${pkg}" 2>/dev/null || warn "Optional package '${pkg}' not available in mirror, skipping."
+    done
 }
 
 setup_python_env() {
