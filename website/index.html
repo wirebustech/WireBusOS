@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WireBusOS — Functional Modules & Renewable Energy Linux Platform</title>
-    <meta name="description" content="WireBusOS is a specialized renewable energy Linux distribution featuring 13 functional module directories (Solar PV, Wind, Microgrids, Battery, Building Energy, SCADA, CAD, GIS, LF Energy, EV, Energy Finance).">
+    <meta name="description" content="WireBusOS is a specialized renewable energy Linux distribution featuring 14 functional module directories (Solar PV, Wind, Microgrids, Battery, Building Energy, SCADA, CAD, GIS, LF Energy, EV, Energy Finance, Carbon Accounting).">
     <link rel="icon" type="image/svg+xml" href="wirebusos_logo.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -45,10 +45,10 @@
         <div class="nav-container">
             <a href="#" class="brand">
                 <img src="wirebusos_logo.svg" alt="WireBusOS Logo" class="brand-logo-img">
-                <span class="brand-name">WireBus<span class="highlight">OS</span> <span class="sub-tag">13 FUNCTIONAL MODULES</span></span>
+                <span class="brand-name">WireBus<span class="highlight">OS</span> <span class="sub-tag">14 FUNCTIONAL MODULES</span></span>
             </a>
             <nav class="nav-links">
-                <a href="#functional-modules">13 Functional Modules</a>
+                <a href="#functional-modules">14 Functional Modules</a>
                 <a href="#vendor-suite">Vendor Ecosystem</a>
                 <a href="#custom-vendor-sec">Vendor SDK</a>
                 <a href="#sld">Single-Line Diagram</a>
@@ -66,15 +66,15 @@
             <div class="container hero-grid">
                 <div class="hero-content">
                     <div class="badge">
-                        <span class="pulse-dot"></span> 13 Functionally Modularized Renewable Energy Directories
+                        <span class="pulse-dot"></span> 14 Functionally Modularized Renewable Energy Directories
                     </div>
                     <h1 class="hero-title">Functionally Modularized <span class="gradient-text">Renewable Energy Suite</span></h1>
                     <p class="hero-subtitle">
-                        Organized into 13 functional directories covering **Solar PV**, **Wind Energy**, **Microgrids**, **Battery Storage**, **Building Energy**, **SCADA/IoT**, **CAD Design**, **OpenModelica**, **GIS**, **LF Energy**, **EV Charging**, **Data Science Base**, and **Energy Finance & Economics**.
+                        Organized into 14 functional directories covering **Solar PV**, **Wind Energy**, **Microgrids**, **Battery Storage**, **Building Energy**, **SCADA/IoT**, **CAD Design**, **OpenModelica**, **GIS**, **LF Energy**, **EV Charging**, **Data Science Base**, **Energy Finance**, and **Carbon Accounting & Energy Efficiency**.
                     </p>
                     <div class="hero-actions">
                         <a href="#functional-modules" class="btn btn-primary btn-lg">
-                            <span>📂 Explore 13 Functional Modules</span>
+                            <span>📂 Explore 14 Functional Modules</span>
                         </a>
                         <button class="btn btn-outline btn-lg" id="btn-open-add-vendor">
                             <span>➕ Add Custom Vendor App</span>
@@ -82,11 +82,11 @@
                     </div>
                     <div class="hero-stats">
                         <div class="stat-item">
-                            <span class="stat-num">13</span>
+                            <span class="stat-num">14</span>
                             <span class="stat-label">Functional Directories</span>
                         </div>
                         <div class="stat-item">
-                            <span class="stat-num">40+</span>
+                            <span class="stat-num">45+</span>
                             <span class="stat-label">Open Source Tools</span>
                         </div>
                         <div class="stat-item">
@@ -107,26 +107,25 @@
                         <div class="terminal-title">for f in modules/*/*.py; do python3 "$f"; done</div>
                     </div>
                     <div class="terminal-body" id="terminal-output">
-                        <div class="term-line"><span class="prompt">[WireBusOS Modules]</span> Executing 13 Functional Module Suites...</div>
+                        <div class="term-line"><span class="prompt">[WireBusOS Modules]</span> Executing 14 Functional Module Suites...</div>
                         <div class="term-line info"><span class="prompt">[WireBusOS Modules]</span> 01-solar-pv: pvlib, SAM, PySAM, PVGIS, r.sun</div>
-                        <div class="term-line success"><span class="prompt">[WireBusOS Modules]</span> 02-wind-energy: OpenFAST, FAST.Farm, QBlade, windpowerlib</div>
-                        <div class="term-line highlight"><span class="prompt">[WireBusOS Modules]</span> 03-microgrid: PyPSA, oemof, Calliope, pandapower, ANDES</div>
                         <div class="term-line success"><span class="prompt">[WireBusOS Modules]</span> 13-energy-finance: LCOE ($51.51/MWh), PPA ($52.50), NPV ($403.5k)</div>
+                        <div class="term-line highlight"><span class="prompt">[WireBusOS Modules]</span> 14-carbon-efficiency: 385 gCO2/kWh, Scope 1-3 Audit, CalTRACK M&V</div>
                     </div>
                     <div class="terminal-controls">
-                        <button class="btn btn-sm btn-secondary" id="btn-replay-term">▶ Run All 13 Modules</button>
+                        <button class="btn btn-sm btn-secondary" id="btn-replay-term">▶ Run All 14 Modules</button>
                         <span class="terminal-status">Modular Directory Suite</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- 13 Functional Modules Explorer Section -->
+        <!-- 14 Functional Modules Explorer Section -->
         <section id="functional-modules" class="section modules-section">
             <div class="container">
                 <div class="section-header text-center">
                     <span class="section-badge">Modular Directory Architecture</span>
-                    <h2 class="section-title">13 Functional Module Directories</h2>
+                    <h2 class="section-title">14 Functional Module Directories</h2>
                     <p class="section-subtitle">Browse through the repository folders organized by engineering function.</p>
                 </div>
 
@@ -220,6 +219,13 @@
                         <h3 class="tool-name">💰 Energy Finance & Economics</h3>
                         <p class="tool-desc">pyPPA, NREL PySAM Financials, levelisedcost, PyThermoNomics, lazard_lcoe, OpenPyTEA, BioSTEAM, DCF, LCOE, NPV, IRR & PPA cash flows.</p>
                         <div class="tool-repo">📂 modules/13-energy-finance-economics/</div>
+                    </div>
+
+                    <div class="glass-card tool-card">
+                        <span class="tool-tag">MODULE 14</span>
+                        <h3 class="tool-name">🌱 Carbon & Energy Efficiency</h3>
+                        <p class="tool-desc">CodeCarbon, openEEmeter, Green Metrics Tool, ghg-calculator, OWID CO2 Dataset, Kepler, Scope 1-3 GHG audit, grid carbon intensity ($gCO_2/kWh$), CalTRACK M&V.</p>
+                        <div class="tool-repo">📂 modules/14-carbon-accounting-energy-efficiency/</div>
                     </div>
                 </div>
             </div>
