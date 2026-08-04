@@ -1,6 +1,6 @@
 # WireBusOS ⚡🌱
 
-**WireBusOS** is a specialized, open-source Linux distribution remastered using **Cubic (Custom Ubuntu ISO Creator)** engineered for power systems engineering, renewable energy dispatch modeling, microgrid optimal power flow (OPF), battery electrochemistry, industrial SCADA telemetry (Modbus/DNP3/MQTT), and commercial equipment integrations.
+**WireBusOS** is a specialized, open-source Linux distribution remastered as a standalone, bootable ISO image engineered for power systems engineering, renewable energy dispatch modeling, microgrid optimal power flow (OPF), battery electrochemistry, industrial SCADA telemetry (Modbus/DNP3/MQTT), and commercial equipment integrations.
 
 ```
                   +-------------------------------------------------------------+
@@ -29,7 +29,7 @@
 
 ## 🏭 Commercial Renewable Energy Vendor Integrations
 
-WireBusOS provides pre-mapped registers, protocol drivers, and SDK tools for the **Top Commercial Vendors** in solar, wind, hydro, battery storage, and EV infrastructure:
+WireBusOS provides pre-mapped registers, protocol drivers, and SDK tools for commercial vendors in solar, wind, hydro, battery storage, and EV infrastructure:
 
 | Category | Commercial Vendor & Ecosystem | Supported Hardware & Protocols | Driver Module |
 |---|---|---|---|
@@ -80,7 +80,7 @@ Click the **"➕ Add Custom Vendor"** button on the WireBusOS Web Portal to defi
 ```
 WireBusOS/
 ├── build-scripts/
-│   ├── install-wirebus.sh          # Installer with --chroot Cubic remastering support
+│   ├── install-wirebus.sh          # Installer with --chroot ISO remastering support
 │   ├── wirebus-first-boot.sh       # First-boot provisioning engine
 │   └── first-boot-wirebus.service  # Systemd deferred startup unit
 ├── config/
@@ -89,6 +89,19 @@ WireBusOS/
 │   ├── docker-compose.yml          # Telemetry stack (Grafana, InfluxDB, Home Assistant)
 │   ├── modbus_scada_map.json       # Modbus TCP SCADA register mapping
 │   └── vendor_registers.json       # Commercial Vendor registry
+├── modules/                        # 12 Functional Open Source Tool Directories
+│   ├── 01-solar-pv/                # pvlib-python, NREL SAM, PySAM, PVGIS, r.sun
+│   ├── 02-wind-energy/             # OpenFAST, FAST.Farm, QBlade, windpowerlib
+│   ├── 03-microgrid-energy-systems/# PyPSA, oemof, Calliope, OSeMOSYS, SWITCH, Temoa, etc.
+│   ├── 04-battery-storage/         # PyBaMM, OpenEMS
+│   ├── 05-building-energy/         # EnergyPlus, OpenStudio
+│   ├── 06-monitoring-scada-iot/    # Home Assistant, emoncms, Node-RED, Grafana, ThingsBoard
+│   ├── 07-cad-electronics-design/  # KiCad, FreeCAD, QElectroTech, ngspice
+│   ├── 08-simulation-framework/    # OpenModelica
+│   ├── 09-gis-spatial/             # QGIS, GRASS GIS
+│   ├── 10-lf-energy-projects/      # GridAPPS-D, OpenSTEF, PowerGridModel, OperatorFabric, openEEmeter
+│   ├── 11-ev-charging/             # EVerest Core, OpenEVSE
+│   └── 12-data-science-base/       # NumPy, pandas, SciPy, matplotlib, JupyterLab
 ├── vendor-drivers/                 # Vendor Driver Suite & Extension SDK
 │   ├── vendor_registry.py          # CLI Manager & Extension SDK
 │   ├── victron_vrm_bridge.py       # Victron VE.Direct / VE.Bus / VRM API driver
@@ -98,14 +111,8 @@ WireBusOS/
 │   ├── sma_fronius_drivers.py      # SMA Speedwire & Fronius Solar.API drivers
 │   └── templates/
 │       └── custom_vendor_template.py # Boilerplate template for new custom vendors
-├── examples/                       # Technical Reference Models
-│   ├── pvlib_irradiance.py         # Plane-of-array solar simulation
-│   ├── pypsa_powerflow.py          # 5-bus optimal power flow
-│   ├── pybamm_battery_degradation.py# Battery SEI degradation
-│   ├── openfast_wind_simulation.py # BEMT wind turbine aerodynamic power curve
-│   └── scada_modbus_client.py      # Modbus TCP SCADA telemetry logger
 ├── docs/
-│   ├── CUBIC_ISO_BUILD_GUIDE.md    # Step-by-step ISO remastering guide
+│   ├── ISO_BUILD_GUIDE.md          # Step-by-step ISO remastering guide
 │   └── RENEWABLE_SUITE.md          # Detailed upstream package index
 ├── website/                        # Technical Workstation Portal & Microgrid Visualizer
 │   ├── index.html

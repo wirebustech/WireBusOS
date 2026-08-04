@@ -20,7 +20,7 @@ WireBusOS Build & Installer Script
 Options:
   --core       Install core energy Python libraries & essential APT dependencies (default)
   --full       Install full CAD tools (FreeCAD, KiCad, QGIS) + preconfigured container stacks
-  --chroot     Enable Cubic ISO remastering mode (bypasses running daemons, installs first-boot service)
+  --chroot     Enable ISO remastering mode (bypasses running daemons, installs first-boot service)
   --desktop    Install extra GUI shortcuts and desktop wallpaper
   --help       Show this help message
 EOF
@@ -128,7 +128,7 @@ setup_first_boot_service() {
 
 start_live_services() {
     if [[ "${IS_CHROOT}" -eq 1 ]]; then
-        warn "Running in CHROOT mode (Cubic ISO build). Skipping live service start & live docker pulls."
+        warn "Running in CHROOT mode (ISO build). Skipping live service start & live docker pulls."
         warn "Services will automatically initialize on the booted machine via first-boot-wirebus.service."
     else
         log "Starting live background services..."
