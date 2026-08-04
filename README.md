@@ -1,6 +1,6 @@
 # WireBusOS ⚡🌱
 
-**WireBusOS** is a specialized, open-source Linux distribution remastered using **Cubic (Custom Ubuntu ISO Creator)** engineered for power systems engineering, renewable energy dispatch modeling, microgrid optimal power flow (OPF), battery electrochemistry, industrial SCADA telemetry (Modbus/DNP3/MQTT), and commercial equipment integrations.
+**WireBusOS** is a specialized, open-source Linux distribution engineered for energy systems engineering, renewable energy dispatch modeling, microgrid optimal power flow (OPF), battery electrochemistry, industrial SCADA telemetry (Modbus/DNP3/MQTT), and commercial equipment integrations.
 
 ```
                   +-------------------------------------------------------------+
