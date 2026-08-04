@@ -1,0 +1,54 @@
+{
+  "system": "WireBusOS Commercial Equipment SCADA & Protocol Registry",
+  "vendors": [
+    {
+      "vendor": "Victron Energy",
+      "ecosystem": "VE.Bus / VE.Direct / Venus OS dbus",
+      "devices": ["MultiPlus-II", "Quattro", "SmartSolar MPPT", "Cerbo GX"],
+      "registers": [
+        { "id": "0xED8D", "name": "VE_Bus_State", "type": "UINT16", "unit": "enum", "desc": "0=Off, 3=Inverting, 4=Bulk, 5=Absorption" },
+        { "id": "0x0304", "name": "VE_Direct_PV_Power", "type": "UINT16", "unit": "W", "desc": "MPPT Real-time Panel Yield" },
+        { "id": "0x0305", "name": "VE_Direct_Battery_SOC", "type": "UINT16", "unit": "%", "desc": "SmartShunt Battery SOC" }
+      ]
+    },
+    {
+      "vendor": "Pylontech",
+      "ecosystem": "CANbus / RS485 Console",
+      "devices": ["US2000C", "US3000C", "US5000", "Force L1/L2"],
+      "registers": [
+        { "id": "CAN_0x355", "name": "BMS_SOC_SOH", "type": "UINT16", "unit": "%", "desc": "Battery Stack SOC & SOH Percentage" },
+        { "id": "CAN_0x356", "name": "BMS_Voltage_Current", "type": "INT16", "unit": "V / A", "desc": "Stack Voltage (0.01V) & Current (0.1A)" },
+        { "id": "CAN_0x359", "name": "BMS_Alarms", "type": "BITMASK", "unit": "flags", "desc": "Protection & Overvoltage Flags" }
+      ]
+    },
+    {
+      "vendor": "Siemens Energy",
+      "ecosystem": "S7comm Protocol / Spectrum Power SCADA",
+      "devices": ["S7-1200", "S7-1500", "WinCC SCADA", "Spectrum Power"],
+      "registers": [
+        { "id": "DB10.DBD0", "name": "Hydro_Flow_Rate", "type": "REAL", "unit": "m3/s", "desc": "Penstock Hydro Turbine Volumetric Flow" },
+        { "id": "DB10.DBD4", "name": "Penstock_Pressure", "type": "REAL", "unit": "bar", "desc": "Hydraulic Penstock Operating Pressure" },
+        { "id": "DB10.DBW8", "name": "Generator_RPM", "type": "INT16", "unit": "RPM", "desc": "Hydro Turbine Shaft Speed" }
+      ]
+    },
+    {
+      "vendor": "LuxpowerTek",
+      "ecosystem": "Lux Cloud / Modbus RTU (RS485)",
+      "devices": ["LXP Hybrid 12k", "SNA 5000", "LXP-LB 5k"],
+      "registers": [
+        { "id": "REG_040", "name": "Lux_PV1_Power", "type": "UINT16", "unit": "W", "desc": "Solar String 1 DC Power" },
+        { "id": "REG_041", "name": "Lux_PV2_Power", "type": "UINT16", "unit": "W", "desc": "Solar String 2 DC Power" },
+        { "id": "REG_080", "name": "Lux_Battery_SOC", "type": "UINT16", "unit": "%", "desc": "Lithium Battery SOC Percentage" }
+      ]
+    },
+    {
+      "vendor": "SMA Solar Technology",
+      "ecosystem": "Speedwire UDP Multicast / SunSpec Modbus",
+      "devices": ["Sunny Boy", "Sunny Tripower CORE1", "Sunny Island"],
+      "registers": [
+        { "id": "30775", "name": "SMA_Grid_Power", "type": "INT32", "unit": "W", "desc": "Total AC Output Power" },
+        { "id": "30803", "name": "SMA_Grid_Frequency", "type": "UINT32", "unit": "Hz", "desc": "Grid AC Frequency (0.01Hz)" }
+      ]
+    }
+  ]
+}

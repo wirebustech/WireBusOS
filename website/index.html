@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WireBusOS — Energy & Power Systems Engineering Linux Platform</title>
-    <meta name="description" content="WireBusOS is a specialized power systems engineering Linux distribution featuring PyPSA optimal power flow, pvlib solar modeling, PyBaMM battery electrochemistry, OpenFAST wind simulation, and SCADA telemetry.">
+    <title>WireBusOS — Commercial Vendor Integrations & Energy Linux Platform</title>
+    <meta name="description" content="WireBusOS is a specialized power systems engineering Linux distribution featuring integrations for Victron Energy, Pylontech, Luxpower, Siemens, SMA, Fronius, Tesla, and Enphase equipment.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
@@ -18,24 +18,20 @@
             <span class="tel-val highlight-green" id="tel-freq">60.00 Hz</span>
         </div>
         <div class="telemetry-item">
-            <span class="tel-label">AC BUS VOLTAGE:</span>
-            <span class="tel-val" id="tel-vac">480.2 V AC</span>
+            <span class="tel-label">VICTRON VE.BUS:</span>
+            <span class="tel-val highlight-cyan" id="tel-victron">MultiPlus 48/5000 (Bulk)</span>
         </div>
         <div class="telemetry-item">
-            <span class="tel-label">DC BUS VOLTAGE:</span>
-            <span class="tel-val" id="tel-vdc">750.5 V DC</span>
+            <span class="tel-label">PYLONTECH BMS:</span>
+            <span class="tel-val highlight-emerald" id="tel-pylon">US5000 Stack (82% SOC)</span>
         </div>
         <div class="telemetry-item">
-            <span class="tel-label">POWER FACTOR:</span>
-            <span class="tel-val highlight-cyan" id="tel-pf">0.985 (Lagging)</span>
+            <span class="tel-label">SIEMENS S7 SCADA:</span>
+            <span class="tel-val highlight-amber" id="tel-siemens">S7-1500 (Hydro 14.5 m³/s)</span>
         </div>
         <div class="telemetry-item">
-            <span class="tel-label">TOTAL GENERATION P:</span>
-            <span class="tel-val highlight-amber" id="tel-pgen">48.5 kW</span>
-        </div>
-        <div class="telemetry-item">
-            <span class="tel-label">REACTIVE POWER Q:</span>
-            <span class="tel-val" id="tel-qgen">+7.2 kVAR</span>
+            <span class="tel-label">LUXPOWER CLOUD:</span>
+            <span class="tel-val" id="tel-lux">LXP 12k (5.8 kW PV)</span>
         </div>
     </div>
 
@@ -44,14 +40,14 @@
         <div class="nav-container">
             <a href="#" class="brand">
                 <span class="brand-icon">⚡</span>
-                <span class="brand-name">WireBus<span class="highlight">OS</span> <span class="sub-tag">ENGINEERING WORKSTATION</span></span>
+                <span class="brand-name">WireBus<span class="highlight">OS</span> <span class="sub-tag">VENDOR & SCADA SUITE</span></span>
             </a>
             <nav class="nav-links">
+                <a href="#vendor-suite">Vendor Ecosystem</a>
                 <a href="#sld">Single-Line Diagram</a>
                 <a href="#code-sandbox">Python Sandbox</a>
                 <a href="#scada-map">Modbus SCADA Map</a>
                 <a href="#suite">Tool Suite</a>
-                <a href="#cubic-guide">Cubic Remastering</a>
                 <a href="#download" class="btn btn-sm btn-primary">Get ISO Build Kit</a>
             </nav>
             <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle Menu">☰</button>
@@ -65,37 +61,37 @@
             <div class="container hero-grid">
                 <div class="hero-content">
                     <div class="badge">
-                        <span class="pulse-dot"></span> IEEE Benchmark & Power Systems Linux OS
+                        <span class="pulse-dot"></span> Commercial Inverter, BMS & SCADA Linux OS
                     </div>
-                    <h1 class="hero-title">The Engineering Workstation for <span class="gradient-text">Power Systems & Microgrids</span></h1>
+                    <h1 class="hero-title">Integrated Driver Suite for <span class="gradient-text">Top Renewable Energy Vendors</span></h1>
                     <p class="hero-subtitle">
-                        Integrated Linux platform bundling Optimal Power Flow (PyPSA/pandapower), Solar Irradiance Transposition (pvlib), Battery SPM Degradation (PyBaMM), and Modbus TCP Telemetry.
+                        Native drivers and protocol gateways for **Victron Energy**, **Pylontech**, **Luxpower**, **Siemens**, **SMA**, **Fronius**, **Tesla Energy**, and **Enphase**.
                     </p>
                     <div class="hero-actions">
-                        <a href="#sld" class="btn btn-primary btn-lg">
-                            <span>📊 Launch SLD Simulator</span>
+                        <a href="#vendor-suite" class="btn btn-primary btn-lg">
+                            <span>🔌 Explore Vendor Drivers</span>
                         </a>
-                        <a href="#code-sandbox" class="btn btn-outline btn-lg">
-                            <span>🐍 Python Code Models</span>
+                        <a href="#sld" class="btn btn-outline btn-lg">
+                            <span>📊 Launch SLD Simulator</span>
                         </a>
                     </div>
                     <div class="hero-stats">
                         <div class="stat-item">
-                            <span class="stat-num">AC/DC</span>
-                            <span class="stat-label">Optimal Power Flow</span>
+                            <span class="stat-num">Victron</span>
+                            <span class="stat-label">VE.Direct & VRM API</span>
                         </div>
                         <div class="stat-item">
-                            <span class="stat-num">Modbus</span>
-                            <span class="stat-label">Industrial SCADA Stack</span>
+                            <span class="stat-num">Pylontech</span>
+                            <span class="stat-label">CANbus & RS485 BMS</span>
                         </div>
                         <div class="stat-item">
-                            <span class="stat-num">Cubic</span>
-                            <span class="stat-label">Chroot Remaster Ready</span>
+                            <span class="stat-num">Siemens</span>
+                            <span class="stat-label">S7comm & WinCC SCADA</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Technical Live Terminal / Script Execution View -->
+                <!-- Technical Live Terminal / Vendor Script Execution -->
                 <div class="hero-terminal">
                     <div class="terminal-header">
                         <div class="terminal-buttons">
@@ -103,34 +99,110 @@
                             <span class="btn-dot yellow"></span>
                             <span class="btn-dot green"></span>
                         </div>
-                        <div class="terminal-title">wirebus-python @ 5-Bus Optimal Power Flow (OPF)</div>
+                        <div class="terminal-title">vendor-drivers/victron_pylontech_gateway.py</div>
                     </div>
                     <div class="terminal-body" id="terminal-output">
-                        <div class="term-line"><span class="prompt">[WireBusOS Grid Engine]</span> Initializing 5-Bus Microgrid Network...</div>
-                        <div class="term-line"><span class="prompt">[WireBusOS Grid Engine]</span> AC Bus Nominal Voltage: 0.48 kV (480V)</div>
-                        <div class="term-line info"><span class="prompt">[WireBusOS Grid Engine]</span> Solving LOPF equations (P_net = V_i * sum(V_j * Y_ij))...</div>
-                        <div class="term-line success"><span class="prompt">[WireBusOS Grid Engine]</span> Solar PV: 28.5 kW | Wind: 20.0 kW | Battery: +3.5 kW Charging</div>
-                        <div class="term-line highlight"><span class="prompt">[WireBusOS Grid Engine]</span> Grid Balance Reached: f = 60.00 Hz | Line Loading: < 45%</div>
+                        <div class="term-line"><span class="prompt">[WireBusOS Gateway]</span> Connecting to Victron Cerbo GX & Pylontech CANbus...</div>
+                        <div class="term-line info"><span class="prompt">[WireBusOS Gateway]</span> VE.Direct: SmartSolar MPPT 250/100 -> PV Yield: 4,192 W</div>
+                        <div class="term-line success"><span class="prompt">[WireBusOS Gateway]</span> Pylontech CAN 0x355: US5000 Stack SOC: 82% | SOH: 98%</div>
+                        <div class="term-line highlight"><span class="prompt">[WireBusOS Gateway]</span> Siemens S7-1500 DB10: Penstock Pressure: 12.8 bar</div>
+                        <div class="term-line"><span class="prompt">[WireBusOS Gateway]</span> Streaming vendor telemetry to InfluxDB / Grafana</div>
                     </div>
                     <div class="terminal-controls">
-                        <button class="btn btn-sm btn-secondary" id="btn-replay-term">▶ Re-Run PyPSA Model</button>
-                        <span class="terminal-status">Linearized Optimal Power Flow Engine</span>
+                        <button class="btn btn-sm btn-secondary" id="btn-replay-term">▶ Poll Vendor Gateway</button>
+                        <span class="terminal-status">Commercial Protocol Gateway</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Interactive Single-Line Diagram (SLD) & Microgrid Node Bus -->
+        <!-- Vendor Ecosystem & Driver Navigator Section -->
+        <section id="vendor-suite" class="section vendor-section">
+            <div class="container">
+                <div class="section-header text-center">
+                    <span class="section-badge">Commercial Compatibility</span>
+                    <h2 class="section-title">Commercial & Industrial Equipment Suite</h2>
+                    <p class="section-subtitle">Select an equipment vendor to inspect native drivers, protocol frames, and communication interfaces.</p>
+                </div>
+
+                <!-- Vendor Selector Tabs -->
+                <div class="vendor-selector-grid" id="vendor-selector-grid">
+                    <button class="vendor-card-btn active" data-vendor="victron">
+                        <div class="v-icon">⚡</div>
+                        <div class="v-name">Victron Energy</div>
+                        <div class="v-tag">VE.Bus / VE.Direct / VRM</div>
+                    </button>
+
+                    <button class="vendor-card-btn" data-vendor="pylontech">
+                        <div class="v-icon">🔋</div>
+                        <div class="v-name">Pylontech</div>
+                        <div class="v-tag">CANbus / RS485 BMS</div>
+                    </button>
+
+                    <button class="vendor-card-btn" data-vendor="siemens">
+                        <div class="v-icon">⚙️</div>
+                        <div class="v-name">Siemens Energy</div>
+                        <div class="v-tag">S7comm / Spectrum SCADA</div>
+                    </button>
+
+                    <button class="vendor-card-btn" data-vendor="luxpower">
+                        <div class="v-icon">☀️</div>
+                        <div class="v-name">LuxpowerTek</div>
+                        <div class="v-tag">Lux Cloud / Modbus RTU</div>
+                    </button>
+
+                    <button class="vendor-card-btn" data-vendor="sma">
+                        <div class="v-icon">📡</div>
+                        <div class="v-name">SMA & Fronius</div>
+                        <div class="v-tag">Speedwire / Solar.API</div>
+                    </button>
+                </div>
+
+                <!-- Vendor Protocol Inspector Panel -->
+                <div class="vendor-inspector glass-panel">
+                    <div class="inspector-header">
+                        <div class="ins-title" id="vendor-detail-title">Victron Energy Protocol Driver</div>
+                        <div class="ins-file" id="vendor-detail-file">vendor-drivers/victron_vrm_bridge.py</div>
+                    </div>
+
+                    <div class="inspector-grid">
+                        <div class="ins-col">
+                            <h4>Supported Devices & Hardware</h4>
+                            <ul class="device-list" id="vendor-device-list">
+                                <li>Victron MultiPlus-II / Quattro Inverter-Chargers</li>
+                                <li>SmartSolar & BlueSolar MPPT Charge Controllers</li>
+                                <li>Cerbo GX / Color Control GX Gateway</li>
+                                <li>SmartShunt & BMV Battery Monitors</li>
+                            </ul>
+                        </div>
+
+                        <div class="ins-col">
+                            <h4>Communication Protocols</h4>
+                            <div class="protocol-tags" id="vendor-proto-tags">
+                                <span class="proto-badge">VE.Direct RS232</span>
+                                <span class="proto-badge">VE.Bus CAN</span>
+                                <span class="proto-badge">VRM REST API</span>
+                                <span class="proto-badge">Venus OS dbus</span>
+                            </div>
+                            <div class="code-block" style="margin-top: 14px;">
+                                <pre><code id="vendor-code-snippet">python3 vendor-drivers/victron_vrm_bridge.py</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Single-Line Diagram (SLD) -->
         <section id="sld" class="section sld-section">
             <div class="container">
                 <div class="section-header text-center">
                     <span class="section-badge">Power Flow Physics</span>
                     <h2 class="section-title">Electrical Single-Line Diagram (SLD) Visualizer</h2>
-                    <p class="section-subtitle">Simulate node bus voltages, line impedance ($R + jX$), active power ($P$), reactive power ($Q$), and battery charge/discharge dynamics.</p>
+                    <p class="section-subtitle">Simulate node bus voltages, active power ($P$), reactive power ($Q$), and battery charge/discharge dynamics.</p>
                 </div>
 
                 <div class="sld-panel glass-panel">
-                    <!-- Controls Bar -->
                     <div class="sld-controls-grid">
                         <div class="ctrl-box">
                             <label for="solar-slider">☀️ Solar POA Irradiance ($G_{poa}$): <span id="solar-val" class="val-tag">850 W/m²</span></label>
@@ -148,49 +220,37 @@
                         </div>
                     </div>
 
-                    <!-- Single Line Diagram Canvas Layout -->
                     <div class="sld-diagram">
-                        <!-- Top Row: Generation Nodes -->
                         <div class="sld-row">
                             <div class="sld-node node-pv">
-                                <div class="node-header"><span class="node-tag">BUS 2</span> Solar PV Array</div>
+                                <div class="node-header"><span class="node-tag">VICTRON MPPT</span> Solar PV Array</div>
                                 <div class="node-metric" id="metric-pv">P = 28.5 kW</div>
-                                <div class="node-sub">Inverter Eff: 98.2%</div>
+                                <div class="node-sub">SmartSolar 250/100</div>
                             </div>
 
-                            <div class="sld-connector vert"><div class="flow-dot"></div></div>
-
                             <div class="sld-node node-wind">
-                                <div class="node-header"><span class="node-tag">BUS 5</span> Wind Turbine</div>
+                                <div class="node-header"><span class="node-tag">SIEMENS S7</span> Hydro & Wind</div>
                                 <div class="node-metric" id="metric-wind">P = 20.0 kW</div>
-                                <div class="node-sub">Cp = 0.42 (BEMT)</div>
+                                <div class="node-sub">S7-1500 PLC Synchronized</div>
                             </div>
                         </div>
 
-                        <!-- Central Bus Bar -->
                         <div class="sld-busbar">
                             <div class="busbar-label">MAIN COMMON BUSBAR — 480V 3-PHASE AC (60.00 Hz)</div>
                             <div class="busbar-metric" id="metric-bus">Total Gen: 48.5 kW | Net Delta P: +6.5 kW</div>
                         </div>
 
-                        <!-- Bottom Row: Storage, Load, and Grid Tie -->
                         <div class="sld-row">
                             <div class="sld-node node-bess">
-                                <div class="node-header"><span class="node-tag">BUS 4</span> Battery BESS (NMC)</div>
+                                <div class="node-header"><span class="node-tag">PYLONTECH BMS</span> US5000 Stack</div>
                                 <div class="node-metric" id="metric-battery">Charging: +6.5 kW</div>
-                                <div class="node-sub" id="metric-soc">SOC: 78.5% | SoH: 96.2%</div>
+                                <div class="node-sub" id="metric-soc">SOC: 82.0% | CANbus 0x355</div>
                             </div>
 
                             <div class="sld-node node-load">
-                                <div class="node-header"><span class="node-tag">BUS 3</span> Industrial Site Load</div>
+                                <div class="node-header"><span class="node-tag">LUXPOWER</span> Hybrid Site Load</div>
                                 <div class="node-metric" id="metric-load">P = 42.0 kW</div>
-                                <div class="node-sub">Q = +13.8 kVAR (cos φ = 0.95)</div>
-                            </div>
-
-                            <div class="sld-node node-grid">
-                                <div class="node-header"><span class="node-tag">BUS 1</span> Grid Interconnect</div>
-                                <div class="node-metric" id="metric-grid">P_grid = 0.0 kW</div>
-                                <div class="node-sub">Islanded / Microgrid Mode</div>
+                                <div class="node-sub">LXP 12k Inverter Peak Shaving</div>
                             </div>
                         </div>
                     </div>
@@ -198,58 +258,59 @@
             </div>
         </section>
 
-        <!-- Python Engineering Sandbox / Code Viewer -->
+        <!-- Python Engineering Sandbox -->
         <section id="code-sandbox" class="section sandbox-section">
             <div class="container">
                 <div class="section-header text-center">
-                    <span class="section-badge">Executable Python Reference Models</span>
-                    <h2 class="section-title">Scientific Energy Engineering Sandbox</h2>
-                    <p class="section-subtitle">Run and copy production-ready scripts pre-installed in the WireBusOS Python virtual environment (`/opt/wirebus/venv`).</p>
+                    <span class="section-badge">Vendor & Scientific Models</span>
+                    <h2 class="section-title">Executable Vendor Drivers & Python Sandbox</h2>
+                    <p class="section-subtitle">Run and inspect production-ready vendor drivers and scientific libraries.</p>
                 </div>
 
                 <div class="sandbox-card glass-panel">
                     <div class="sandbox-tabs">
-                        <button class="tab-btn active" data-model="pvlib">☀️ pvlib (Irradiance & Solar)</button>
-                        <button class="tab-btn" data-model="pypsa">⚡ PyPSA (5-Bus Power Flow)</button>
-                        <button class="tab-btn" data-model="pybamm">🔋 PyBaMM (Battery SPM)</button>
+                        <button class="tab-btn active" data-model="victron">⚡ Victron VRM</button>
+                        <button class="tab-btn" data-model="pylontech">🔋 Pylontech BMS</button>
+                        <button class="tab-btn" data-model="siemens">⚙️ Siemens S7 SCADA</button>
+                        <button class="tab-btn" data-model="pvlib">☀️ pvlib Solar</button>
                     </div>
 
                     <div class="sandbox-editor">
                         <div class="editor-header">
-                            <span class="editor-filename" id="sandbox-filename">examples/pvlib_irradiance.py</span>
+                            <span class="editor-filename" id="sandbox-filename">vendor-drivers/victron_vrm_bridge.py</span>
                             <button class="copy-btn" id="btn-copy-sandbox">Copy Script</button>
                         </div>
                         <pre class="editor-code"><code id="sandbox-code-display">
-# Loading model...
+# Loading code...
                         </code></pre>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SCADA Modbus TCP Register Explorer -->
+        <!-- SCADA Modbus & Vendor Register Explorer -->
         <section id="scada-map" class="section scada-section">
             <div class="container">
                 <div class="section-header text-center">
-                    <span class="section-badge">Industrial Protocol Mapping</span>
-                    <h2 class="section-title">Modbus TCP / SunSpec Register Explorer</h2>
-                    <p class="section-subtitle">Inspect pre-mapped industrial Modbus registers used by WireBusOS for inverter telemetry, BMS monitoring, and grid meters.</p>
+                    <span class="section-badge">Industrial & Vendor Registers</span>
+                    <h2 class="section-title">Equipment Register & Protocol Explorer</h2>
+                    <p class="section-subtitle">Search pre-mapped registers for Victron, Pylontech, Siemens, Luxpower, and SunSpec Modbus equipment.</p>
                 </div>
 
                 <div class="scada-panel glass-panel">
                     <div class="search-box-wrap">
-                        <input type="text" id="modbus-search" class="search-input" placeholder="Search register by address, parameter, or unit (e.g. 40071, Frequency, Voltage, SOC)...">
+                        <input type="text" id="modbus-search" class="search-input" placeholder="Search by vendor, address, or parameter (e.g. Victron, Pylontech, Siemens, 40071, SOC)...">
                     </div>
 
                     <div class="table-responsive">
                         <table class="tech-table">
                             <thead>
                                 <tr>
-                                    <th>Register Address</th>
+                                    <th>Vendor</th>
+                                    <th>Register / Frame ID</th>
                                     <th>Signal Name</th>
-                                    <th>Data Type</th>
-                                    <th>Scale Factor</th>
-                                    <th>Engineering Unit</th>
+                                    <th>Type</th>
+                                    <th>Unit</th>
                                     <th>Description</th>
                                 </tr>
                             </thead>
@@ -262,93 +323,12 @@
             </div>
         </section>
 
-        <!-- Comprehensive Tool Suite Directory -->
-        <section id="suite" class="section suite-section">
-            <div class="container">
-                <div class="section-header text-center">
-                    <span class="section-badge">Package Directory</span>
-                    <h2 class="section-title">Integrated Scientific Packages</h2>
-                    <p class="section-subtitle">Search through 30+ pre-compiled energy engineering packages built into WireBusOS.</p>
-                </div>
-
-                <div class="filter-tabs" id="filter-tabs">
-                    <button class="filter-btn active" data-category="all">All Tools (30)</button>
-                    <button class="filter-btn" data-category="solar">☀️ Solar PV</button>
-                    <button class="filter-btn" data-category="wind">💨 Wind Energy</button>
-                    <button class="filter-btn" data-category="grid">⚡ Grid & Microgrid</button>
-                    <button class="filter-btn" data-category="storage">🔋 Battery Storage</button>
-                    <button class="filter-btn" data-category="scada">📊 SCADA & IoT</button>
-                    <button class="filter-btn" data-category="cad">📐 Hardware & CAD</button>
-                </div>
-
-                <div class="search-box-wrap">
-                    <input type="text" id="suite-search" class="search-input" placeholder="Search tool by name or repository (e.g. pvlib, PyPSA, FreeCAD, OpenFAST)...">
-                </div>
-
-                <div class="grid grid-3" id="tools-grid">
-                    <!-- Dynamic cards rendered via JS -->
-                </div>
-            </div>
-        </section>
-
-        <!-- Cubic ISO Build Wizard -->
-        <section id="cubic-guide" class="section guide-section">
-            <div class="container">
-                <div class="section-header text-center">
-                    <span class="section-badge">ISO Remastering Guide</span>
-                    <h2 class="section-title">Remastering WireBusOS with Cubic</h2>
-                    <p class="section-subtitle">Follow these chroot instructions to package the energy suite into a bootable ISO.</p>
-                </div>
-
-                <div class="wizard-steps">
-                    <div class="wizard-step glass-card">
-                        <div class="step-num">1</div>
-                        <h3>Install Cubic PPA</h3>
-                        <p>Add the Cubic repository to your Ubuntu 24.04 VM build environment.</p>
-                        <div class="code-block">
-                            <button class="copy-btn" data-copy="sudo apt-add-repository ppa:cubic-wizard/release -y && sudo apt update && sudo apt install cubic -y">Copy</button>
-                            <code>sudo apt-add-repository ppa:cubic-wizard/release<br>sudo apt install cubic</code>
-                        </div>
-                    </div>
-
-                    <div class="wizard-step glass-card">
-                        <div class="step-num">2</div>
-                        <h3>Open Chroot Shell</h3>
-                        <p>Select Ubuntu 24.04 ISO source and launch into Cubic root terminal.</p>
-                        <div class="code-block">
-                            <button class="copy-btn" data-copy="cubic">Copy</button>
-                            <code>cubic</code>
-                        </div>
-                    </div>
-
-                    <div class="wizard-step glass-card">
-                        <div class="step-num">3</div>
-                        <h3>Run Build Script</h3>
-                        <p>Execute installer with <code>--chroot</code> flag to handle systemd & container hooks.</p>
-                        <div class="code-block">
-                            <button class="copy-btn" data-copy="cd /root && git clone https://github.com/wirebustech/WireBusOS.git && cd WireBusOS && ./build-scripts/install-wirebus.sh --chroot">Copy</button>
-                            <code>git clone https://github.com/wirebustech/WireBusOS.git<br>./build-scripts/install-wirebus.sh --chroot</code>
-                        </div>
-                    </div>
-
-                    <div class="wizard-step glass-card">
-                        <div class="step-num">4</div>
-                        <h3>Generate ISO</h3>
-                        <p>Compress squashfs filesystem and export <code>WireBusOS-24.04-amd64.iso</code>.</p>
-                        <div class="code-block">
-                            <code>Result: WireBusOS-24.04-amd64.iso</code>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Quick Start Hub -->
+        <!-- Quick Start & Download -->
         <section id="download" class="section download-section">
             <div class="container text-center">
                 <div class="download-card glass-panel">
                     <h2 class="download-title">Deploy WireBusOS Workstation</h2>
-                    <p class="download-desc">Clone the repository and provision your renewable energy engineering workstation.</p>
+                    <p class="download-desc">Clone the repository and run the commercial vendor driver kit today.</p>
 
                     <div class="quickstart-box">
                         <button class="copy-btn" data-copy="git clone https://github.com/wirebustech/WireBusOS.git && cd WireBusOS && ./build-scripts/install-wirebus.sh --core">Copy Command</button>
@@ -368,18 +348,17 @@
     <footer class="footer">
         <div class="container footer-content">
             <div class="footer-brand">
-                <span class="brand-icon">⚡</span> WireBusOS — Energy & Power Systems Engineering Linux Platform
+                <span class="brand-icon">⚡</span> WireBusOS — Commercial Renewable Energy Systems Platform
             </div>
             <div class="footer-links">
-                <a href="https://github.com/pvlib/pvlib-python" target="_blank">pvlib</a>
-                <a href="https://github.com/PyPSA/PyPSA" target="_blank">PyPSA</a>
-                <a href="https://github.com/pybamm-team/PyBaMM" target="_blank">PyBaMM</a>
-                <a href="https://github.com/OpenFAST/openfast" target="_blank">OpenFAST</a>
-                <a href="https://github.com/FreeCAD/FreeCAD" target="_blank">FreeCAD</a>
-                <a href="https://github.com/KiCad/kicad-source-mirror" target="_blank">KiCad</a>
+                <a href="https://www.victronenergy.com/" target="_blank">Victron Energy</a>
+                <a href="https://en.pylontech.com.cn/" target="_blank">Pylontech</a>
+                <a href="https://luxpowertek.com/" target="_blank">LuxpowerTek</a>
+                <a href="https://www.siemens-energy.com/" target="_blank">Siemens Energy</a>
+                <a href="https://www.sma.de/" target="_blank">SMA Solar</a>
             </div>
             <div class="footer-copy">
-                Licensed under MIT • Engineering Specification Standard IEEE 1547 / SunSpec Compliant
+                Licensed under MIT • Commercial Driver Suite for Victron, Pylontech, Luxpower, Siemens, SMA, Fronius, Tesla, & Enphase
             </div>
         </div>
     </footer>

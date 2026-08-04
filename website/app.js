@@ -1,6 +1,7 @@
-// WireBusOS Technical Energy Engineering Web Application
+// WireBusOS Commercial Vendor & Technical Energy Web Application
 
 document.addEventListener('DOMContentLoaded', () => {
+    initVendorNavigator();
     initSldSimulator();
     initSandboxEditor();
     initModbusTable();
@@ -9,103 +10,185 @@ document.addEventListener('DOMContentLoaded', () => {
     initCopyButtons();
 });
 
-// Modbus TCP Register Data
-const MODBUS_REGISTERS = [
-    { address: 40071, name: "AC_Active_Power", type: "INT16", unit: "W", scale: 1, desc: "Total Real Power Output (P)" },
-    { address: 40072, name: "AC_Frequency", type: "UINT16", unit: "Hz", scale: 0.01, desc: "Line AC Operating Frequency (f)" },
-    { address: 40073, name: "AC_Reactive_Power", type: "INT16", unit: "VAR", scale: 1, desc: "Total Reactive Power Output (Q)" },
-    { address: 40074, name: "Power_Factor", type: "INT16", unit: "cos phi", scale: 0.001, desc: "Grid Power Factor (cos φ)" },
-    { address: 40101, name: "Battery_SOC", type: "UINT16", unit: "%", scale: 0.1, desc: "Battery State of Charge" },
-    { address: 40102, name: "Battery_SOH", type: "UINT16", unit: "%", scale: 0.1, desc: "Battery State of Health" },
-    { address: 40103, name: "DC_Bus_Voltage", type: "UINT16", unit: "V", scale: 0.1, desc: "Common DC Bus Operating Voltage" }
+// Vendor Data Dictionary
+const VENDOR_DETAILS = {
+    victron: {
+        title: "Victron Energy Ecosystem Driver",
+        filename: "vendor-drivers/victron_vrm_bridge.py",
+        devices: [
+            "MultiPlus-II & Quattro Inverter-Chargers (VE.Bus)",
+            "SmartSolar & BlueSolar MPPT Charge Controllers (VE.Direct)",
+            "Cerbo GX, Ekrano GX & Color Control GX Gateways",
+            "SmartShunt & BMV Battery Monitors"
+        ],
+        protocols: ["VE.Direct RS232", "VE.Bus CAN", "VRM REST API", "Venus OS dbus"],
+        cmd: "python3 vendor-drivers/victron_vrm_bridge.py"
+    },
+    pylontech: {
+        title: "Pylontech Lithium BMS Protocol Decoder",
+        filename: "vendor-drivers/pylontech_bms_reader.py",
+        devices: [
+            "US2000C / US3000C / US5000 48V Rack Battery Modules",
+            "Force L1 & Force L2 High Voltage Battery Stacks",
+            "Pelio Home Energy Storage System"
+        ],
+        protocols: ["CANbus (250 kbps)", "RS485 Console (115200)", "Modbus RTU"],
+        cmd: "python3 vendor-drivers/pylontech_bms_reader.py"
+    },
+    siemens: {
+        title: "Siemens Energy S7comm & SCADA Gateway",
+        filename: "vendor-drivers/siemens_s7_scada.py",
+        devices: [
+            "Siemens S7-1200 / S7-1500 Industrial PLCs",
+            "Spectrum Power SCADA Control Systems",
+            "WinCC Open Architecture HMI Gateways",
+            "SIPROTEC 5 Substation Protection Relays"
+        ],
+        protocols: ["S7comm (TCP 102)", "PROFINET", "IEC 60870-5-104", "DNP3"],
+        cmd: "python3 vendor-drivers/siemens_s7_scada.py"
+    },
+    luxpower: {
+        title: "LuxpowerTek Hybrid Inverter & Cloud API Client",
+        filename: "vendor-drivers/luxpower_cloud_client.py",
+        devices: [
+            "Luxpower LXP Hybrid 12k & LXP-LB 5k",
+            "SNA 5000 Off-Grid Inverters",
+            "Wi-Fi & LAN Dongle Gateways"
+        ],
+        protocols: ["Lux Cloud REST API", "Modbus RTU (RS485)", "TCP Port 8000"],
+        cmd: "python3 vendor-drivers/luxpower_cloud_client.py"
+    },
+    sma: {
+        title: "SMA Speedwire & Fronius Solar.API Drivers",
+        filename: "vendor-drivers/sma_fronius_drivers.py",
+        devices: [
+            "SMA Sunny Boy, Sunny Tripower CORE1 & Sunny Island",
+            "Fronius Symo, Primo, and Eco Inverters",
+            "Fronius Datamanager 2.0 & Smart Meter"
+        ],
+        protocols: ["Speedwire UDP Multicast", "Fronius Solar.API JSON", "SunSpec Modbus"],
+        cmd: "python3 vendor-drivers/sma_fronius_drivers.py"
+    }
+};
+
+// Unified Equipment Registers
+const ALL_REGISTERS = [
+    { vendor: "Victron Energy", address: "0xED8D", name: "VE_Bus_State", type: "UINT16", unit: "enum", desc: "0=Off, 3=Inverting, 4=Bulk, 5=Absorption" },
+    { vendor: "Victron Energy", address: "0x0304", name: "VE_Direct_PV_Power", type: "UINT16", unit: "W", desc: "SmartSolar MPPT Real-time Yield" },
+    { vendor: "Pylontech", address: "CAN 0x355", name: "BMS_SOC_SOH", type: "UINT16", unit: "%", desc: "Stack SOC & SOH Percentage" },
+    { vendor: "Pylontech", address: "CAN 0x356", name: "BMS_Voltage_Current", type: "INT16", unit: "V / A", desc: "Stack Voltage (0.01V) & Current (0.1A)" },
+    { vendor: "Siemens Energy", address: "DB10.DBD0", name: "Hydro_Flow_Rate", type: "REAL", unit: "m3/s", desc: "Hydro Turbine Volumetric Flow" },
+    { vendor: "Siemens Energy", address: "DB10.DBD4", name: "Penstock_Pressure", type: "REAL", unit: "bar", desc: "Hydraulic Penstock Pressure" },
+    { vendor: "LuxpowerTek", address: "REG 040", name: "Lux_PV1_Power", type: "UINT16", unit: "W", desc: "Solar String 1 DC Power" },
+    { vendor: "LuxpowerTek", address: "REG 080", name: "Lux_Battery_SOC", type: "UINT16", unit: "%", desc: "Lithium Battery SOC Percentage" },
+    { vendor: "SMA Solar", address: "30775", name: "SMA_Grid_Power", type: "INT32", unit: "W", desc: "Total AC Output Power" },
+    { vendor: "SunSpec", address: "40071", name: "AC_Active_Power", type: "INT16", unit: "W", desc: "Total Real Power Output (P)" },
+    { vendor: "SunSpec", address: "40072", name: "AC_Frequency", type: "UINT16", unit: "Hz", desc: "Line AC Operating Frequency (f)" }
 ];
 
 // Python Sandbox Code Snippets
 const PYTHON_MODELS = {
+    victron: {
+        filename: "vendor-drivers/victron_vrm_bridge.py",
+        code: `import os, json
+
+# Victron Energy VE.Direct & VRM Cloud API Driver
+def fetch_victron_data(vrm_site_id="12345"):
+    ve_direct_frame = {
+        "PID": "0xA042",     # SmartSolar MPPT 250/100
+        "V": "53.40",        # Battery Volts
+        "PPV": "4192",       # Solar Array Yield (W)
+        "CS": "3"            # State: Bulk
+    }
+    print(f"Victron MPPT Yield: {ve_direct_frame['PPV']} W")
+    return ve_direct_frame
+
+fetch_victron_data()`
+    },
+    pylontech: {
+        filename: "vendor-drivers/pylontech_bms_reader.py",
+        code: `# Pylontech CANbus BMS Frame Decoder (US2000/US3000/US5000/Force L1)
+def parse_pylon_can(can_id="0x355"):
+    bms_data = {
+        "stack_voltage_v": 52.8,
+        "soc_percent": 82,
+        "soh_percent": 98,
+        "max_charge_a": 100.0
+    }
+    print(f"Pylontech Battery Stack SOC: {bms_data['soc_percent']}%")
+    return bms_data
+
+parse_pylon_can()`
+    },
+    siemens: {
+        filename: "vendor-drivers/siemens_s7_scada.py",
+        code: `# Siemens S7comm Protocol Driver (S7-1200 / S7-1500 PLC)
+def read_siemens_db(db_num=10):
+    s7_data = {
+        "hydro_flow_m3s": 14.5,
+        "pressure_bar": 12.8,
+        "generator_rpm": 750
+    }
+    print(f"Siemens S7 DB{db_num}: Hydro Flow={s7_data['hydro_flow_m3s']} m³/s")
+    return s7_data
+
+read_siemens_db()`
+    },
     pvlib: {
         filename: "examples/pvlib_irradiance.py",
-        code: `import pvlib
-import pandas as pd
+        code: `import pvlib, pandas as pd
 
-# Solar PV Transposition & Irradiance Model
+# Solar PV Irradiance Transposition Model
 times = pd.date_range('2026-06-21 06:00', '2026-06-21 19:00', freq='1h', tz='America/Los_Angeles')
 solpos = pvlib.solarposition.get_solarposition(times, lat=37.7749, lon=-122.4194)
-ineichen = pvlib.clearsky.ineichen(solpos['apparent_zenith'], airmass=1.5)
-
-poa = pvlib.irradiance.get_total_irradiance(
-    surface_tilt=30, surface_azimuth=180,
-    solar_zenith=solpos['apparent_zenith'], solar_azimuth=solpos['azimuth'],
-    dni=ineichen['dni'], ghi=ineichen['ghi'], dhi=ineichen['dhi']
-)
-
-print(f"Peak POA Irradiance: {poa['poa_global'].max():.2f} W/m²")`
-    },
-    pypsa: {
-        filename: "examples/pypsa_powerflow.py",
-        code: `import pypsa
-
-# 5-Bus AC/DC Microgrid Optimal Power Flow (OPF)
-network = pypsa.Network()
-for i in range(1, 6):
-    network.add("Bus", f"Bus {i}", v_nom=0.48) # 480V AC
-
-network.add("Generator", "Solar PV", bus="Bus 2", p_nom=200, marginal_cost=0.01)
-network.add("Generator", "Wind Turbine", bus="Bus 5", p_nom=150, marginal_cost=0.02)
-network.add("StorageUnit", "Battery BESS", bus="Bus 4", p_nom=100, max_hours=4)
-network.add("Load", "Industrial Load", bus="Bus 3", p_set=280)
-
-status, condition = network.optimize()
-print(f"Optimal Dispatch Status: {status}")`
-    },
-    pybamm: {
-        filename: "examples/pybamm_battery_degradation.py",
-        code: `import pybamm
-
-# Lithium-ion Single Particle Model (SPM) with SEI Degradation
-model = pybamm.lithium_ion.SPM({
-    "SEI": "ec reaction limited",
-    "SEI film resistance": "distributed"
-})
-
-parameter_values = pybamm.ParameterValues("Chen2020")
-sim = pybamm.Simulation(model, parameter_values=parameter_values)
-sol = sim.solve([0, 3600])
-
-print(f"Final Terminal Voltage: {sol['Terminal voltage [V]'].entries[-1]:.3f} V")`
+poa = pvlib.irradiance.get_total_irradiance(30, 180, solpos['apparent_zenith'], solpos['azimuth'], 900, 100, 100)
+print(f"Peak POA: {poa['poa_global'].max():.2f} W/m²")`
     }
 };
 
-// Tool Catalog Data
-const ENERGY_TOOLS = [
-    { name: "pvlib-python", category: "solar", repo: "pvlib/pvlib-python", desc: "Core Python library for PV performance, irradiance, and degradation modeling." },
-    { name: "NREL SAM", category: "solar", repo: "NREL/SAM", desc: "System Advisor Model techno-economic engine for solar PV, CSP, and wind." },
-    { name: "PySAM", category: "solar", repo: "NREL/pysam", desc: "Python wrapper for NREL SAM simulation engine." },
-    { name: "r.sun", category: "solar", repo: "OSGeo/grass", desc: "Solar radiation raster calculations integrated into GRASS GIS." },
+// Vendor Ecosystem Navigator Switcher
+function initVendorNavigator() {
+    const btns = document.querySelectorAll('.vendor-card-btn');
+    const titleEl = document.getElementById('vendor-detail-title');
+    const fileEl = document.getElementById('vendor-detail-file');
+    const listEl = document.getElementById('vendor-device-list');
+    const protoEl = document.getElementById('vendor-proto-tags');
+    const codeEl = document.getElementById('vendor-code-snippet');
 
-    { name: "OpenFAST", category: "wind", repo: "OpenFAST/openfast", desc: "NREL wind turbine aero-hydro-servo-elastic simulator." },
-    { name: "FAST.Farm", category: "wind", repo: "OpenFAST/openfast", desc: "Wind farm-level wake and atmospheric dynamic simulation." },
-    { name: "QBlade", category: "wind", repo: "qblade/qblade", desc: "Wind turbine blade aerodynamics & aero-elastic design tool." },
-    { name: "windpowerlib", category: "wind", repo: "wind-python/windpowerlib", desc: "Python library to model wind turbine power output from weather data." },
+    function selectVendor(vendorKey) {
+        const details = VENDOR_DETAILS[vendorKey];
+        if (!details) return;
 
-    { name: "PyPSA", category: "grid", repo: "PyPSA/PyPSA", desc: "Power system analysis, optimal power flow, and sector-coupled grid planning." },
-    { name: "oemof-solph", category: "grid", repo: "oemof/oemof-solph", desc: "Linear optimization framework for cross-sector energy systems." },
-    { name: "Calliope", category: "grid", repo: "calliope-project/calliope", desc: "Multi-scale energy system optimization modeling framework." },
-    { name: "pandapower", category: "grid", repo: "e2nIEE/pandapower", desc: "Power system flow, optimal power flow, and short-circuit analysis in Python." },
-    { name: "OpenDSS", category: "grid", repo: "electricdss/electricdss-src", desc: "Electric power distribution system simulator." },
-    { name: "ANDES", category: "grid", repo: "cuihantao/andes", desc: "Power system dynamic simulation & differential-algebraic equation solver." },
+        titleEl.textContent = details.title;
+        fileEl.textContent = details.filename;
+        codeEl.textContent = details.cmd;
 
-    { name: "PyBaMM", category: "storage", repo: "pybamm-team/PyBaMM", desc: "Physics-based electrochemical battery continuum modeling." },
-    { name: "OpenEMS", category: "storage", repo: "OpenEMS/openems", desc: "Energy management system for energy storage deployments." },
+        listEl.replaceChildren();
+        details.devices.forEach(dev => {
+            const li = document.createElement('li');
+            li.textContent = dev;
+            listEl.appendChild(li);
+        });
 
-    { name: "Home Assistant", category: "scada", repo: "home-assistant/core", desc: "Inverter, battery, meter, and EV charger automation engine." },
-    { name: "emoncms", category: "scada", repo: "openenergymonitor/emoncms", desc: "Energy monitoring visual logging dashboard." },
-    { name: "ThingsBoard", category: "scada", repo: "thingsboard/thingsboard", desc: "Enterprise IoT & SCADA telemetry platform." },
+        protoEl.replaceChildren();
+        details.protocols.forEach(proto => {
+            const span = document.createElement('span');
+            span.className = 'proto-badge';
+            span.textContent = proto;
+            protoEl.appendChild(span);
+        });
+    }
 
-    { name: "KiCad", category: "cad", repo: "KiCad/kicad-source-mirror", desc: "Schematic capture & PCB layout for inverters & BMS electronics." },
-    { name: "FreeCAD", category: "cad", repo: "FreeCAD/FreeCAD", desc: "Parametric 3D mechanical CAD for solar mounts and turbine parts." },
-    { name: "QElectroTech", category: "cad", repo: "QElectroTech/qelectrotech", desc: "Electrical single-line diagrams and schematics." },
-    { name: "ngspice", category: "cad", repo: "ngspice/ngspice", desc: "Open-source SPICE circuit simulator." }
-];
+    btns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            btns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            selectVendor(btn.getAttribute('data-vendor'));
+        });
+    });
+
+    selectVendor('victron');
+}
 
 // Single Line Diagram Physics Simulator
 function initSldSimulator() {
@@ -122,11 +205,6 @@ function initSldSimulator() {
     const metricBus = document.getElementById('metric-bus');
     const metricBattery = document.getElementById('metric-battery');
     const metricLoad = document.getElementById('metric-load');
-    const metricGrid = document.getElementById('metric-grid');
-
-    const telFreq = document.getElementById('tel-freq');
-    const telPgen = document.getElementById('tel-pgen');
-    const telQgen = document.getElementById('tel-qgen');
 
     function updatePhysics() {
         const irr = parseFloat(solarSlider.value);
@@ -151,27 +229,11 @@ function initSldSimulator() {
         if (netDeltaP >= 0) {
             metricBattery.textContent = `Charging: +${netDeltaP.toFixed(1)} kW`;
             metricBattery.style.color = '#00ff9d';
-            metricGrid.textContent = `P_grid = 0.0 kW`;
         } else {
             const deficit = Math.abs(netDeltaP);
-            if (deficit <= 50.0) {
-                metricBattery.textContent = `Discharging: -${deficit.toFixed(1)} kW`;
-                metricBattery.style.color = '#ffb700';
-                metricGrid.textContent = `P_grid = 0.0 kW`;
-            } else {
-                const gridImport = deficit - 50.0;
-                metricBattery.textContent = `Max Discharge: -50.0 kW`;
-                metricBattery.style.color = '#ff5f56';
-                metricGrid.textContent = `Grid Import: ${gridImport.toFixed(1)} kW`;
-            }
+            metricBattery.textContent = `Discharging: -${deficit.toFixed(1)} kW`;
+            metricBattery.style.color = '#ffb700';
         }
-
-        // Update header telemetry bar values
-        const freqOffset = (netDeltaP * 0.002).toFixed(2);
-        const freqVal = (60.00 + parseFloat(freqOffset)).toFixed(2);
-        telFreq.textContent = `${freqVal} Hz`;
-        telPgen.textContent = `${totalGen.toFixed(1)} kW`;
-        telQgen.textContent = `+${(totalGen * 0.15).toFixed(1)} kVAR`;
     }
 
     solarSlider.addEventListener('input', updatePhysics);
@@ -187,7 +249,7 @@ function initSandboxEditor() {
     const codeDisplay = document.getElementById('sandbox-code-display');
     const copyBtn = document.getElementById('btn-copy-sandbox');
 
-    let activeKey = 'pvlib';
+    let activeKey = 'victron';
 
     function loadSnippet(key) {
         activeKey = key;
@@ -212,7 +274,7 @@ function initSandboxEditor() {
         });
     });
 
-    loadSnippet('pvlib');
+    loadSnippet('victron');
 }
 
 // SCADA Modbus Table Renderer
@@ -223,8 +285,9 @@ function initModbusTable() {
     function renderTable(filterTerm = '') {
         tableBody.replaceChildren();
 
-        const filtered = MODBUS_REGISTERS.filter(reg => {
-            return reg.address.toString().includes(filterTerm) ||
+        const filtered = ALL_REGISTERS.filter(reg => {
+            return reg.vendor.toLowerCase().includes(filterTerm) ||
+                   reg.address.toLowerCase().includes(filterTerm) ||
                    reg.name.toLowerCase().includes(filterTerm) ||
                    reg.unit.toLowerCase().includes(filterTerm) ||
                    reg.desc.toLowerCase().includes(filterTerm);
@@ -232,6 +295,11 @@ function initModbusTable() {
 
         filtered.forEach(reg => {
             const tr = document.createElement('tr');
+
+            const tdVendor = document.createElement('td');
+            tdVendor.textContent = reg.vendor;
+            tdVendor.style.fontWeight = '700';
+            tdVendor.style.color = '#00ff9d';
 
             const tdAddr = document.createElement('td');
             tdAddr.textContent = reg.address;
@@ -244,20 +312,16 @@ function initModbusTable() {
             const tdType = document.createElement('td');
             tdType.textContent = reg.type;
 
-            const tdScale = document.createElement('td');
-            tdScale.textContent = reg.scale;
-
             const tdUnit = document.createElement('td');
             tdUnit.textContent = reg.unit;
-            tdUnit.style.color = '#00ff9d';
 
             const tdDesc = document.createElement('td');
             tdDesc.textContent = reg.desc;
 
+            tr.appendChild(tdVendor);
             tr.appendChild(tdAddr);
             tr.appendChild(tdName);
             tr.appendChild(tdType);
-            tr.appendChild(tdScale);
             tr.appendChild(tdUnit);
             tr.appendChild(tdDesc);
 
@@ -272,74 +336,15 @@ function initModbusTable() {
     renderTable();
 }
 
-// Tools Catalog Renderer
+// Tools Catalog Dummy Renderer
 function initToolsCatalog() {
-    const gridContainer = document.getElementById('tools-grid');
     const filterBtns = document.querySelectorAll('.filter-btn');
-    const searchInput = document.getElementById('suite-search');
-
-    let currentCategory = 'all';
-    let currentSearch = '';
-
-    function renderCards() {
-        gridContainer.replaceChildren();
-
-        const filtered = ENERGY_TOOLS.filter(tool => {
-            const matchesCategory = (currentCategory === 'all' || tool.category === currentCategory);
-            const matchesSearch = tool.name.toLowerCase().includes(currentSearch) ||
-                                  tool.desc.toLowerCase().includes(currentSearch) ||
-                                  tool.repo.toLowerCase().includes(currentSearch);
-            return matchesCategory && matchesSearch;
-        });
-
-        filtered.forEach(tool => {
-            const card = document.createElement('div');
-            card.className = 'glass-card tool-card';
-
-            const cardTop = document.createElement('div');
-
-            const tag = document.createElement('span');
-            tag.className = 'tool-tag';
-            tag.textContent = tool.category.toUpperCase();
-
-            const title = document.createElement('h3');
-            title.className = 'tool-name';
-            title.textContent = tool.name;
-
-            const desc = document.createElement('p');
-            desc.className = 'tool-desc';
-            desc.textContent = tool.desc;
-
-            cardTop.appendChild(tag);
-            cardTop.appendChild(title);
-            cardTop.appendChild(desc);
-
-            const repo = document.createElement('div');
-            repo.className = 'tool-repo';
-            repo.textContent = `📦 ${tool.repo}`;
-
-            card.appendChild(cardTop);
-            card.appendChild(repo);
-
-            gridContainer.appendChild(card);
-        });
-    }
-
     filterBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             filterBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            currentCategory = btn.getAttribute('data-category');
-            renderCards();
         });
     });
-
-    searchInput.addEventListener('input', (e) => {
-        currentSearch = e.target.value.toLowerCase().trim();
-        renderCards();
-    });
-
-    renderCards();
 }
 
 // Replay Terminal Simulator
@@ -348,11 +353,11 @@ function initTerminalReplay() {
     const replayBtn = document.getElementById('btn-replay-term');
 
     const lines = [
-        { text: "[WireBusOS Grid Engine] Initializing 5-Bus Microgrid Model...", type: "" },
-        { text: "[WireBusOS Grid Engine] AC Bus Nominal Voltage: 0.48 kV (480V)", type: "" },
-        { text: "[WireBusOS Grid Engine] Solving LOPF equations (P_net = V_i * sum(V_j * Y_ij))...", type: "info" },
-        { text: "[WireBusOS Grid Engine] Solar PV: 28.5 kW | Wind: 20.0 kW | Battery: +6.5 kW Charging", type: "success" },
-        { text: "[WireBusOS Grid Engine] Grid Balance Reached: f = 60.00 Hz | Line Loading: < 45%", type: "highlight" }
+        { text: "[WireBusOS Gateway] Connecting to Victron Cerbo GX & Pylontech CANbus...", type: "" },
+        { text: "[WireBusOS Gateway] VE.Direct: SmartSolar MPPT 250/100 -> PV Yield: 4,192 W", type: "info" },
+        { text: "[WireBusOS Gateway] Pylontech CAN 0x355: US5000 Stack SOC: 82% | SOH: 98%", type: "success" },
+        { text: "[WireBusOS Gateway] Siemens S7-1500 DB10: Penstock Pressure: 12.8 bar", type: "highlight" },
+        { text: "[WireBusOS Gateway] Streaming commercial vendor telemetry to InfluxDB / Grafana", type: "" }
     ];
 
     function runReplay() {
@@ -364,9 +369,9 @@ function initTerminalReplay() {
 
                 const promptSpan = document.createElement('span');
                 promptSpan.className = 'prompt';
-                promptSpan.textContent = line.text.substring(0, 23);
+                promptSpan.textContent = line.text.substring(0, 20);
 
-                const contentText = document.createTextNode(line.text.substring(23));
+                const contentText = document.createTextNode(line.text.substring(20));
 
                 lineDiv.appendChild(promptSpan);
                 lineDiv.appendChild(contentText);
