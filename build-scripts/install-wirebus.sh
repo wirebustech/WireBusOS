@@ -70,9 +70,11 @@ warn() {
 }
 
 install_apt_packages() {
-    log "Disabling offline CD-ROM repository entries in chroot..."
-    grep -rl "cdrom" /etc/apt/ 2>/dev/null | xargs -r sed -i '/cdrom/s/^/#/' 2>/dev/null || true
+    log "Removing offline CD-ROM repository files in chroot..."
     rm -f /etc/apt/sources.list.d/*cdrom* 2>/dev/null || true
+    if [[ -f "/etc/apt/sources.list" ]]; then
+        sed -i '/cdrom/s/^/#/' /etc/apt/sources.list 2>/dev/null || true
+    fi
 
     log "Updating package index..."
     apt-get update -y
