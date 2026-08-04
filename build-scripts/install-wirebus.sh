@@ -90,10 +90,17 @@ setup_cad_repositories() {
     curl -fsSL http://build.openmodelica.org/apt/openmodelica.asc 2>/dev/null | gpg --dearmor -o /etc/apt/trusted.gpg.d/openmodelica-keyring.gpg 2>/dev/null || true
     echo "deb [signed-by=/etc/apt/trusted.gpg.d/openmodelica-keyring.gpg] http://build.openmodelica.org/apt noble stable" > /etc/apt/sources.list.d/openmodelica.list 2>/dev/null || true
 
-    apt-get update -y 2>/dev/null || true
+}
+
+fix_chroot_kernel_hooks() {
+    log "Disabling problematic chroot kernel postinst hooks (kdump-tools)..."
+    chmod -x /etc/kernel/postinst.d/kdump-tools 2>/dev/null || true
+    apt-get purge -y kdump-tools 2>/dev/null || true
+    dpkg --configure -a 2>/dev/null || true
 }
 
 install_apt_packages() {
+    fix_chroot_kernel_hooks
     setup_cad_repositories
 
     log "Installing core development dependencies..."
