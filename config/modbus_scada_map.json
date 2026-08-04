@@ -1,0 +1,64 @@
+{
+  "system": "WireBusOS Industrial Telemetry Protocol Mapping",
+  "protocol": "Modbus TCP / SunSpec Compliance",
+  "port": 502,
+  "unit_id": 1,
+  "registers": [
+    {
+      "address": 40071,
+      "name": "AC_Active_Power",
+      "type": "INT16",
+      "unit": "W",
+      "scale": 1,
+      "description": "Total Real Power Output (P)"
+    },
+    {
+      "address": 40072,
+      "name": "AC_Frequency",
+      "type": "UINT16",
+      "unit": "Hz",
+      "scale": 0.01,
+      "description": "Line AC Operating Frequency (f)"
+    },
+    {
+      "address": 40073,
+      "name": "AC_Reactive_Power",
+      "type": "INT16",
+      "unit": "VAR",
+      "scale": 1,
+      "description": "Total Reactive Power Output (Q)"
+    },
+    {
+      "address": 40074,
+      "name": "Power_Factor",
+      "type": "INT16",
+      "unit": "cos phi",
+      "scale": 0.001,
+      "description": "Grid Power Factor (cos phi)"
+    },
+    {
+      "address": 40101,
+      "name": "Battery_SOC",
+      "type": "UINT16",
+      "unit": "%",
+      "scale": 0.1,
+      "description": "Battery State of Charge"
+    },
+    {
+      "address": 40102,
+      "name": "Battery_SOH",
+      "type": "UINT16",
+      "unit": "%",
+      "scale": 0.1,
+      "description": "Battery State of Health"
+    },
+    {
+      "address": 40103,
+      "name": "DC_Bus_Voltage",
+      "type": "UINT16",
+      "unit": "V",
+      "scale": 0.1,
+      "description": "Common DC Bus Operating Voltage"
+    }
+  ]
+}

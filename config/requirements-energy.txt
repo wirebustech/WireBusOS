@@ -1,0 +1,32 @@
+# Base Data Science Stack
+numpy>=1.24.0
+pandas>=2.0.0
+scipy>=1.10.0
+matplotlib>=3.7.0
+seaborn>=0.12.0
+jupyterlab>=4.0.0
+
+# Solar PV Modeling
+pvlib>=0.10.0
+pysam>=4.0.0
+
+# Wind Energy Modeling
+windpowerlib>=0.2.2
+openfast-io>=1.0.0
+
+# Energy System & Power Flow Modeling
+pypsa>=0.25.0
+oemof.solph>=0.5.0
+calliope>=0.6.10
+pandapower>=2.13.0
+andes>=1.8.0
+
+# Battery & Storage
+pybamm>=23.5
+
+# Utilities & Interfaces
+requests>=2.30.0
+pyyaml>=6.0
+openpyxl>=3.1.0
+tables>=3.8.0
+netCDF4>=1.6.0

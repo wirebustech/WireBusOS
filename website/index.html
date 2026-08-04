@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WireBusOS — Energy & Power Systems Engineering Linux Platform</title>
+    <meta name="description" content="WireBusOS is a specialized power systems engineering Linux distribution featuring PyPSA optimal power flow, pvlib solar modeling, PyBaMM battery electrochemistry, OpenFAST wind simulation, and SCADA telemetry.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Live Telemetry Ticker Header -->
+    <div class="telemetry-bar">
+        <div class="telemetry-item">
+            <span class="tel-label">SYSTEM FREQUENCY:</span>
+            <span class="tel-val highlight-green" id="tel-freq">60.00 Hz</span>
+        </div>
+        <div class="telemetry-item">
+            <span class="tel-label">AC BUS VOLTAGE:</span>
+            <span class="tel-val" id="tel-vac">480.2 V AC</span>
+        </div>
+        <div class="telemetry-item">
+            <span class="tel-label">DC BUS VOLTAGE:</span>
+            <span class="tel-val" id="tel-vdc">750.5 V DC</span>
+        </div>
+        <div class="telemetry-item">
+            <span class="tel-label">POWER FACTOR:</span>
+            <span class="tel-val highlight-cyan" id="tel-pf">0.985 (Lagging)</span>
+        </div>
+        <div class="telemetry-item">
+            <span class="tel-label">TOTAL GENERATION P:</span>
+            <span class="tel-val highlight-amber" id="tel-pgen">48.5 kW</span>
+        </div>
+        <div class="telemetry-item">
+            <span class="tel-label">REACTIVE POWER Q:</span>
+            <span class="tel-val" id="tel-qgen">+7.2 kVAR</span>
+        </div>
+    </div>
+
+    <!-- Top Navigation -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="#" class="brand">
+                <span class="brand-icon">⚡</span>
+                <span class="brand-name">WireBus<span class="highlight">OS</span> <span class="sub-tag">ENGINEERING WORKSTATION</span></span>
+            </a>
+            <nav class="nav-links">
+                <a href="#sld">Single-Line Diagram</a>
+                <a href="#code-sandbox">Python Sandbox</a>
+                <a href="#scada-map">Modbus SCADA Map</a>
+                <a href="#suite">Tool Suite</a>
+                <a href="#cubic-guide">Cubic Remastering</a>
+                <a href="#download" class="btn btn-sm btn-primary">Get ISO Build Kit</a>
+            </nav>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle Menu">☰</button>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-bg-glow"></div>
+            <div class="container hero-grid">
+                <div class="hero-content">
+                    <div class="badge">
+                        <span class="pulse-dot"></span> IEEE Benchmark & Power Systems Linux OS
+                    </div>
+                    <h1 class="hero-title">The Engineering Workstation for <span class="gradient-text">Power Systems & Microgrids</span></h1>
+                    <p class="hero-subtitle">
+                        Integrated Linux platform bundling Optimal Power Flow (PyPSA/pandapower), Solar Irradiance Transposition (pvlib), Battery SPM Degradation (PyBaMM), and Modbus TCP Telemetry.
+                    </p>
+                    <div class="hero-actions">
+                        <a href="#sld" class="btn btn-primary btn-lg">
+                            <span>📊 Launch SLD Simulator</span>
+                        </a>
+                        <a href="#code-sandbox" class="btn btn-outline btn-lg">
+                            <span>🐍 Python Code Models</span>
+                        </a>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <span class="stat-num">AC/DC</span>
+                            <span class="stat-label">Optimal Power Flow</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-num">Modbus</span>
+                            <span class="stat-label">Industrial SCADA Stack</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-num">Cubic</span>
+                            <span class="stat-label">Chroot Remaster Ready</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Technical Live Terminal / Script Execution View -->
+                <div class="hero-terminal">
+                    <div class="terminal-header">
+                        <div class="terminal-buttons">
+                            <span class="btn-dot red"></span>
+                            <span class="btn-dot yellow"></span>
+                            <span class="btn-dot green"></span>
+                        </div>
+                        <div class="terminal-title">wirebus-python @ 5-Bus Optimal Power Flow (OPF)</div>
+                    </div>
+                    <div class="terminal-body" id="terminal-output">
+                        <div class="term-line"><span class="prompt">[WireBusOS Grid Engine]</span> Initializing 5-Bus Microgrid Network...</div>
+                        <div class="term-line"><span class="prompt">[WireBusOS Grid Engine]</span> AC Bus Nominal Voltage: 0.48 kV (480V)</div>
+                        <div class="term-line info"><span class="prompt">[WireBusOS Grid Engine]</span> Solving LOPF equations (P_net = V_i * sum(V_j * Y_ij))...</div>
+                        <div class="term-line success"><span class="prompt">[WireBusOS Grid Engine]</span> Solar PV: 28.5 kW | Wind: 20.0 kW | Battery: +3.5 kW Charging</div>
+                        <div class="term-line highlight"><span class="prompt">[WireBusOS Grid Engine]</span> Grid Balance Reached: f = 60.00 Hz | Line Loading: < 45%</div>
+                    </div>
+                    <div class="terminal-controls">
+                        <button class="btn btn-sm btn-secondary" id="btn-replay-term">▶ Re-Run PyPSA Model</button>
+                        <span class="terminal-status">Linearized Optimal Power Flow Engine</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Single-Line Diagram (SLD) & Microgrid Node Bus -->
+        <section id="sld" class="section sld-section">
+            <div class="container">
+                <div class="section-header text-center">
+                    <span class="section-badge">Power Flow Physics</span>
+                    <h2 class="section-title">Electrical Single-Line Diagram (SLD) Visualizer</h2>
+                    <p class="section-subtitle">Simulate node bus voltages, line impedance ($R + jX$), active power ($P$), reactive power ($Q$), and battery charge/discharge dynamics.</p>
+                </div>
+
+                <div class="sld-panel glass-panel">
+                    <!-- Controls Bar -->
+                    <div class="sld-controls-grid">
+                        <div class="ctrl-box">
+                            <label for="solar-slider">☀️ Solar POA Irradiance ($G_{poa}$): <span id="solar-val" class="val-tag">850 W/m²</span></label>
+                            <input type="range" id="solar-slider" min="0" max="1200" value="850" class="form-range">
+                        </div>
+
+                        <div class="ctrl-box">
+                            <label for="wind-slider">💨 Wind Velocity ($v_{wind}$): <span id="wind-val" class="val-tag">8.5 m/s</span></label>
+                            <input type="range" id="wind-slider" min="0" max="25" value="8.5" step="0.5" class="form-range">
+                        </div>
+
+                        <div class="ctrl-box">
+                            <label for="load-slider">🏬 Active Load ($P_{load}$): <span id="load-val" class="val-tag">42.0 kW</span></label>
+                            <input type="range" id="load-slider" min="10" max="100" value="42" class="form-range">
+                        </div>
+                    </div>
+
+                    <!-- Single Line Diagram Canvas Layout -->
+                    <div class="sld-diagram">
+                        <!-- Top Row: Generation Nodes -->
+                        <div class="sld-row">
+                            <div class="sld-node node-pv">
+                                <div class="node-header"><span class="node-tag">BUS 2</span> Solar PV Array</div>
+                                <div class="node-metric" id="metric-pv">P = 28.5 kW</div>
+                                <div class="node-sub">Inverter Eff: 98.2%</div>
+                            </div>
+
+                            <div class="sld-connector vert"><div class="flow-dot"></div></div>
+
+                            <div class="sld-node node-wind">
+                                <div class="node-header"><span class="node-tag">BUS 5</span> Wind Turbine</div>
+                                <div class="node-metric" id="metric-wind">P = 20.0 kW</div>
+                                <div class="node-sub">Cp = 0.42 (BEMT)</div>
+                            </div>
+                        </div>
+
+                        <!-- Central Bus Bar -->
+                        <div class="sld-busbar">
+                            <div class="busbar-label">MAIN COMMON BUSBAR — 480V 3-PHASE AC (60.00 Hz)</div>
+                            <div class="busbar-metric" id="metric-bus">Total Gen: 48.5 kW | Net Delta P: +6.5 kW</div>
+                        </div>
+
+                        <!-- Bottom Row: Storage, Load, and Grid Tie -->
+                        <div class="sld-row">
+                            <div class="sld-node node-bess">
+                                <div class="node-header"><span class="node-tag">BUS 4</span> Battery BESS (NMC)</div>
+                                <div class="node-metric" id="metric-battery">Charging: +6.5 kW</div>
+                                <div class="node-sub" id="metric-soc">SOC: 78.5% | SoH: 96.2%</div>
+                            </div>
+
+                            <div class="sld-node node-load">
+                                <div class="node-header"><span class="node-tag">BUS 3</span> Industrial Site Load</div>
+                                <div class="node-metric" id="metric-load">P = 42.0 kW</div>
+                                <div class="node-sub">Q = +13.8 kVAR (cos φ = 0.95)</div>
+                            </div>
+
+                            <div class="sld-node node-grid">
+                                <div class="node-header"><span class="node-tag">BUS 1</span> Grid Interconnect</div>
+                                <div class="node-metric" id="metric-grid">P_grid = 0.0 kW</div>
+                                <div class="node-sub">Islanded / Microgrid Mode</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Python Engineering Sandbox / Code Viewer -->
+        <section id="code-sandbox" class="section sandbox-section">
+            <div class="container">
+                <div class="section-header text-center">
+                    <span class="section-badge">Executable Python Reference Models</span>
+                    <h2 class="section-title">Scientific Energy Engineering Sandbox</h2>
+                    <p class="section-subtitle">Run and copy production-ready scripts pre-installed in the WireBusOS Python virtual environment (`/opt/wirebus/venv`).</p>
+                </div>
+
+                <div class="sandbox-card glass-panel">
+                    <div class="sandbox-tabs">
+                        <button class="tab-btn active" data-model="pvlib">☀️ pvlib (Irradiance & Solar)</button>
+                        <button class="tab-btn" data-model="pypsa">⚡ PyPSA (5-Bus Power Flow)</button>
+                        <button class="tab-btn" data-model="pybamm">🔋 PyBaMM (Battery SPM)</button>
+                    </div>
+
+                    <div class="sandbox-editor">
+                        <div class="editor-header">
+                            <span class="editor-filename" id="sandbox-filename">examples/pvlib_irradiance.py</span>
+                            <button class="copy-btn" id="btn-copy-sandbox">Copy Script</button>
+                        </div>
+                        <pre class="editor-code"><code id="sandbox-code-display">
+# Loading model...
+                        </code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SCADA Modbus TCP Register Explorer -->
+        <section id="scada-map" class="section scada-section">
+            <div class="container">
+                <div class="section-header text-center">
+                    <span class="section-badge">Industrial Protocol Mapping</span>
+                    <h2 class="section-title">Modbus TCP / SunSpec Register Explorer</h2>
+                    <p class="section-subtitle">Inspect pre-mapped industrial Modbus registers used by WireBusOS for inverter telemetry, BMS monitoring, and grid meters.</p>
+                </div>
+
+                <div class="scada-panel glass-panel">
+                    <div class="search-box-wrap">
+                        <input type="text" id="modbus-search" class="search-input" placeholder="Search register by address, parameter, or unit (e.g. 40071, Frequency, Voltage, SOC)...">
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="tech-table">
+                            <thead>
+                                <tr>
+                                    <th>Register Address</th>
+                                    <th>Signal Name</th>
+                                    <th>Data Type</th>
+                                    <th>Scale Factor</th>
+                                    <th>Engineering Unit</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody id="modbus-table-body">
+                                <!-- Dynamically populated via app.js -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Comprehensive Tool Suite Directory -->
+        <section id="suite" class="section suite-section">
+            <div class="container">
+                <div class="section-header text-center">
+                    <span class="section-badge">Package Directory</span>
+                    <h2 class="section-title">Integrated Scientific Packages</h2>
+                    <p class="section-subtitle">Search through 30+ pre-compiled energy engineering packages built into WireBusOS.</p>
+                </div>
+
+                <div class="filter-tabs" id="filter-tabs">
+                    <button class="filter-btn active" data-category="all">All Tools (30)</button>
+                    <button class="filter-btn" data-category="solar">☀️ Solar PV</button>
+                    <button class="filter-btn" data-category="wind">💨 Wind Energy</button>
+                    <button class="filter-btn" data-category="grid">⚡ Grid & Microgrid</button>
+                    <button class="filter-btn" data-category="storage">🔋 Battery Storage</button>
+                    <button class="filter-btn" data-category="scada">📊 SCADA & IoT</button>
+                    <button class="filter-btn" data-category="cad">📐 Hardware & CAD</button>
+                </div>
+
+                <div class="search-box-wrap">
+                    <input type="text" id="suite-search" class="search-input" placeholder="Search tool by name or repository (e.g. pvlib, PyPSA, FreeCAD, OpenFAST)...">
+                </div>
+
+                <div class="grid grid-3" id="tools-grid">
+                    <!-- Dynamic cards rendered via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Cubic ISO Build Wizard -->
+        <section id="cubic-guide" class="section guide-section">
+            <div class="container">
+                <div class="section-header text-center">
+                    <span class="section-badge">ISO Remastering Guide</span>
+                    <h2 class="section-title">Remastering WireBusOS with Cubic</h2>
+                    <p class="section-subtitle">Follow these chroot instructions to package the energy suite into a bootable ISO.</p>
+                </div>
+
+                <div class="wizard-steps">
+                    <div class="wizard-step glass-card">
+                        <div class="step-num">1</div>
+                        <h3>Install Cubic PPA</h3>
+                        <p>Add the Cubic repository to your Ubuntu 24.04 VM build environment.</p>
+                        <div class="code-block">
+                            <button class="copy-btn" data-copy="sudo apt-add-repository ppa:cubic-wizard/release -y && sudo apt update && sudo apt install cubic -y">Copy</button>
+                            <code>sudo apt-add-repository ppa:cubic-wizard/release<br>sudo apt install cubic</code>
+                        </div>
+                    </div>
+
+                    <div class="wizard-step glass-card">
+                        <div class="step-num">2</div>
+                        <h3>Open Chroot Shell</h3>
+                        <p>Select Ubuntu 24.04 ISO source and launch into Cubic root terminal.</p>
+                        <div class="code-block">
+                            <button class="copy-btn" data-copy="cubic">Copy</button>
+                            <code>cubic</code>
+                        </div>
+                    </div>
+
+                    <div class="wizard-step glass-card">
+                        <div class="step-num">3</div>
+                        <h3>Run Build Script</h3>
+                        <p>Execute installer with <code>--chroot</code> flag to handle systemd & container hooks.</p>
+                        <div class="code-block">
+                            <button class="copy-btn" data-copy="cd /root && git clone https://github.com/wirebustech/WireBusOS.git && cd WireBusOS && ./build-scripts/install-wirebus.sh --chroot">Copy</button>
+                            <code>git clone https://github.com/wirebustech/WireBusOS.git<br>./build-scripts/install-wirebus.sh --chroot</code>
+                        </div>
+                    </div>
+
+                    <div class="wizard-step glass-card">
+                        <div class="step-num">4</div>
+                        <h3>Generate ISO</h3>
+                        <p>Compress squashfs filesystem and export <code>WireBusOS-24.04-amd64.iso</code>.</p>
+                        <div class="code-block">
+                            <code>Result: WireBusOS-24.04-amd64.iso</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Start Hub -->
+        <section id="download" class="section download-section">
+            <div class="container text-center">
+                <div class="download-card glass-panel">
+                    <h2 class="download-title">Deploy WireBusOS Workstation</h2>
+                    <p class="download-desc">Clone the repository and provision your renewable energy engineering workstation.</p>
+
+                    <div class="quickstart-box">
+                        <button class="copy-btn" data-copy="git clone https://github.com/wirebustech/WireBusOS.git && cd WireBusOS && ./build-scripts/install-wirebus.sh --core">Copy Command</button>
+                        <code>git clone https://github.com/wirebustech/WireBusOS.git<br>cd WireBusOS && ./build-scripts/install-wirebus.sh --core</code>
+                    </div>
+
+                    <div class="download-actions">
+                        <a href="https://github.com/wirebustech/WireBusOS" target="_blank" rel="noopener" class="btn btn-primary btn-lg">
+                            <span>⭐ Star GitHub Repository</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <span class="brand-icon">⚡</span> WireBusOS — Energy & Power Systems Engineering Linux Platform
+            </div>
+            <div class="footer-links">
+                <a href="https://github.com/pvlib/pvlib-python" target="_blank">pvlib</a>
+                <a href="https://github.com/PyPSA/PyPSA" target="_blank">PyPSA</a>
+                <a href="https://github.com/pybamm-team/PyBaMM" target="_blank">PyBaMM</a>
+                <a href="https://github.com/OpenFAST/openfast" target="_blank">OpenFAST</a>
+                <a href="https://github.com/FreeCAD/FreeCAD" target="_blank">FreeCAD</a>
+                <a href="https://github.com/KiCad/kicad-source-mirror" target="_blank">KiCad</a>
+            </div>
+            <div class="footer-copy">
+                Licensed under MIT • Engineering Specification Standard IEEE 1547 / SunSpec Compliant
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

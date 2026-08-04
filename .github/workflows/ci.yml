@@ -1,0 +1,38 @@
+name: WireBusOS CI Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate-scripts-and-models:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Check Shell Script Syntax
+        run: |
+          bash -n build-scripts/install-wirebus.sh
+          bash -n build-scripts/wirebus-first-boot.sh
+
+      - name: Validate Python Reference Models
+        run: |
+          python -m py_compile examples/*.py
+          python examples/pvlib_irradiance.py
+          python examples/pypsa_powerflow.py
+          python examples/pybamm_battery_degradation.py
+
+      - name: Validate Modbus JSON Schema
+        run: |
+          python -c "import json; json.load(open('config/modbus_scada_map.json'))"
+
+      - name: Validate Docker Compose Config
+        run: |
+          docker compose -f config/docker-compose.yml config

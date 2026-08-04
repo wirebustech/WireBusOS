@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  grafana:
+    image: grafana/grafana:latest
+    container_name: wirebus-grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=wirebus
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana-data:/var/lib/grafana
+
+  influxdb:
+    image: influxdb:2.7
+    container_name: wirebus-influxdb
+    restart: unless-stopped
+    ports:
+      - "8086:8086"
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=wirebus
+      - DOCKER_INFLUXDB_INIT_PASSWORD=wirebusos_energy
+      - DOCKER_INFLUXDB_INIT_ORG=wirebus
+      - DOCKER_INFLUXDB_INIT_BUCKET=telemetry
+    volumes:
+      - influxdb-data:/var/lib/influxdb2
+
+  homeassistant:
+    image: ghcr.io/home-assistant/home-assistant:stable
+    container_name: wirebus-homeassistant
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - TZ=UTC
+    volumes:
+      - homeassistant-config:/config
+
+volumes:
+  grafana-data:
+  influxdb-data:
+  homeassistant-config:

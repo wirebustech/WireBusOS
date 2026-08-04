@@ -1,0 +1,23 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+/opt/wirebus/venv
+
+# Cubic & ISO remastering temporary folders
+cubic-*/
+*.iso
+*.squashfs
+
+# Operating System & IDE
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Docker data volumes
+docker-data/
+*.log
