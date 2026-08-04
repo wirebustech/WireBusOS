@@ -93,7 +93,9 @@ a:hover { color: var(--accent-emerald); }
     border-bottom: 1px solid var(--border-glass); padding: 14px 0;
 }
 .nav-container { display: flex; align-items: center; justify-content: space-between; }
-.brand { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 1.25rem; color: var(--text-main); }
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.25rem; color: var(--text-main); }
+.brand-logo-img { width: 34px; height: 34px; object-fit: contain; filter: drop-shadow(0 0 8px rgba(76, 226, 147, 0.4)); }
+.inline-footer-logo { width: 24px; height: 24px; vertical-align: middle; margin-right: 6px; }
 .nav-links { display: flex; align-items: center; gap: 24px; }
 .nav-links a { color: var(--text-muted); font-size: 0.9rem; font-weight: 500; }
 .nav-links a:hover { color: var(--text-main); }

@@ -1,6 +1,12 @@
-# WireBusOS ⚡🌱
+<p align="center">
+  <img src="assets/wirebusos_horizontal_logo.svg" alt="WireBusOS — Energy Systems Platform Logo" width="650">
+</p>
 
-**WireBusOS** is a specialized, open-source Linux distribution remastered as a standalone, bootable ISO image engineered for power systems engineering, renewable energy dispatch modeling, microgrid optimal power flow (OPF), battery electrochemistry, industrial SCADA telemetry (Modbus/DNP3/MQTT), and commercial equipment integrations.
+<p align="center">
+  <b>A specialized open-source Linux distribution engineered for power systems analysis, renewable microgrids, battery electrochemistry, and SCADA automation.</b>
+</p>
+
+---
 
 ```
                   +-------------------------------------------------------------+
@@ -75,21 +81,16 @@ Click the **"➕ Add Custom Vendor"** button on the WireBusOS Web Portal to defi
 
 ---
 
-## 📦 Repository Structure
+## 📂 12 Functional Module Directories
+
+WireBusOS is organized into 12 functional tool directories:
 
 ```
 WireBusOS/
-├── build-scripts/
-│   ├── install-wirebus.sh          # Installer with --chroot ISO remastering support
-│   ├── wirebus-first-boot.sh       # First-boot provisioning engine
-│   └── first-boot-wirebus.service  # Systemd deferred startup unit
-├── config/
-│   ├── packages-core.txt           # APT package manifest (QGIS, KiCad, FreeCAD, OpenModelica)
-│   ├── requirements-energy.txt     # Python scientific library manifest
-│   ├── docker-compose.yml          # Telemetry stack (Grafana, InfluxDB, Home Assistant)
-│   ├── modbus_scada_map.json       # Modbus TCP SCADA register mapping
-│   └── vendor_registers.json       # Commercial Vendor registry
-├── modules/                        # 12 Functional Open Source Tool Directories
+├── assets/                         # Official Logo & Graphic Assets
+│   ├── wirebusos_icon.svg          # 512x512 Icon Badge
+│   └── wirebusos_horizontal_logo.svg # 900x220 Horizontal Logo
+├── modules/                        # 12 Functional Tool Directories
 │   ├── 01-solar-pv/                # pvlib-python, NREL SAM, PySAM, PVGIS, r.sun
 │   ├── 02-wind-energy/             # OpenFAST, FAST.Farm, QBlade, windpowerlib
 │   ├── 03-microgrid-energy-systems/# PyPSA, oemof, Calliope, OSeMOSYS, SWITCH, Temoa, etc.
@@ -111,13 +112,9 @@ WireBusOS/
 │   ├── sma_fronius_drivers.py      # SMA Speedwire & Fronius Solar.API drivers
 │   └── templates/
 │       └── custom_vendor_template.py # Boilerplate template for new custom vendors
-├── docs/
-│   ├── ISO_BUILD_GUIDE.md          # Step-by-step ISO remastering guide
-│   └── RENEWABLE_SUITE.md          # Detailed upstream package index
+├── build-scripts/                  # Installer & Systemd provisioning hooks
+├── docs/                           # ISO build guide & package catalog
 ├── website/                        # Technical Workstation Portal & Microgrid Visualizer
-│   ├── index.html
-│   ├── style.css
-│   └── app.js
 ├── LICENSE
 └── README.md
 ```
