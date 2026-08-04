@@ -1,193 +1,188 @@
-// WireBusOS Commercial Vendor & Technical Energy Web Application
+// WireBusOS Top 20 Commercial Vendors & Custom Driver Extension SDK
 
 document.addEventListener('DOMContentLoaded', () => {
-    initVendorNavigator();
+    initTop20Vendors();
+    initModalForm();
     initSldSimulator();
-    initSandboxEditor();
     initModbusTable();
     initToolsCatalog();
     initTerminalReplay();
     initCopyButtons();
 });
 
-// Vendor Data Dictionary
-const VENDOR_DETAILS = {
-    victron: {
-        title: "Victron Energy Ecosystem Driver",
-        filename: "vendor-drivers/victron_vrm_bridge.py",
-        devices: [
-            "MultiPlus-II & Quattro Inverter-Chargers (VE.Bus)",
-            "SmartSolar & BlueSolar MPPT Charge Controllers (VE.Direct)",
-            "Cerbo GX, Ekrano GX & Color Control GX Gateways",
-            "SmartShunt & BMV Battery Monitors"
-        ],
-        protocols: ["VE.Direct RS232", "VE.Bus CAN", "VRM REST API", "Venus OS dbus"],
-        cmd: "python3 vendor-drivers/victron_vrm_bridge.py"
-    },
-    pylontech: {
-        title: "Pylontech Lithium BMS Protocol Decoder",
-        filename: "vendor-drivers/pylontech_bms_reader.py",
-        devices: [
-            "US2000C / US3000C / US5000 48V Rack Battery Modules",
-            "Force L1 & Force L2 High Voltage Battery Stacks",
-            "Pelio Home Energy Storage System"
-        ],
-        protocols: ["CANbus (250 kbps)", "RS485 Console (115200)", "Modbus RTU"],
-        cmd: "python3 vendor-drivers/pylontech_bms_reader.py"
-    },
-    siemens: {
-        title: "Siemens Energy S7comm & SCADA Gateway",
-        filename: "vendor-drivers/siemens_s7_scada.py",
-        devices: [
-            "Siemens S7-1200 / S7-1500 Industrial PLCs",
-            "Spectrum Power SCADA Control Systems",
-            "WinCC Open Architecture HMI Gateways",
-            "SIPROTEC 5 Substation Protection Relays"
-        ],
-        protocols: ["S7comm (TCP 102)", "PROFINET", "IEC 60870-5-104", "DNP3"],
-        cmd: "python3 vendor-drivers/siemens_s7_scada.py"
-    },
-    luxpower: {
-        title: "LuxpowerTek Hybrid Inverter & Cloud API Client",
-        filename: "vendor-drivers/luxpower_cloud_client.py",
-        devices: [
-            "Luxpower LXP Hybrid 12k & LXP-LB 5k",
-            "SNA 5000 Off-Grid Inverters",
-            "Wi-Fi & LAN Dongle Gateways"
-        ],
-        protocols: ["Lux Cloud REST API", "Modbus RTU (RS485)", "TCP Port 8000"],
-        cmd: "python3 vendor-drivers/luxpower_cloud_client.py"
-    },
-    sma: {
-        title: "SMA Speedwire & Fronius Solar.API Drivers",
-        filename: "vendor-drivers/sma_fronius_drivers.py",
-        devices: [
-            "SMA Sunny Boy, Sunny Tripower CORE1 & Sunny Island",
-            "Fronius Symo, Primo, and Eco Inverters",
-            "Fronius Datamanager 2.0 & Smart Meter"
-        ],
-        protocols: ["Speedwire UDP Multicast", "Fronius Solar.API JSON", "SunSpec Modbus"],
-        cmd: "python3 vendor-drivers/sma_fronius_drivers.py"
-    }
-};
+// Top 20 Commercial Renewable Energy Vendors Dataset
+const TOP_20_VENDORS = [
+    { name: "Victron Energy", category: "solar", ecosystem: "VE.Direct / VE.Bus / VRM Cloud API", devices: "MultiPlus-II, Quattro, SmartSolar MPPT, Cerbo GX", driver: "vendor-drivers/victron_vrm_bridge.py" },
+    { name: "Pylontech", category: "storage", ecosystem: "CANbus 250kbps / RS485 Console", devices: "US2000C, US3000C, US5000, Force L1/L2 Stacks", driver: "vendor-drivers/pylontech_bms_reader.py" },
+    { name: "Siemens Energy", category: "hydro", ecosystem: "S7comm TCP 102 / Spectrum Power SCADA", devices: "S7-1200, S7-1500 PLC, WinCC, Penstock Actuators", driver: "vendor-drivers/siemens_s7_scada.py" },
+    { name: "LuxpowerTek", category: "solar", ecosystem: "Lux Cloud API / Modbus RTU RS485", devices: "LXP Hybrid 12k, SNA 5000, LXP-LB 5k Inverters", driver: "vendor-drivers/luxpower_cloud_client.py" },
+    { name: "SMA Solar Technology", category: "solar", ecosystem: "Speedwire UDP Multicast / SunSpec", devices: "Sunny Boy, Sunny Tripower CORE1, Sunny Island", driver: "vendor-drivers/sma_fronius_drivers.py" },
+    { name: "Fronius International", category: "solar", ecosystem: "Fronius Solar.API REST / SunSpec Modbus", devices: "Fronius Symo, Primo, Eco Inverters", driver: "vendor-drivers/sma_fronius_drivers.py" },
+    { name: "SolarEdge Technologies", category: "solar", ecosystem: "SunSpec Modbus TCP / Monitoring API", devices: "SE10000H, SE33.3K, Energy Bank Storage", driver: "Built-in SunSpec Engine" },
+    { name: "Tesla Energy", category: "storage", ecosystem: "Tesla Local Gateway 2 API / Fleet API", devices: "Powerwall 2, Powerwall 3, Megapack 2XL", driver: "Built-in Tesla Bridge" },
+    { name: "Enphase Energy", category: "solar", ecosystem: "Envoy IQ Gateway Local API", devices: "IQ7+, IQ8M Microinverters, IQ Battery 5P", driver: "Built-in Envoy Driver" },
+    { name: "Growatt New Energy", category: "solar", ecosystem: "ShineServer API / Modbus RTU RS485", devices: "MIN 5000TL-XH, SPH 10000, MAX 125KTL3", driver: "Built-in Growatt Gateway" },
+    { name: "Deye / Sol-Ark", category: "solar", ecosystem: "Hybrid Inverter CANbus & Modbus RTU", devices: "Deye SUN-12K-SG04, Sol-Ark 15K Hybrid", driver: "Built-in Hybrid Adapter" },
+    { name: "Solis (Ginlong)", category: "solar", ecosystem: "SolisCloud API / Modbus RS485", devices: "S5-GC60K, RHI-5K-Plus Hybrid Inverter", driver: "Built-in Solis Adapter" },
+    { name: "Schneider Electric", category: "grid", ecosystem: "EcoStruxure Microgrid Advisor / Conext", devices: "Conext XW Pro, EcoStruxure PLC Gateway", driver: "Built-in Schneider Gateway" },
+    { name: "ABB / Fimer", category: "solar", ecosystem: "PVS Inverter SunSpec Modbus TCP", devices: "PVS-100/120 Commercial, REACT 2 Storage", driver: "Built-in ABB Modbus Driver" },
+    { name: "Vestas Wind Systems", category: "wind", ecosystem: "Vestas VMP / Online SCADA Gateway", devices: "V150-4.2 MW, V162-6.2 MW EnVentus Turbines", driver: "Built-in Vestas SCADA" },
+    { name: "GE Vernova", category: "wind", ecosystem: "Mark VIe Control SCADA / Hydro & Wind", devices: "GE Haliade-X 12MW, GE 3.4MW, GE Hydro Governor", driver: "Built-in GE Mark VIe Driver" },
+    { name: "BYD Energy", category: "storage", ecosystem: "Battery-Box Premium CANbus Protocol", devices: "Battery-Box Premium HVS/HVM, LVS Stacks", driver: "Built-in BYD CAN Driver" },
+    { name: "CATL", category: "storage", ecosystem: "EnerOne / EnerC Grid Storage Modbus TCP", devices: "EnerOne LFP BESS, EnerC Storage Container", driver: "Built-in CATL Storage Core" },
+    { name: "Andritz Hydro", category: "hydro", ecosystem: "Metris DiOMera Hydro SCADA", devices: "Francis Hydro Turbine, Pelton Wheel, Kaplan", driver: "Built-in Andritz Hydro Driver" },
+    { name: "LF Energy EVerest / OpenEVSE", category: "ev", ecosystem: "OCPP 1.6J / 2.0.1 EV Charger Gateway", devices: "EVerest Core Station, OpenEVSE WiFi v5", driver: "Built-in OCPP Engine" }
+];
 
 // Unified Equipment Registers
 const ALL_REGISTERS = [
     { vendor: "Victron Energy", address: "0xED8D", name: "VE_Bus_State", type: "UINT16", unit: "enum", desc: "0=Off, 3=Inverting, 4=Bulk, 5=Absorption" },
-    { vendor: "Victron Energy", address: "0x0304", name: "VE_Direct_PV_Power", type: "UINT16", unit: "W", desc: "SmartSolar MPPT Real-time Yield" },
+    { vendor: "Victron Energy", address: "0x0304", name: "VE_Direct_PV_Power", type: "UINT16", unit: "W", desc: "MPPT Real-time Panel Yield" },
     { vendor: "Pylontech", address: "CAN 0x355", name: "BMS_SOC_SOH", type: "UINT16", unit: "%", desc: "Stack SOC & SOH Percentage" },
-    { vendor: "Pylontech", address: "CAN 0x356", name: "BMS_Voltage_Current", type: "INT16", unit: "V / A", desc: "Stack Voltage (0.01V) & Current (0.1A)" },
-    { vendor: "Siemens Energy", address: "DB10.DBD0", name: "Hydro_Flow_Rate", type: "REAL", unit: "m3/s", desc: "Hydro Turbine Volumetric Flow" },
+    { vendor: "Pylontech", address: "CAN 0x356", name: "BMS_Voltage_Current", type: "INT16", unit: "V / A", desc: "Stack Voltage & Current" },
+    { vendor: "Siemens Energy", address: "DB10.DBD0", name: "Hydro_Flow_Rate", type: "REAL", unit: "m3/s", desc: "Penstock Hydro Turbine Flow Rate" },
     { vendor: "Siemens Energy", address: "DB10.DBD4", name: "Penstock_Pressure", type: "REAL", unit: "bar", desc: "Hydraulic Penstock Pressure" },
     { vendor: "LuxpowerTek", address: "REG 040", name: "Lux_PV1_Power", type: "UINT16", unit: "W", desc: "Solar String 1 DC Power" },
-    { vendor: "LuxpowerTek", address: "REG 080", name: "Lux_Battery_SOC", type: "UINT16", unit: "%", desc: "Lithium Battery SOC Percentage" },
     { vendor: "SMA Solar", address: "30775", name: "SMA_Grid_Power", type: "INT32", unit: "W", desc: "Total AC Output Power" },
-    { vendor: "SunSpec", address: "40071", name: "AC_Active_Power", type: "INT16", unit: "W", desc: "Total Real Power Output (P)" },
-    { vendor: "SunSpec", address: "40072", name: "AC_Frequency", type: "UINT16", unit: "Hz", desc: "Line AC Operating Frequency (f)" }
+    { vendor: "Tesla Energy", address: "API_SOC", name: "Tesla_Battery_SOC", type: "FLOAT", unit: "%", desc: "Powerwall State of Charge" },
+    { vendor: "Vestas Wind", address: "VMP_P_Act", name: "Vestas_Active_Power", type: "FLOAT", unit: "kW", desc: "Wind Turbine Power Output" },
+    { vendor: "CATL", address: "40201", name: "CATL_Rack_SOC", type: "UINT16", unit: "%", desc: "EnerOne Storage Rack SOC" }
 ];
 
-// Python Sandbox Code Snippets
-const PYTHON_MODELS = {
-    victron: {
-        filename: "vendor-drivers/victron_vrm_bridge.py",
-        code: `import os, json
+// Initialize Top 20 Vendors Cards
+function initTop20Vendors() {
+    const grid = document.getElementById('top20-vendors-grid');
+    const tabs = document.querySelectorAll('#vendor-category-tabs .filter-btn');
 
-# Victron Energy VE.Direct & VRM Cloud API Driver
-def fetch_victron_data(vrm_site_id="12345"):
-    ve_direct_frame = {
-        "PID": "0xA042",     # SmartSolar MPPT 250/100
-        "V": "53.40",        # Battery Volts
-        "PPV": "4192",       # Solar Array Yield (W)
-        "CS": "3"            # State: Bulk
-    }
-    print(f"Victron MPPT Yield: {ve_direct_frame['PPV']} W")
-    return ve_direct_frame
+    let activeCategory = 'all';
 
-fetch_victron_data()`
-    },
-    pylontech: {
-        filename: "vendor-drivers/pylontech_bms_reader.py",
-        code: `# Pylontech CANbus BMS Frame Decoder (US2000/US3000/US5000/Force L1)
-def parse_pylon_can(can_id="0x355"):
-    bms_data = {
-        "stack_voltage_v": 52.8,
-        "soc_percent": 82,
-        "soh_percent": 98,
-        "max_charge_a": 100.0
-    }
-    print(f"Pylontech Battery Stack SOC: {bms_data['soc_percent']}%")
-    return bms_data
+    // Load custom vendors saved in localStorage if any
+    const savedCustomVendors = JSON.parse(localStorage.getItem('wirebus_custom_vendors') || '[]');
+    const combinedVendors = [...TOP_20_VENDORS, ...savedCustomVendors];
 
-parse_pylon_can()`
-    },
-    siemens: {
-        filename: "vendor-drivers/siemens_s7_scada.py",
-        code: `# Siemens S7comm Protocol Driver (S7-1200 / S7-1500 PLC)
-def read_siemens_db(db_num=10):
-    s7_data = {
-        "hydro_flow_m3s": 14.5,
-        "pressure_bar": 12.8,
-        "generator_rpm": 750
-    }
-    print(f"Siemens S7 DB{db_num}: Hydro Flow={s7_data['hydro_flow_m3s']} m³/s")
-    return s7_data
+    function renderVendors() {
+        grid.replaceChildren();
 
-read_siemens_db()`
-    },
-    pvlib: {
-        filename: "examples/pvlib_irradiance.py",
-        code: `import pvlib, pandas as pd
-
-# Solar PV Irradiance Transposition Model
-times = pd.date_range('2026-06-21 06:00', '2026-06-21 19:00', freq='1h', tz='America/Los_Angeles')
-solpos = pvlib.solarposition.get_solarposition(times, lat=37.7749, lon=-122.4194)
-poa = pvlib.irradiance.get_total_irradiance(30, 180, solpos['apparent_zenith'], solpos['azimuth'], 900, 100, 100)
-print(f"Peak POA: {poa['poa_global'].max():.2f} W/m²")`
-    }
-};
-
-// Vendor Ecosystem Navigator Switcher
-function initVendorNavigator() {
-    const btns = document.querySelectorAll('.vendor-card-btn');
-    const titleEl = document.getElementById('vendor-detail-title');
-    const fileEl = document.getElementById('vendor-detail-file');
-    const listEl = document.getElementById('vendor-device-list');
-    const protoEl = document.getElementById('vendor-proto-tags');
-    const codeEl = document.getElementById('vendor-code-snippet');
-
-    function selectVendor(vendorKey) {
-        const details = VENDOR_DETAILS[vendorKey];
-        if (!details) return;
-
-        titleEl.textContent = details.title;
-        fileEl.textContent = details.filename;
-        codeEl.textContent = details.cmd;
-
-        listEl.replaceChildren();
-        details.devices.forEach(dev => {
-            const li = document.createElement('li');
-            li.textContent = dev;
-            listEl.appendChild(li);
+        const filtered = combinedVendors.filter(v => {
+            return activeCategory === 'all' || v.category === activeCategory;
         });
 
-        protoEl.replaceChildren();
-        details.protocols.forEach(proto => {
-            const span = document.createElement('span');
-            span.className = 'proto-badge';
-            span.textContent = proto;
-            protoEl.appendChild(span);
+        filtered.forEach(v => {
+            const card = document.createElement('div');
+            card.className = 'glass-card tool-card';
+
+            const cardTop = document.createElement('div');
+
+            const tag = document.createElement('span');
+            tag.className = 'tool-tag';
+            tag.textContent = (v.category || 'GENERAL').toUpperCase();
+
+            const title = document.createElement('h3');
+            title.className = 'tool-name';
+            title.textContent = v.name;
+
+            const eco = document.createElement('p');
+            eco.className = 'tool-desc';
+            eco.textContent = `📡 ${v.ecosystem}`;
+
+            const dev = document.createElement('p');
+            dev.style.fontSize = '0.78rem';
+            dev.style.color = '#64748b';
+            dev.style.marginTop = '6px';
+            dev.textContent = `⚙️ Devices: ${v.devices}`;
+
+            cardTop.appendChild(tag);
+            cardTop.appendChild(title);
+            cardTop.appendChild(eco);
+            cardTop.appendChild(dev);
+
+            const driver = document.createElement('div');
+            driver.className = 'tool-repo';
+            driver.textContent = `📄 ${v.driver}`;
+
+            card.appendChild(cardTop);
+            card.appendChild(driver);
+
+            grid.appendChild(card);
         });
     }
 
-    btns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            btns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            selectVendor(btn.getAttribute('data-vendor'));
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            activeCategory = tab.getAttribute('data-vcat');
+            renderVendors();
         });
     });
 
-    selectVendor('victron');
+    renderVendors();
+}
+
+// Modal Form Handler for Adding Custom Vendor Application
+function initModalForm() {
+    const modal = document.getElementById('add-vendor-modal');
+    const openBtn1 = document.getElementById('btn-open-add-vendor');
+    const openBtn2 = document.getElementById('btn-trigger-modal-sec');
+    const closeBtn = document.getElementById('btn-close-modal');
+    const cancelBtn = document.getElementById('btn-cancel-modal');
+    const form = document.getElementById('add-vendor-form');
+
+    function openModal() { modal.classList.add('active'); }
+    function closeModal() { modal.classList.remove('active'); }
+
+    if (openBtn1) openBtn1.addEventListener('click', openModal);
+    if (openBtn2) openBtn2.addEventListener('click', openModal);
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const name = document.getElementById('vendor-name-input').value.trim();
+        const category = document.getElementById('vendor-cat-select').value;
+        const protocol = document.getElementById('vendor-proto-select').value;
+        const devices = document.getElementById('vendor-devices-input').value.trim();
+        const regInput = document.getElementById('vendor-reg-input').value.trim();
+
+        const safeFilename = name.toLowerCase().replace(/ /g, '_').replace(/-/g, '_') + '_driver.py';
+
+        const newVendorObj = {
+            name: `${name} (Custom)`,
+            category: category,
+            ecosystem: `${protocol} Custom Integration`,
+            devices: devices,
+            driver: `vendor-drivers/${safeFilename}`
+        };
+
+        // Save custom vendor to local storage
+        const saved = JSON.parse(localStorage.getItem('wirebus_custom_vendors') || '[]');
+        saved.push(newVendorObj);
+        localStorage.setItem('wirebus_custom_vendors', JSON.stringify(saved));
+
+        // Add to Modbus Register Explorer
+        if (regInput) {
+            const parts = regInput.split(',');
+            if (parts.length >= 4) {
+                ALL_REGISTERS.unshift({
+                    vendor: name,
+                    address: parts[0].trim(),
+                    name: parts[1].trim(),
+                    type: parts[2].trim(),
+                    unit: parts[3].trim(),
+                    desc: `Custom ${protocol} Signal`
+                });
+            }
+        }
+
+        alert(`✅ Custom Vendor Driver successfully generated!\nFile: vendor-drivers/${safeFilename}\nRegistered in WireBusOS SDK.`);
+        form.reset();
+        closeModal();
+
+        // Refresh UI
+        initTop20Vendors();
+        initModbusTable();
+    });
 }
 
 // Single Line Diagram Physics Simulator
@@ -240,41 +235,6 @@ function initSldSimulator() {
     windSlider.addEventListener('input', updatePhysics);
     loadSlider.addEventListener('input', updatePhysics);
     updatePhysics();
-}
-
-// Sandbox Editor Code Switcher
-function initSandboxEditor() {
-    const tabs = document.querySelectorAll('.tab-btn');
-    const filenameEl = document.getElementById('sandbox-filename');
-    const codeDisplay = document.getElementById('sandbox-code-display');
-    const copyBtn = document.getElementById('btn-copy-sandbox');
-
-    let activeKey = 'victron';
-
-    function loadSnippet(key) {
-        activeKey = key;
-        const model = PYTHON_MODELS[key];
-        filenameEl.textContent = model.filename;
-        codeDisplay.textContent = model.code;
-    }
-
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            tabs.forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-            loadSnippet(tab.getAttribute('data-model'));
-        });
-    });
-
-    copyBtn.addEventListener('click', () => {
-        navigator.clipboard.writeText(PYTHON_MODELS[activeKey].code).then(() => {
-            const orig = copyBtn.textContent;
-            copyBtn.textContent = 'Copied!';
-            setTimeout(() => copyBtn.textContent = orig, 2000);
-        });
-    });
-
-    loadSnippet('victron');
 }
 
 // SCADA Modbus Table Renderer
@@ -336,15 +296,9 @@ function initModbusTable() {
     renderTable();
 }
 
-// Tools Catalog Dummy Renderer
+// Tools Catalog Renderer
 function initToolsCatalog() {
-    const filterBtns = document.querySelectorAll('.filter-btn');
-    filterBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            filterBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-        });
-    });
+    // Keep clean
 }
 
 // Replay Terminal Simulator
@@ -353,11 +307,11 @@ function initTerminalReplay() {
     const replayBtn = document.getElementById('btn-replay-term');
 
     const lines = [
-        { text: "[WireBusOS Gateway] Connecting to Victron Cerbo GX & Pylontech CANbus...", type: "" },
-        { text: "[WireBusOS Gateway] VE.Direct: SmartSolar MPPT 250/100 -> PV Yield: 4,192 W", type: "info" },
-        { text: "[WireBusOS Gateway] Pylontech CAN 0x355: US5000 Stack SOC: 82% | SOH: 98%", type: "success" },
-        { text: "[WireBusOS Gateway] Siemens S7-1500 DB10: Penstock Pressure: 12.8 bar", type: "highlight" },
-        { text: "[WireBusOS Gateway] Streaming commercial vendor telemetry to InfluxDB / Grafana", type: "" }
+        { text: "[WireBusOS SDK] Loaded WireBusOS Top 20 Vendor Registry...", type: "" },
+        { text: "[WireBusOS SDK] Victron Energy | Solar | VE.Bus / VE.Direct / VRM", type: "info" },
+        { text: "[WireBusOS SDK] Siemens Energy | Hydro | S7comm TCP 102 / Spectrum SCADA", type: "success" },
+        { text: "[WireBusOS SDK] Vestas Wind | Wind | VMP SCADA Gateway", type: "highlight" },
+        { text: "[WireBusOS SDK] CATL BESS | Storage | EnerOne Modbus TCP", type: "" }
     ];
 
     function runReplay() {
@@ -369,9 +323,9 @@ function initTerminalReplay() {
 
                 const promptSpan = document.createElement('span');
                 promptSpan.className = 'prompt';
-                promptSpan.textContent = line.text.substring(0, 20);
+                promptSpan.textContent = line.text.substring(0, 18);
 
-                const contentText = document.createTextNode(line.text.substring(20));
+                const contentText = document.createTextNode(line.text.substring(18));
 
                 lineDiv.appendChild(promptSpan);
                 lineDiv.appendChild(contentText);
@@ -380,13 +334,12 @@ function initTerminalReplay() {
         });
     }
 
-    replayBtn.addEventListener('click', runReplay);
+    if (replayBtn) replayBtn.addEventListener('click', runReplay);
 }
 
 // Copy Buttons Helper
 function initCopyButtons() {
     document.querySelectorAll('.copy-btn').forEach(btn => {
-        if (btn.id === 'btn-copy-sandbox') return;
         btn.addEventListener('click', () => {
             const textToCopy = btn.getAttribute('data-copy');
             if (textToCopy) {
