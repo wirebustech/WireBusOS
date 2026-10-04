@@ -227,8 +227,8 @@ install_apt_packages() {
         done < "${REPO_DIR}/config/packages-core.txt"
     fi
 
-    log "Installing CAD, GIS, and Simulation tools (ignoring missing packages)..."
-    for pkg in qgis grass kicad freecad qelectrotech ngspice openmodelica docker.io; do
+    log "Installing CAD, GIS, Engineering Computation, and Simulation tools (ignoring missing packages)..."
+    for pkg in qgis grass kicad freecad qelectrotech ngspice openmodelica octave scilab femm librecad drawio postgresql postgis docker.io; do
         if apt-get install -y --no-install-recommends --ignore-missing "${pkg}" 2>/dev/null; then
             log "Successfully installed ${pkg}."
         else

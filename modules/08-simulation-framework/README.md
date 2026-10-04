@@ -1,15 +1,20 @@
-# Modeling & Physical Simulation Framework Module
+# Engineering Computation & Simulation Framework Module
 
-This module contains object-oriented physical system modeling environments for multi-domain engineering systems (electrical, thermal, fluid, and mechanical).
+This module contains numerical computing platforms, finite element magnetic solvers, block-diagram dynamic system modelers, and multi-domain physical simulation engines.
 
 ## Included Open Source Tools
 
 | Tool | Upstream Repository | Description |
 |---|---|---|
-| **OpenModelica** | [`OpenModelica/OpenModelica`](https://github.com/OpenModelica/OpenModelica) | Open-source Modelica-based physical modeling environment with renewable energy component libraries |
+| **GNUOctave** | [`gnu-octave/octave`](https://github.com/gnu-octave/octave) | High-level numerical computation language compatible with MATLAB |
+| **Scilab / Xcos** | Upstream Scilab Project | Open-source software for numerical computation and dynamic block-diagram modeling |
+| **OpenModelica** | [`OpenModelica/OpenModelica`](https://github.com/OpenModelica/OpenModelica) | Modelica-based physical modeling environment with renewable energy libraries |
+| **FEMM** | Upstream FEMM Project | Finite Element Method Magnetics for low-frequency electromagnetic design |
+| **openEMS** | [`OpenEMS/openems`](https://github.com/OpenEMS/openems) | Open-source FDTD electromagnetic & physical field solver |
 
-## Running the Simulation Framework Model
+## Running the Engineering Computation Suite
 
 ```bash
 python3 modules/08-simulation-framework/openmodelica_suite.py
 ```
+

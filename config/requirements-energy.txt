@@ -21,6 +21,7 @@ calliope>=0.6.10
 pandapower>=2.13.0
 andes>=1.8.0
 opendssdirect.py>=0.8.0
+veragrid>=0.1.0
 
 # Battery & Storage (Module 04)
 pybamm>=23.5
@@ -37,6 +38,9 @@ numpy-financial>=1.0.0
 
 # Carbon Content & Energy Efficiency (Module 14)
 codecarbon>=2.3.0
+
+# Data Engineering & Analytics (Module 06/12)
+duckdb>=0.9.0
 
 # Vendor Telemetry & SCADA Protocols
 pymodbus>=3.5.0

@@ -1,18 +1,20 @@
-# CAD / Electrical & Mechanical Design Module
+# Electrical and Electronics Design Module
 
-This module contains schematic capture, PCB layout tools, 3D mechanical CAD engines, single-line electrical diagramming tools, and SPICE circuit simulators.
+This module contains tools for electrical single-line diagramming, schematic capture, PCB layout, SPICE circuit simulation, system architecture mapping, and 2D CAD drafting.
 
 ## Included Open Source Tools
 
 | Tool | Upstream Repository | Description |
 |---|---|---|
-| **KiCad** | [`KiCad/kicad-source-mirror`](https://github.com/KiCad/kicad-source-mirror) | Schematic capture & PCB layout for inverters & BMS electronics |
-| **FreeCAD** | [`FreeCAD/FreeCAD`](https://github.com/FreeCAD/FreeCAD) | Parametric 3D mechanical CAD for solar mounting & turbine parts |
-| **QElectroTech** | [`QElectroTech/qelectrotech`](https://github.com/QElectroTech/qelectrotech) | Electrical single-line diagrams and schematics |
-| **ngspice** | Upstream Spice Project | Open source SPICE circuit simulator for power electronics |
+| **QElectroTech** | [`QElectroTech/qelectrotech`](https://github.com/QElectroTech/qelectrotech) | Electrical schematics and single-line wiring diagram editor |
+| **KiCad** | [`KiCad/kicad-source-mirror`](https://github.com/KiCad/kicad-source-mirror) | Schematic capture & PCB layout suite for power electronics and BMS |
+| **ngspice** | Upstream Spice Project | Open-source SPICE circuit simulator for power electronics transients |
+| **draw.io** | [`jgraph/drawio`](https://github.com/jgraph/drawio) | Visual diagramming tool for microgrid system architectures & control loops |
+| **LibreCAD** | [`LibreCAD/LibreCAD`](https://github.com/LibreCAD/LibreCAD) | Open-source 2D CAD application for electrical engineering layouts |
 
-## Running the CAD & Electronics Suite
+## Running the Electrical & Electronics Design Suite
 
 ```bash
 python3 modules/07-cad-electronics-design/cad_electronics_suite.py
 ```
+

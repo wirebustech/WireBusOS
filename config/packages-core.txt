@@ -18,3 +18,17 @@ net-tools
 jq
 mosquitto
 mosquitto-clients
+
+# Engineering Computation & Simulation Packages
+octave
+scilab
+femm
+
+# Electrical, Electronics & CAD Packages
+librecad
+drawio
+
+# Data Engineering & Spatial Database Packages
+postgresql
+postgresql-contrib
+postgis

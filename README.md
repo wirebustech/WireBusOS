@@ -78,6 +78,20 @@ This automatically registers the equipment in `config/vendor_registers.json` and
 
 ---
 
+## 🧰 Core Engineering Domain Modules
+
+WireBusOS organizes open-source energy engineering tools into 5 primary domain suites:
+
+| Domain Category | Integrated Open-Source Tools | Key Applications |
+|---|---|---|
+| ⚡ **Power-System Modelling & Analysis** | **OpenDSS**, **pandapower**, **VeraGrid**, **Matpower**, **PowerModels.jl**, **ANDES**, **GridLAB-D** | Transmission & distribution power flow, AC/DC OPF, dynamic stability, short-circuit, and feeder simulation |
+| ☀️🌱 **Energy Planning & Renewables** | **PyPSA**, **OSeMOSYS**, **Calliope**, **NREL SAM** (PySAM), **pvlib-python**, **OpenFAST**, **EnergyPlus** | Sector-coupled energy transition planning, aero-elastic wind simulation, solar PV irradiance, and building HVAC modeling |
+| 🔬 **Engineering Computation** | **GNUOctave**, **Scilab / Xcos**, **OpenModelica**, **FEMM**, **openEMS** | High-performance matrix computing, dynamic block-diagram modeling, Modelica physical simulation, and electromagnetic finite element analysis |
+| 📐 **Electrical & Electronics Design** | **QElectroTech**, **KiCad**, **ngspice**, **draw.io**, **LibreCAD** | Electrical single-line schematics, power electronics PCB design, SPICE transient simulation, microgrid architecture drawing, and 2D CAD drafting |
+| 📊 **Data Engineering & Visualisation** | **DuckDB**, **PostgreSQL** (PostGIS), **Grafana**, **QGIS** | Fast analytical SQL queries, spatial/time-series data infrastructure, real-time SCADA telemetry dashboards, and GIS spatial mapping |
+
+---
+
 ## 📂 14 Functional Module Directories
 
 WireBusOS is organized into 14 functional tool directories:
@@ -90,16 +104,16 @@ WireBusOS/
 ├── modules/                        # 14 Functional Tool Directories
 │   ├── 01-solar-pv/                # pvlib-python, NREL SAM, PySAM, PVGIS, r.sun
 │   ├── 02-wind-energy/             # OpenFAST, FAST.Farm, QBlade, windpowerlib
-│   ├── 03-microgrid-energy-systems/# PyPSA, oemof, Calliope, OSeMOSYS, SWITCH, Temoa, etc.
+│   ├── 03-microgrid-energy-systems/# OpenDSS, pandapower, VeraGrid, Matpower, PowerModels.jl, ANDES, GridLAB-D, PyPSA, Calliope
 │   ├── 04-battery-storage/         # PyBaMM, OpenEMS
 │   ├── 05-building-energy/         # EnergyPlus, OpenStudio
-│   ├── 06-monitoring-scada-iot/    # Home Assistant, emoncms, Node-RED, Grafana, ThingsBoard
-│   ├── 07-cad-electronics-design/  # KiCad, FreeCAD, QElectroTech, ngspice
-│   ├── 08-simulation-framework/    # OpenModelica
+│   ├── 06-monitoring-scada-iot/    # DuckDB, PostgreSQL, Grafana, Home Assistant, emoncms
+│   ├── 07-cad-electronics-design/  # QElectroTech, KiCad, ngspice, draw.io, LibreCAD, FreeCAD
+│   ├── 08-simulation-framework/    # GNUOctave, Scilab/Xcos, OpenModelica, FEMM, openEMS
 │   ├── 09-gis-spatial/             # QGIS, GRASS GIS
 │   ├── 10-lf-energy-projects/      # GridAPPS-D, OpenSTEF, PowerGridModel, OperatorFabric, openEEmeter
 │   ├── 11-ev-charging/             # EVerest Core, OpenEVSE
-│   ├── 12-data-science-base/       # NumPy, pandas, SciPy, matplotlib, JupyterLab
+│   ├── 12-data-science-base/       # DuckDB, NumPy, pandas, SciPy, matplotlib, JupyterLab
 │   ├── 13-energy-finance-economics/# pyPPA, NREL PySAM Financials, levelisedcost, PyThermoNomics, OpenPyTEA
 │   └── 14-carbon-accounting-energy-efficiency/# CodeCarbon, openEEmeter, Green Metrics Tool, ghg-calculator, OWID CO2 Dataset, Kepler
 ├── vendor-drivers/                 # Vendor Driver Suite & Extension SDK
