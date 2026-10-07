@@ -30,36 +30,22 @@ fi
 # 2. Check and Install Penguin's Eggs
 install_eggs_if_missing() {
     if ! command -v eggs &> /dev/null; then
-        log "Penguin's Eggs (eggs) is not installed. Installing dependencies & eggs..."
+        log "Penguin's Eggs (eggs) is not installed. Installing build dependencies & penguins-eggs..."
         
         apt-get update -y
-        apt-get install -y curl squashfs-tools xorriso genisoimage isolinux syslinux-utils
+        apt-get install -y curl squashfs-tools xorriso genisoimage isolinux syslinux-utils unzip
 
-        # Import repository key and add APT source for penguins-eggs
-        log "Adding Penguin's Eggs APT repository..."
-        curl -fsSL https://pieroproietti.github.io/eggs-repo/KEY.gpg | gpg --dearmor -o /etc/apt/trusted.gpg.d/penguins-eggs.gpg --overwrite
-        echo "deb [signed-by=/etc/apt/trusted.gpg.d/penguins-eggs.gpg] https://pieroproietti.github.io/eggs-repo/ debian main" | tee /etc/apt/sources.list.d/penguins-eggs.list
-        
-        apt-get update -y
-        if apt-get install -y eggs; then
-            log "Penguin's Eggs installed successfully via APT."
+        log "Installing penguins-eggs via npm global package manager..."
+        if command -v npm &> /dev/null; then
+            npm install -g penguins-eggs
         else
-            warn "APT installation of eggs failed. Attempting npm global installation..."
-            if command -v npm &> /dev/null; then
-                npm install -g penguins-eggs || true
-            fi
-            if ! command -v eggs &> /dev/null; then
-                warn "Attempting direct deb download from GitHub..."
-                TEMP_DEB="/tmp/penguins-eggs.deb"
-                EGGS_LATEST_URL=$(curl -s https://api.github.com/repos/pieroproietti/penguins-eggs/releases/latest | grep "browser_download_url.*_amd64.deb" | cut -d : -f 2,3 | tr -d \")
-                if [[ -n "${EGGS_LATEST_URL}" ]]; then
-                    curl -L "${EGGS_LATEST_URL}" -o "${TEMP_DEB}"
-                    apt-get install -y "${TEMP_DEB}"
-                    rm -f "${TEMP_DEB}"
-                else
-                    error "Failed to fetch Penguin's Eggs package automatically. Please install manually: npm i -g penguins-eggs"
-                fi
-            fi
+            error "npm is required to install penguins-eggs. Please install Node.js/npm."
+        fi
+
+        if ! command -v eggs &> /dev/null; then
+            error "Failed to install penguins-eggs via npm. Please install manually with: sudo npm install -g penguins-eggs"
+        else
+            log "Penguin's Eggs (eggs) successfully installed: $(eggs --version 2>/dev/null || echo 'active')"
         fi
     else
         log "Penguin's Eggs (eggs) is already installed: $(eggs --version 2>/dev/null || echo 'active')"
