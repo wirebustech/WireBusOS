@@ -92,18 +92,19 @@ ensure_kernel_and_bootloader() {
         # Re-fetch latest initrd
         ACTUAL_INITRD=$(find /boot/ -maxdepth 1 -type f -name "initrd.img-${KERNEL_VER}" 2>/dev/null | head -n 1 || true)
 
-        log "Creating clean kernel symlinks for ${ACTUAL_VMLINUZ}..."
+        UNAME_R=$(uname -r)
+        log "Creating kernel & initrd aliases for penguins-eggs uname matching (${UNAME_R})..."
+        cp -f "${ACTUAL_VMLINUZ}" "/boot/vmlinuz-${UNAME_R}"
+        cp -f "${ACTUAL_INITRD}" "/boot/initrd.img-${UNAME_R}"
+
+        log "Creating clean kernel & initrd root symlinks..."
         ln -sf "${ACTUAL_VMLINUZ}" /boot/vmlinuz
         ln -sf "${ACTUAL_VMLINUZ}" /vmlinuz
-    fi
-
-    if [[ -n "${ACTUAL_INITRD}" && -f "${ACTUAL_INITRD}" ]]; then
-        log "Creating clean initrd symlinks for ${ACTUAL_INITRD}..."
         ln -sf "${ACTUAL_INITRD}" /boot/initrd.img
         ln -sf "${ACTUAL_INITRD}" /initrd.img
     fi
 
-    log "Kernel & bootloader symlinks verified in /boot:"
+    log "Kernel & bootloader files verified in /boot:"
     ls -la /boot/vmlinuz* /boot/initrd* 2>/dev/null || true
 }
 
@@ -162,14 +163,8 @@ EOF
 produce_iso() {
     log "Starting ISO generation with Penguin's Eggs (eggs produce)..."
     
-    ACTUAL_VMLINUZ=$(find /boot/ -maxdepth 1 -type f -name "vmlinuz-*" ! -name "*.old" ! -name "*WSL*" 2>/dev/null | head -n 1 || true)
-    if [[ -n "${ACTUAL_VMLINUZ}" && -f "${ACTUAL_VMLINUZ}" ]]; then
-        KERNEL_VER=$(basename "${ACTUAL_VMLINUZ}" | sed 's/vmlinuz-//')
-        log "Using detected actual kernel version: ${KERNEL_VER}"
-        eggs produce --nointeractive --prefix wirebusos-1.0.0 --kernel "${KERNEL_VER}"
-    else
-        eggs produce --nointeractive --prefix wirebusos-1.0.0
-    fi
+    # Execute eggs produce in non-interactive mode
+    eggs produce --nointeractive --prefix wirebusos-1.0.0
     
     log "ISO build complete! ISO files are stored in ${ISO_OUTPUT_DIR}"
     ls -lh ${ISO_OUTPUT_DIR}/wirebusos*.iso 2>/dev/null || ls -lh ${ISO_OUTPUT_DIR}/*.iso || true
