@@ -69,9 +69,9 @@ apply_wirebus_customization() {
 configure_eggs() {
     log "Configuring Penguin's Eggs for WireBusOS build..."
 
-    # Run eggs dad in unattended mode to create base configuration if missing
+    # Run eggs dad in non-interactive mode to create base configuration if missing
     if [[ ! -f "/etc/eggs/eggs.yaml" && ! -f "/etc/eggs/penguins-eggs.yaml" ]]; then
-        eggs dad --unattended || true
+        eggs dad --nointeractive || true
     fi
 
     # Create/override custom penguins-eggs config directory
@@ -97,8 +97,8 @@ EOF
 produce_iso() {
     log "Starting ISO generation with Penguin's Eggs (eggs produce)..."
     
-    # Execute eggs produce in clone or standard mode
-    eggs produce --unattended --prefix wirebusos-1.0.0
+    # Execute eggs produce in non-interactive mode
+    eggs produce --nointeractive --prefix wirebusos-1.0.0
     
     log "ISO build complete! ISO files are stored in ${ISO_OUTPUT_DIR}"
     ls -lh ${ISO_OUTPUT_DIR}/wirebusos*.iso 2>/dev/null || ls -lh ${ISO_OUTPUT_DIR}/*.iso || true
