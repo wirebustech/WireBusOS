@@ -71,12 +71,26 @@ ensure_kernel_and_bootloader() {
         update-initramfs -c -k all || true
     fi
 
-    # Verify kernel presence
-    if ls /boot/vmlinuz* 1>/dev/null 2>&1; then
-        log "Kernel image verified in /boot: $(ls /boot/vmlinuz* | head -n 1)"
-    else
-        warn "Notice: vmlinuz is still not detected directly in /boot."
+    # Create kernel & initrd symlinks expected by eggs
+    LATEST_VMLINUZ=$(ls -t /boot/vmlinuz-* 2>/dev/null | grep -v "\.old" | head -n 1 || true)
+    LATEST_INITRD=$(ls -t /boot/initrd.img-* 2>/dev/null | grep -v "\.old" | head -n 1 || true)
+
+    if [[ -n "${LATEST_VMLINUZ}" ]]; then
+        log "Creating kernel symlinks for ${LATEST_VMLINUZ}..."
+        ln -sf "${LATEST_VMLINUZ}" /boot/vmlinuz
+        ln -sf "${LATEST_VMLINUZ}" "/boot/vmlinuz-$(uname -r)" 2>/dev/null || true
+        ln -sf "${LATEST_VMLINUZ}" /vmlinuz
     fi
+
+    if [[ -n "${LATEST_INITRD}" ]]; then
+        log "Creating initrd symlinks for ${LATEST_INITRD}..."
+        ln -sf "${LATEST_INITRD}" /boot/initrd.img
+        ln -sf "${LATEST_INITRD}" "/boot/initrd.img-$(uname -r)" 2>/dev/null || true
+        ln -sf "${LATEST_INITRD}" /initrd.img
+    fi
+
+    log "Kernel & bootloader symlinks verified in /boot:"
+    ls -la /boot/vmlinuz* /boot/initrd* 2>/dev/null || true
 }
 
 # 4. Apply System Customization and Branding
@@ -124,8 +138,15 @@ EOF
 produce_iso() {
     log "Starting ISO generation with Penguin's Eggs (eggs produce)..."
     
-    # Execute eggs produce in non-interactive mode
-    eggs produce --nointeractive --prefix wirebusos-1.0.0
+    KERNEL_VER=$(basename $(ls -t /boot/vmlinuz-* 2>/dev/null | grep -v "\.old" | head -n 1) | sed 's/vmlinuz-//')
+    log "Using kernel version: ${KERNEL_VER}"
+
+    # Execute eggs produce in non-interactive mode with kernel parameter
+    if [[ -n "${KERNEL_VER}" ]]; then
+        eggs produce --nointeractive --prefix wirebusos-1.0.0 --kernel "${KERNEL_VER}"
+    else
+        eggs produce --nointeractive --prefix wirebusos-1.0.0
+    fi
     
     log "ISO build complete! ISO files are stored in ${ISO_OUTPUT_DIR}"
     ls -lh ${ISO_OUTPUT_DIR}/wirebusos*.iso 2>/dev/null || ls -lh ${ISO_OUTPUT_DIR}/*.iso || true
