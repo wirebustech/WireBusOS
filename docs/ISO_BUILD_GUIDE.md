@@ -28,19 +28,37 @@ sudo apt update && sudo apt install -y git build-essential xorriso squashfs-tool
 
 ## 🚀 2. Building the WireBusOS v1.0.0 ISO
 
-1. Clone the WireBusOS repository into your build environment:
+### Method A: Automated Build with Penguin's Eggs (`penguins-eggs`) — Recommended
+
+Penguin's Eggs (`eggs`) is a modern Linux live ISO remastering framework that creates bootable ISO images with Calamares installer directly from a configured system.
+
+WireBusOS includes an automated Penguin's Eggs build script:
+
+1. Execute the automated Eggs builder script with root privileges:
    ```bash
-   git clone https://github.com/wirebustech/WireBusOS.git
-   cd WireBusOS
+   sudo ./build-scripts/build-eggs-iso.sh
    ```
 
-2. Open **Cubic** and set ISO Metadata:
+2. **What this script does automatically**:
+   - Checks for and installs `penguins-eggs` and required ISO build packages (`squashfs-tools`, `xorriso`, `genisoimage`, `isolinux`).
+   - Runs `install-wirebus.sh --full --chroot` and `customize-distro.sh` to apply system identity, GNOME defaults, wallpapers, desktop launchers, and module environments.
+   - Configures `/etc/eggs/eggs.yaml` with WireBusOS metadata, user credentials (`wirebus` / `wirebus`), and Calamares installer settings.
+   - Invokes `eggs produce` to generate the live bootable ISO.
+
+3. Output ISO location:
+   - `/home/eggs/wirebusos-1.0.0-amd64.iso`
+
+---
+
+### Method B: Remastering via Cubic
+
+1. Open **Cubic** and set ISO Metadata:
    - **Disk Name**: `WireBusOS v1.0.0`
    - **Volume ID**: `WireBusOS_v1_0_0`
    - **Release Name**: `WireBusOS Initial Release (v1.0.0)`
    - **Filename**: `WireBusOS-v1.0.0-amd64.iso`
 
-3. Inside the `chroot` terminal, grant execute permissions and run the installer with the `--chroot` flag:
+2. Inside the `chroot` terminal, grant execute permissions and run the installer with the `--chroot` flag:
    ```bash
    chmod +x build-scripts/install-wirebus.sh
    ./build-scripts/install-wirebus.sh --chroot
@@ -69,10 +87,10 @@ WireBusOS includes a dedicated distribution remastering engine (`build-scripts/c
 
 ## 📀 3. Finishing & Generating the ISO
 
-1. Click **Next** in Cubic to generate the bootable `WireBusOS-v1.0.0-amd64.iso` image.
-2. Test the generated `WireBusOS-v1.0.0-amd64.iso` in VirtualBox, VMware, or QEMU:
+1. Run `eggs produce` or finish in Cubic to generate `wirebusos-1.0.0-amd64.iso`.
+2. Test the generated ISO in QEMU:
    ```bash
-   qemu-system-x86_64 -enable-kvm -m 4096 -cdrom WireBusOS-v1.0.0-amd64.iso
+   qemu-system-x86_64 -enable-kvm -m 4096 -cdrom /home/eggs/wirebusos-1.0.0-amd64.iso -boot d
    ```
 
 ---

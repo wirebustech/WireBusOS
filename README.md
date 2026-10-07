@@ -125,7 +125,11 @@ WireBusOS/
 │   ├── sma_fronius_drivers.py      # SMA Speedwire & Fronius Solar.API drivers
 │   └── templates/
 │       └── custom_vendor_template.py # Boilerplate template for new custom vendors
-├── build-scripts/                  # Installer & Systemd provisioning hooks
+├── build-scripts/                  # Installer, Penguin's Eggs & Systemd provisioning hooks
+│   ├── build-eggs-iso.sh           # Penguin's Eggs Live ISO builder script
+│   ├── customize-distro.sh         # Complete OS branding & Plymouth theme customizer
+│   ├── install-wirebus.sh          # System dependency & engineering suite installer
+│   └── wirebus-first-boot.sh       # First-boot telemetry & module sync service
 ├── docs/                           # ISO build guide & package catalog
 ├── website/                        # Technical Workstation Portal & Microgrid Visualizer
 ├── LICENSE
@@ -134,6 +138,20 @@ WireBusOS/
 
 ---
 
+## 💿 Building the Bootable Live ISO (Penguin's Eggs)
+
+WireBusOS includes automated remastering scripts using **Penguin's Eggs (`penguins-eggs`)** to generate a bootable ISO image with the Calamares installer:
+
+```bash
+# Build bootable Live ISO image with Penguin's Eggs
+sudo ./build-scripts/build-eggs-iso.sh
+```
+
+For full remastering options and testing instructions, see [`docs/ISO_BUILD_GUIDE.md`](docs/ISO_BUILD_GUIDE.md).
+
+---
+
 ## 📄 License
 
 Licensed under the [MIT License](LICENSE).
+
