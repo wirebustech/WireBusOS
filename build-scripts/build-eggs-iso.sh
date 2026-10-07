@@ -52,7 +52,34 @@ install_eggs_if_missing() {
     fi
 }
 
-# 3. Apply System Customization and Branding
+# 3. Ensure Kernel and Bootloader packages exist in /boot
+ensure_kernel_and_bootloader() {
+    log "Ensuring Linux kernel image and bootloader packages (GRUB EFI & PC) are present in /boot..."
+
+    apt-get update -y
+    apt-get install -y grub-efi-amd64-bin grub-pc-bin grub-common mtools dosfstools isolinux syslinux-utils initramfs-tools || warn "Bootloader dependencies installation warning."
+
+    # Check if vmlinuz is present in /boot
+    if ! ls /boot/vmlinuz* 1>/dev/null 2>&1; then
+        log "Installing kernel package (linux-image-amd64 / linux-image-generic)..."
+        apt-get install -y linux-image-amd64 || apt-get install -y linux-image-generic || warn "Kernel installation completed with warning."
+    fi
+
+    # Ensure initrd / initramfs image exists
+    if ! ls /boot/initrd* 1>/dev/null 2>&1; then
+        log "Generating initramfs images for kernel..."
+        update-initramfs -c -k all || true
+    fi
+
+    # Verify kernel presence
+    if ls /boot/vmlinuz* 1>/dev/null 2>&1; then
+        log "Kernel image verified in /boot: $(ls /boot/vmlinuz* | head -n 1)"
+    else
+        warn "Notice: vmlinuz is still not detected directly in /boot."
+    fi
+}
+
+# 4. Apply System Customization and Branding
 apply_wirebus_customization() {
     log "Applying WireBusOS branding, system scripts, and module dependencies..."
 
@@ -65,7 +92,7 @@ apply_wirebus_customization() {
     fi
 }
 
-# 4. Configure Eggs Settings for WireBusOS
+# 5. Configure Eggs Settings for WireBusOS
 configure_eggs() {
     log "Configuring Penguin's Eggs for WireBusOS build..."
 
@@ -93,7 +120,7 @@ EOF
     log "Penguin's Eggs configuration updated at /etc/eggs/eggs.yaml"
 }
 
-# 5. Produce Live ISO
+# 6. Produce Live ISO
 produce_iso() {
     log "Starting ISO generation with Penguin's Eggs (eggs produce)..."
     
@@ -107,6 +134,7 @@ produce_iso() {
 main() {
     log "=== WireBusOS Penguin's Eggs Build System ==="
     install_eggs_if_missing
+    ensure_kernel_and_bootloader
     apply_wirebus_customization
     configure_eggs
     produce_iso
