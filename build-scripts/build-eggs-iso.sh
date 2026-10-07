@@ -71,22 +71,25 @@ ensure_kernel_and_bootloader() {
         update-initramfs -c -k all || true
     fi
 
-    # Create kernel & initrd symlinks expected by eggs
-    LATEST_VMLINUZ=$(ls -t /boot/vmlinuz-* 2>/dev/null | grep -v "\.old" | head -n 1 || true)
-    LATEST_INITRD=$(ls -t /boot/initrd.img-* 2>/dev/null | grep -v "\.old" | head -n 1 || true)
+    # Remove any broken symlinks in /boot
+    find /boot/ -maxdepth 1 -type l -delete 2>/dev/null || true
 
-    if [[ -n "${LATEST_VMLINUZ}" ]]; then
-        log "Creating kernel symlinks for ${LATEST_VMLINUZ}..."
-        ln -sf "${LATEST_VMLINUZ}" /boot/vmlinuz
-        ln -sf "${LATEST_VMLINUZ}" "/boot/vmlinuz-$(uname -r)" 2>/dev/null || true
-        ln -sf "${LATEST_VMLINUZ}" /vmlinuz
+    # Create kernel & initrd symlinks expected by eggs (filtering for regular files ONLY)
+    ACTUAL_VMLINUZ=$(find /boot/ -maxdepth 1 -type f -name "vmlinuz-*" ! -name "*.old" 2>/dev/null | head -n 1 || true)
+    ACTUAL_INITRD=$(find /boot/ -maxdepth 1 -type f -name "initrd.img-*" ! -name "*.old" 2>/dev/null | head -n 1 || true)
+
+    if [[ -n "${ACTUAL_VMLINUZ}" && -f "${ACTUAL_VMLINUZ}" ]]; then
+        log "Creating kernel symlinks for ${ACTUAL_VMLINUZ}..."
+        ln -sf "${ACTUAL_VMLINUZ}" /boot/vmlinuz
+        ln -sf "${ACTUAL_VMLINUZ}" "/boot/vmlinuz-$(uname -r)" 2>/dev/null || true
+        ln -sf "${ACTUAL_VMLINUZ}" /vmlinuz
     fi
 
-    if [[ -n "${LATEST_INITRD}" ]]; then
-        log "Creating initrd symlinks for ${LATEST_INITRD}..."
-        ln -sf "${LATEST_INITRD}" /boot/initrd.img
-        ln -sf "${LATEST_INITRD}" "/boot/initrd.img-$(uname -r)" 2>/dev/null || true
-        ln -sf "${LATEST_INITRD}" /initrd.img
+    if [[ -n "${ACTUAL_INITRD}" && -f "${ACTUAL_INITRD}" ]]; then
+        log "Creating initrd symlinks for ${ACTUAL_INITRD}..."
+        ln -sf "${ACTUAL_INITRD}" /boot/initrd.img
+        ln -sf "${ACTUAL_INITRD}" "/boot/initrd.img-$(uname -r)" 2>/dev/null || true
+        ln -sf "${ACTUAL_INITRD}" /initrd.img
     fi
 
     log "Kernel & bootloader symlinks verified in /boot:"
@@ -148,11 +151,10 @@ EOF
 produce_iso() {
     log "Starting ISO generation with Penguin's Eggs (eggs produce)..."
     
-    KERNEL_VER=$(basename $(ls -t /boot/vmlinuz-* 2>/dev/null | grep -v "\.old" | head -n 1) | sed 's/vmlinuz-//')
-    log "Using kernel version: ${KERNEL_VER}"
-
-    # Execute eggs produce in non-interactive mode with kernel parameter
-    if [[ -n "${KERNEL_VER}" ]]; then
+    ACTUAL_VMLINUZ=$(find /boot/ -maxdepth 1 -type f -name "vmlinuz-*" ! -name "*.old" 2>/dev/null | head -n 1 || true)
+    if [[ -n "${ACTUAL_VMLINUZ}" && -f "${ACTUAL_VMLINUZ}" ]]; then
+        KERNEL_VER=$(basename "${ACTUAL_VMLINUZ}" | sed 's/vmlinuz-//')
+        log "Using detected actual kernel version: ${KERNEL_VER}"
         eggs produce --nointeractive --prefix wirebusos-1.0.0 --kernel "${KERNEL_VER}"
     else
         eggs produce --nointeractive --prefix wirebusos-1.0.0
