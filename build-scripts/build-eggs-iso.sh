@@ -110,6 +110,16 @@ apply_wirebus_customization() {
 configure_eggs() {
     log "Configuring Penguin's Eggs for WireBusOS build..."
 
+    # Fix GRUB/Isolinux theme template symlinks for penguins-eggs npm package
+    THEME_DIR=$(find /usr/lib/node_modules/penguins-eggs/ -type d -path "*/theme/livecd" 2>/dev/null | head -n 1 || true)
+    if [[ -n "${THEME_DIR}" && -d "${THEME_DIR}" ]]; then
+        log "Ensuring GRUB/Isolinux theme template symlinks in ${THEME_DIR}..."
+        [[ -f "${THEME_DIR}/generic.grub.theme.cfg" ]] && ln -sf "${THEME_DIR}/generic.grub.theme.cfg" "${THEME_DIR}/grub.theme.cfg"
+        [[ -f "${THEME_DIR}/generic.grub.main.cfg" ]] && ln -sf "${THEME_DIR}/generic.grub.main.cfg" "${THEME_DIR}/grub.main.cfg"
+        [[ -f "${THEME_DIR}/generic.isolinux.theme.cfg" ]] && ln -sf "${THEME_DIR}/generic.isolinux.theme.cfg" "${THEME_DIR}/isolinux.theme.cfg"
+        [[ -f "${THEME_DIR}/generic.isolinux.main.cfg" ]] && ln -sf "${THEME_DIR}/generic.isolinux.main.cfg" "${THEME_DIR}/isolinux.main.cfg"
+    fi
+
     # Run eggs dad in non-interactive mode to create base configuration if missing
     if [[ ! -f "/etc/eggs/eggs.yaml" && ! -f "/etc/eggs/penguins-eggs.yaml" ]]; then
         eggs dad --nointeractive || true
