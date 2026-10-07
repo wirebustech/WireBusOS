@@ -54,10 +54,19 @@ install_eggs_if_missing() {
 
 # 3. Ensure Kernel and Bootloader packages exist in /boot
 ensure_kernel_and_bootloader() {
-    log "Ensuring Linux kernel image and bootloader packages (GRUB EFI & PC) are present in /boot..."
+    log "Ensuring Live ISO boot packages (live-boot, overlayfs, GRUB EFI & PC) are present..."
 
     apt-get update -y
-    apt-get install -y grub-efi-amd64-bin grub-pc-bin grub-common mtools dosfstools isolinux syslinux-utils initramfs-tools || warn "Bootloader dependencies installation warning."
+    apt-get install -y live-boot live-boot-initramfs-tools live-config live-config-systemd casper grub-efi-amd64-bin grub-pc-bin grub-common mtools dosfstools isolinux syslinux-utils initramfs-tools || warn "Live boot packages installation warning."
+
+    # Ensure overlayfs, squashfs, loop, iso9660 modules are in /etc/initramfs-tools/modules
+    log "Configuring initramfs modules for live boot (overlayfs, squashfs, loop, iso9660)..."
+    mkdir -p /etc/initramfs-tools
+    for mod in overlay squashfs loop iso9660 ext4 fat vfat; do
+        if ! grep -q "^${mod}" /etc/initramfs-tools/modules 2>/dev/null; then
+            echo "${mod}" >> /etc/initramfs-tools/modules
+        fi
+    done
 
     # Check if vmlinuz is present in /boot
     if ! ls /boot/vmlinuz* 1>/dev/null 2>&1; then
@@ -65,11 +74,9 @@ ensure_kernel_and_bootloader() {
         apt-get install -y linux-image-amd64 || apt-get install -y linux-image-generic || warn "Kernel installation completed with warning."
     fi
 
-    # Ensure initrd / initramfs image exists
-    if ! ls /boot/initrd* 1>/dev/null 2>&1; then
-        log "Generating initramfs images for kernel..."
-        update-initramfs -c -k all || true
-    fi
+    # Rebuild initramfs with live-boot & overlayfs drivers
+    log "Rebuilding initramfs with live-boot & overlayfs drivers..."
+    update-initramfs -u -k all || update-initramfs -c -k all || true
 
     # Remove any broken symlinks in /boot
     find /boot/ -maxdepth 1 -type l -delete 2>/dev/null || true
