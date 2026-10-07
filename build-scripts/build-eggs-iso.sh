@@ -74,28 +74,32 @@ ensure_kernel_and_bootloader() {
         apt-get install -y linux-image-amd64 || apt-get install -y linux-image-generic || warn "Kernel installation completed with warning."
     fi
 
-    # Rebuild initramfs with live-boot & overlayfs drivers
-    log "Rebuilding initramfs with live-boot & overlayfs drivers..."
-    update-initramfs -u -k all || update-initramfs -c -k all || true
-
-    # Remove any broken symlinks in /boot
+    # Purge any WSL/container kernel symlinks that trick mkinitramfs into creating empty initrds
+    rm -f /boot/*WSL* /boot/*microsoft* /vmlinuz*WSL* /vmlinuz*microsoft* /initrd*WSL* /initrd*microsoft* 2>/dev/null || true
     find /boot/ -maxdepth 1 -type l -delete 2>/dev/null || true
 
-    # Create kernel & initrd symlinks expected by eggs (filtering for regular files ONLY)
-    ACTUAL_VMLINUZ=$(find /boot/ -maxdepth 1 -type f -name "vmlinuz-*" ! -name "*.old" 2>/dev/null | head -n 1 || true)
-    ACTUAL_INITRD=$(find /boot/ -maxdepth 1 -type f -name "initrd.img-*" ! -name "*.old" 2>/dev/null | head -n 1 || true)
+    # Locate actual non-WSL Linux kernel binary and module version
+    ACTUAL_VMLINUZ=$(find /boot/ -maxdepth 1 -type f -name "vmlinuz-*" ! -name "*.old" ! -name "*WSL*" 2>/dev/null | head -n 1 || true)
+    ACTUAL_INITRD=$(find /boot/ -maxdepth 1 -type f -name "initrd.img-*" ! -name "*.old" ! -name "*WSL*" 2>/dev/null | head -n 1 || true)
 
     if [[ -n "${ACTUAL_VMLINUZ}" && -f "${ACTUAL_VMLINUZ}" ]]; then
-        log "Creating kernel symlinks for ${ACTUAL_VMLINUZ}..."
+        KERNEL_VER=$(basename "${ACTUAL_VMLINUZ}" | sed 's/vmlinuz-//')
+        log "Targeting real installed kernel version: ${KERNEL_VER}"
+
+        log "Rebuilding initramfs with live-boot & overlayfs drivers for kernel ${KERNEL_VER}..."
+        update-initramfs -c -k "${KERNEL_VER}" || update-initramfs -u -k "${KERNEL_VER}" || true
+
+        # Re-fetch latest initrd
+        ACTUAL_INITRD=$(find /boot/ -maxdepth 1 -type f -name "initrd.img-${KERNEL_VER}" 2>/dev/null | head -n 1 || true)
+
+        log "Creating clean kernel symlinks for ${ACTUAL_VMLINUZ}..."
         ln -sf "${ACTUAL_VMLINUZ}" /boot/vmlinuz
-        ln -sf "${ACTUAL_VMLINUZ}" "/boot/vmlinuz-$(uname -r)" 2>/dev/null || true
         ln -sf "${ACTUAL_VMLINUZ}" /vmlinuz
     fi
 
     if [[ -n "${ACTUAL_INITRD}" && -f "${ACTUAL_INITRD}" ]]; then
-        log "Creating initrd symlinks for ${ACTUAL_INITRD}..."
+        log "Creating clean initrd symlinks for ${ACTUAL_INITRD}..."
         ln -sf "${ACTUAL_INITRD}" /boot/initrd.img
-        ln -sf "${ACTUAL_INITRD}" "/boot/initrd.img-$(uname -r)" 2>/dev/null || true
         ln -sf "${ACTUAL_INITRD}" /initrd.img
     fi
 
@@ -158,7 +162,7 @@ EOF
 produce_iso() {
     log "Starting ISO generation with Penguin's Eggs (eggs produce)..."
     
-    ACTUAL_VMLINUZ=$(find /boot/ -maxdepth 1 -type f -name "vmlinuz-*" ! -name "*.old" 2>/dev/null | head -n 1 || true)
+    ACTUAL_VMLINUZ=$(find /boot/ -maxdepth 1 -type f -name "vmlinuz-*" ! -name "*.old" ! -name "*WSL*" 2>/dev/null | head -n 1 || true)
     if [[ -n "${ACTUAL_VMLINUZ}" && -f "${ACTUAL_VMLINUZ}" ]]; then
         KERNEL_VER=$(basename "${ACTUAL_VMLINUZ}" | sed 's/vmlinuz-//')
         log "Using detected actual kernel version: ${KERNEL_VER}"
